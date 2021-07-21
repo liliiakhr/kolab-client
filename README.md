@@ -1,70 +1,172 @@
-# Getting Started with Create React App
+# Backlog Quest
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<br>
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+This is an app that organizes and manages backlog for different types of media. Mainly from streaming and other monthly services.
 
-### `yarn start`
+## User Stories
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **404:** As an anon/user I can see a 404 page if I try to reach a page that does not exist so that I know it's my fault
+- **Signup:** As an anon I can sign up in the platform so that I can start creating and managing my backlog
+- **Login:** As a user I can login to the platform so that I can start creating and managing my backlog
+- **Logout:** As a user I can logout from the platform so no one else can modify my information
+- **Toogle media** As a user I can toogle between different types of media
+- **Add elements** As a user I can add elements to my backlog
+- **Delete elements** As a user I can delete elements from my backlog
+- **Mark elements** As a user I can mark elements in my backlog as done
+- **Random element** As a user I can get a random element from my backlog
+- **Check profile** As a user I can check my profile and stats
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Backlog
 
-### `yarn test`
+- Friends list
+- Recommendations from friends
+- Books media
+- Comics media
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<br>
 
-### `yarn build`
+# Client / Frontend
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## React Router Routes (React App)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Path              | Component                      | Permissions                | Behavior                                                      |
+| ----------------- | ------------------------------ | -------------------------- | ------------------------------------------------------------- |
+| `/`               | SplashPage                     | public `<Route>`           | Home page                                                     |
+| `/signup`         | SignupPage                     | anon only `<AnonRoute>`    | Signup form, link to login, navigate to homepage after signup |
+| `/login`          | LoginPage                      | anon only `<AnonRoute>`    | Login form, link to signup, navigate to homepage after login  |
+| `/logout`         | n/a                            | user only `<PrivateRoute>` | Navigate to homepage after logout, expire session             |
+| `/backlog/series` | NavBar, ElementList, FooterBar | user only `<PrivateRoute>` | Shows all tv series on backlog                                |
+| `/backlog/films`  | NavBar, ElementList, FooterBar | user only `<PrivateRoute>` | Shows all films on backlog                                    |
+| `/backlog/games`  | NavBar, ElementList, FooterBar | user only `<PrivateRoute>` | Shows all games on backlog                                    |
+| `/search/series`  | SearchForm, SearchResults      | user only `<PrivateRoute>` | Search a tv series to be added                                |
+| `/search/films`   | SearchForm, SearchResults      | user only `<PrivateRoute>` | Search a film to be added                                     |
+| `/search/games`   | SearchForm, SearchResults      | user only `<PrivateRoute>` | Search a game to be added                                     |
+| `/add/:id`        | ElementInfo                    | user only `<PrivateRoute>` | Add an element to the backlog                                 |
+| `/profile`        | Profile, Stats                 | user only `<PrivateRoute>` | Check profile with stat information                           |
+| `/done/series`    | Done list for Series           | user only `<PrivateRoute>` | Shows all tv series finished                                  |
+| `/done/films`     | Done list for films            | user only `<PrivateRoute>` | Shows all films finished                                      |
+| `/done/games`     | Done list for games            | user only `<PrivateRoute>` | Shows all videogames finished                                 |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Components
 
-### `yarn eject`
+- LoginPage
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- SignupPage
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- NavBar
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- FooterBar
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- BackBar
 
-## Learn More
+- ElementList
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- SearchForm
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- SearchResults
 
-### Code Splitting
+- ElementInfo
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Stats
 
-### Analyzing the Bundle Size
+## Services
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Auth Service
 
-### Making a Progressive Web App
+  - auth.login(user)
+  - auth.signup(user)
+  - auth.logout()
+  - auth.me()
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Backlog Service
+  - backlog.filter(type, status) // for different types of media and if they are done or not
+  - backlog.detail(id)
+  - backlog.add(id)
+  - backlog.delete(id)
+  - backlog.update(id)
+- External API
+  - API for games
+  - API for series
+  - API for films
 
-### Advanced Configuration
+<br>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+# Server / Backend
 
-### Deployment
+## Models
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+User model
 
-### `yarn build` fails to minify
+```javascript
+{
+  username: {type: String, required: true, unique: true},
+  email: {type: String, required: true, unique: true},
+  password: {type: String, required: true},
+  platform: [platforms]
+  elements: [{type: Schema.Types.ObjectId,ref:'Media'}]
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Media model
+
+```javascript
+ {
+   title: {type: String, required: true},
+   type: {type: String, required: true},
+   done: {type: Boolean, required: true},
+   platform: {type: String, required: true},
+   image: {type: String, required: true}
+   description: {type, String, required: true}
+   user: {type: Schema.Types.ObjectId,ref:'User'},
+ }
+```
+
+<br>
+
+## API Endpoints (backend routes)
+
+| HTTP Method | URL               | Request Body                | Success status | Error Status | Description                                                                                                                     |
+| ----------- | ----------------- | --------------------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| GET         | `/auth/profile `  | Saved session               | 200            | 404          | Check if user is logged in and return profile page                                                                              |
+| POST        | `/auth/signup`    | {name, email, password}     | 201            | 404          | Checks if fields not empty (422) and user not exists (409), then create user with encrypted password, and store user in session |
+| POST        | `/auth/login`     | {username, password}        | 200            | 401          | Checks if fields not empty (422), if user exists (404), and if password matches (404), then stores user in session              |
+| POST        | `/auth/logout`    | (empty)                     | 204            | 400          | Logs out the user                                                                                                               |
+| POST        | `/search/add`     | {platform, title, type, id} |                | 400          | Add new backlog element and add to user                                                                                         |
+| GET         | `/backlog/series` |                             |                | 400          | Show series elements                                                                                                            |
+| GET         | `/backlog/films`  |                             |                |              | Show film elements                                                                                                              |
+| GET         | `/backlog/games`  |                             |                |              | Show games elements                                                                                                             |
+| GET         | `/media/:id`      |                             | 201            | 400          | Show specific element                                                                                                           |
+| PUT         | `/media/:id`      |                             | 200            | 400          | edit element                                                                                                                    |
+| DELETE      | `/media/:id`      |                             | 201            | 400          | delete element                                                                                                                  |
+| GET         | `/done/series`    |                             |                | 400          | Show series elements                                                                                                            |
+| GET         | `/done/films`     |                             |                |              | Show film elements                                                                                                              |
+| GET         | `/done/games`     |                             |                |              | Show games elements                                                                                                             |
+
+<br>
+
+## Links
+
+### Trello/Kanban
+
+[Link to your trello board](https://trello.com/b/iloDccrZ/backlog-quest)
+or picture of your physical board
+
+### Git
+
+The url to your repository and to your deployed project
+
+[Client repository Link](https://github.com/jorgeberrizbeitia/backlog-quest)
+
+[Server repository Link](https://github.com/jorgeberrizbeitia/backlog-quest-server)
+
+[Deployed App Link](https://backlog-quest.herokuapp.com/login)
+
+### Slides
+
+The url to your presentation slides
+
+[Slides Link](https://docs.google.com/presentation/d/1zndKZ8DC-_i391alptPKsAKanCSXTrLVL39L3xtEjz8/edit?usp=sharing)
+{"mode":"full","isActive":false}
