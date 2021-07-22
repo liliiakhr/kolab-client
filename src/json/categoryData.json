@@ -1,47 +1,38 @@
 [
   {
-    "url": "/images/magic.jpg",
-    "title": "Art",
-    "width": "40%"
+    "url": "/images/art.jpg",
+    "title": "Art"
+  },
+  {
+    "url": "/images/sports.jpg",
+    "title": "Sports"
+  },
+  {
+    "url": "/images/science.jpg",
+    "title": "Science"
+  },
+  {
+    "url": "/images/lifestyle.jpg",
+    "title": "Lifestyle"
+  },
+  {
+    "url": "/images/nature.jpg",
+    "title": "Nature"
+  },
+  {
+    "url": "/images/politics.png",
+    "title": "Politics"
+  },
+  {
+    "url": "/images/entertainment.jpg",
+    "title": "Entertainment"
   },
   {
     "url": "/images/magic.jpg",
-    "title": "Sports",
-    "width": "40%"
+    "title": "Magic"
   },
   {
-    "url": "/images/magic.jpg",
-    "title": "Science",
-    "width": "40%"
-  },
-  {
-    "url": "/images/magic.jpg",
-    "title": "Lifestyle",
-    "width": "40%"
-  },
-  {
-    "url": "/images/magic.jpg",
-    "title": "Nature",
-    "width": "40%"
-  },
-  {
-    "url": "/images/magic.jpg",
-    "title": "Politics",
-    "width": "40%"
-  },
-  {
-    "url": "/images/magic.jpg",
-    "title": "Entertainment",
-    "width": "40%"
-  },
-  {
-    "url": "/images/magic.jpg",
-    "title": "Magic",
-    "width": "40%"
-  },
-  {
-    "url": "/images/magic.jpg",
-    "title": "Other",
-    "width": "40%"
+    "url": "/images/other.jpg",
+    "title": "Other"
   }
 ]
