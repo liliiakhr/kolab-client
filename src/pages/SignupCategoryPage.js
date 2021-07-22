@@ -41,21 +41,23 @@ function SignupCategoryPage( {user, onUpdateUser, history} ) {
     }
 
     return (
-        <Container style={{ marginTop: "60px"}} >
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
-                <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "20px"}}>What are your interests?</Typography>
-                {
-                    categories.length > 0 && 
-                        <Button 
-                            color="primary" 
-                            size="large" 
-                            variant="contained" 
-                            style={{marginBottom: "20px"}}
-                            onClick={handleUpdateCategoriesUser}
-                            >
-                            <ArrowRightAltIcon />
-                        </Button> 
-                }
+        <Container style={{ marginTop: "50px"}} >
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}} className="fly-top">
+                <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "30px"}}>
+                    What are your interests?
+                    {
+                        categories.length > 0 && 
+                            <Button 
+                                color="primary" 
+                                size="large" 
+                                variant="contained" 
+                                style={{ marginLeft: "20px"}}
+                                onClick={handleUpdateCategoriesUser}
+                                >
+                                <ArrowRightAltIcon />
+                            </Button> 
+                    }
+                </Typography>
             </div>
             <Grid
                 container
@@ -69,7 +71,9 @@ function SignupCategoryPage( {user, onUpdateUser, history} ) {
                         categoryData.map((image, index) => {
                             return (
                                 <Grid item xs={12} sm={6} md={4} >
-                                    <CategoryCard key={index} image={image} onUpdateCategories={handleUpdateCategoriesState} />
+                                    <div className={index < 3 || index > 5 ? 'fly-left' : 'fly-right'}>
+                                        <CategoryCard key={index} image={image} onUpdateCategories={handleUpdateCategoriesState} />
+                                    </div>
                                 </Grid>
                             )
                         }) 

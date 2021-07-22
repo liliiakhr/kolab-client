@@ -4,38 +4,40 @@ import { Button, Typography, CardActions, Card, CardMedia, CardContent } from '@
 import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
 import QuestionAnswerOutlinedIcon from '@material-ui/icons/QuestionAnswerOutlined';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 500,
-  },
-  media: {
-    height: 0,
-    paddingTop: '33%', // 16:9
-  }
-}));
+function GroupCard({group}) {
+    const useStyles = makeStyles((theme) => ({
+      root: {
+        maxWidth: 500,
+      },
+      media: {
+        height: 0,
+        paddingTop: '33%', // 16:9
+      }
+    }));
 
-function GroupCard() {
-  const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+    const classes = useStyles();
 
-  return (
-    <Card className={classes.root}>
+    return (
+    <Card className={classes.root} >
         <CardMedia
-          className={classes.media}
-          image="/images/azkaban.jpg"
-          title="Paella dish"
+        className={classes.media}
+        image={group.image_url}
+        title={group.name}
         />
-      <CardContent>
-        <Typography variant="subtitle1">Azkaban Group</Typography>
+    <CardContent>
+        <Typography variant="subtitle1">{group.name}</Typography>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your
-          guests. Add 1 cup of frozen peas along with the mussels, if you like.
+        {group.description}
         </Typography>
-      </CardContent>
-      <CardActions style={{display: "flex", justifyContent: "space-between"}}>
-        <Button  color="primary" startIcon={<PeopleAltOutlinedIcon />}>Members</Button>
-        <Button  color="primary" startIcon={<QuestionAnswerOutlinedIcon />}>Posts</Button>
-      </CardActions>
+    </CardContent>
+    <CardActions style={{display: "flex", justifyContent: "space-between"}}>
+        <Button  color="primary" startIcon={<PeopleAltOutlinedIcon />}>
+            {group.users.length} Members
+        </Button>
+        <Button  color="primary" startIcon={<QuestionAnswerOutlinedIcon />}>
+            {group.postCount} Posts
+        </Button>
+    </CardActions>
     </Card>
   );
 }
