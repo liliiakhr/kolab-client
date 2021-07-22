@@ -216,6 +216,7 @@ Messages model
 
 [Trello]()
 [Whimsical](https://whimsical.com/wireframes-JtCyGbL2GbYyoR3Gq8sTrt)
+[Colors palette](https://coolors.co/006c7a-55abb1-e0f7fa-f2e7e3-543327-6d4031)
 
 
 ### Git
