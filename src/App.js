@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, {useEffect, useState} from "react";
 import { Switch, Route, withRouter, useHistory } from "react-router-dom";
 import Login from './components/Login';
@@ -52,15 +51,13 @@ function App(props) {
     try {
       let response = await axios.post(`${API_URL}/api/login`, myUser, {withCredentials: true});
       updateUser(response.data);
-      props.history.push('/home')
+      props.history.push('/home');
     }
     catch(err){
-      updateErrorMessage(err.response.data.errorMessage)
+      updateErrorMessage(err.response.data.errorMessage);
     }
 
   }
-
-  
   
   let handleSignUp = async (event) => {
 
@@ -70,29 +67,22 @@ function App(props) {
         password: event.target.password.value
     } 
     try{
-    let response = await axios.post(`${API_URL}/api/signup`, newUser, {withCredentials: true})
-        updateSuccessMessage(response.data.successMessage)        
-        props.history.push('/signup/category')
+      let response = await axios.post(`${API_URL}/api/signup`, newUser, {withCredentials: true})
+          updateSuccessMessage(response.data.successMessage)        
+          props.history.push('/signup/category')
     }
     catch (error) {
         updateErrorMessage(error.response.data.errorMessage)
     }
   }
-=======
-import React from "react";
-import { Switch, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import SignupCategoryPage from "./pages/SignupCategoryPage";
->>>>>>> affa03c4c41f103b7c910ce2481e6513ea78c250
 
   return (
     <div>
-<<<<<<< HEAD
     <ThemeProvider theme={theme}>
     
       <Switch>
         <Route exact path={'/'} render={() => {
-          return <HomePage />
+          return <HomePage user={user}/>
         }}/>
         <Route path={'/login'} render={(routeProps) => {
           return <Login onLogin={handleLogin} {...routeProps} />
@@ -103,9 +93,6 @@ import SignupCategoryPage from "./pages/SignupCategoryPage";
       </Switch>
       
       </ThemeProvider>
-=======
-      <SignupCategoryPage />
->>>>>>> affa03c4c41f103b7c910ce2481e6513ea78c250
     </div>
   );
 }
