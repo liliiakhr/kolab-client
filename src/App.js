@@ -7,6 +7,8 @@ import { createTheme, Snackbar, ThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from './config';
 import { EnhancedEncryptionTwoTone } from "@material-ui/icons";
+import SignupCategoryPage from "./pages/SignupCategoryPage";
+import SignupGroupPage from "./pages/SignupGroupPage";
 
 
 
@@ -51,7 +53,7 @@ function App(props) {
     try {
       let response = await axios.post(`${API_URL}/api/login`, myUser, {withCredentials: true});
       updateUser(response.data);
-      props.history.push('/home')
+      history.push('/home')
     }
     catch(err){
       updateErrorMessage(err.response.data.errorMessage)
@@ -89,8 +91,15 @@ function App(props) {
         <Route path={'/login'} render={(routeProps) => {
           return <Login onLogin={handleLogin} {...routeProps} />
         }}/>
-        <Route path={'/signup'} render={(routeProps) => {
+        <Route exact path={'/signup'} render={(routeProps) => {
           return <Signup {...routeProps}/>
+        }}/>
+        {/* NEED PROPS user, onUpdateUser */}
+        <Route path={'/signup/category'} render={(routeProps) => {
+          return <SignupCategoryPage {...routeProps}/>
+        }}/>
+        <Route path={'/signup/group'} render={(routeProps) => {
+          return <SignupGroupPage {...routeProps}/>
         }}/>
       </Switch>
       

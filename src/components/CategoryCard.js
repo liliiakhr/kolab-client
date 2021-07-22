@@ -3,8 +3,7 @@ import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 
-
-function CategoryCard({image}) {
+function CategoryCard({image, onUpdateCategories}) {
     const [ selected, setSelected ] = useState(false);
     
     const useStyles = makeStyles((theme) => ({
@@ -91,8 +90,9 @@ function CategoryCard({image}) {
       }));
     const classes = useStyles();
 
-    const handleSelected = () => {
+    const handleSelected = (category) => {
         setSelected(!selected)
+        onUpdateCategories(category)
     }
    
     return (
@@ -102,8 +102,7 @@ function CategoryCard({image}) {
                 key={image.title}
                 className={classes.image}
                 focusVisibleClassName={classes.focusVisible}
-                onClick={handleSelected}
-                // disableRipple
+                onClick={() => handleSelected(image.title)}
             >
           <span
             className={classes.imageSrc}
@@ -129,12 +128,3 @@ function CategoryCard({image}) {
 }
 
 export default CategoryCard
-
-
-// const images = [
-//   {
-//     url: '/static/images/image-list/breakfast.jpg',
-//     title: 'Breakfast',
-//     width: '40%',
-//   }
-// ]
