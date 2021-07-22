@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {useEffect, useState} from "react";
 import { Switch, Route, withRouter, useHistory } from "react-router-dom";
 import Login from './components/Login';
@@ -77,9 +78,16 @@ function App(props) {
         updateErrorMessage(error.response.data.errorMessage)
     }
   }
+=======
+import React from "react";
+import { Switch, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import SignupCategoryPage from "./pages/SignupCategoryPage";
+>>>>>>> affa03c4c41f103b7c910ce2481e6513ea78c250
 
   return (
     <div>
+<<<<<<< HEAD
     <ThemeProvider theme={theme}>
     
       <Switch>
@@ -95,6 +103,9 @@ function App(props) {
       </Switch>
       
       </ThemeProvider>
+=======
+      <SignupCategoryPage />
+>>>>>>> affa03c4c41f103b7c910ce2481e6513ea78c250
     </div>
   );
 }

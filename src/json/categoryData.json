@@ -1,0 +1,47 @@
+[
+  {
+    "url": "/images/magic.jpg",
+    "title": "Art",
+    "width": "40%"
+  },
+  {
+    "url": "/images/magic.jpg",
+    "title": "Sports",
+    "width": "40%"
+  },
+  {
+    "url": "/images/magic.jpg",
+    "title": "Science",
+    "width": "40%"
+  },
+  {
+    "url": "/images/magic.jpg",
+    "title": "Lifestyle",
+    "width": "40%"
+  },
+  {
+    "url": "/images/magic.jpg",
+    "title": "Nature",
+    "width": "40%"
+  },
+  {
+    "url": "/images/magic.jpg",
+    "title": "Politics",
+    "width": "40%"
+  },
+  {
+    "url": "/images/magic.jpg",
+    "title": "Entertainment",
+    "width": "40%"
+  },
+  {
+    "url": "/images/magic.jpg",
+    "title": "Magic",
+    "width": "40%"
+  },
+  {
+    "url": "/images/magic.jpg",
+    "title": "Other",
+    "width": "40%"
+  }
+]
