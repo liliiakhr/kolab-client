@@ -63,14 +63,14 @@ function App() {
 
     try {
       let response = await axios.post(`${API_URL}/api/login`, myUser, {withCredentials: true});
-      setUser(response.data);
-      history.push('/home');
-    }
-    catch(err){
-      setErrorMessage(err.response.data.errorMessage)
+      setSuccessMessage(response.data.successMessage)
       setUser(response.data.userData);
       history.push('/home')
     }
+    catch(err){
+      setErrorMessage(err.response.data.errorMessage)
+    }
+
   }
   
   let handleSignUp = async (event) => {
@@ -82,7 +82,7 @@ function App() {
         password: password.value
     } 
     try{
-      let response = await axios.post(`${API_URL}/api/signup`, newUser, {withCredentials: true})
+    let response = await axios.post(`${API_URL}/api/signup`, newUser, {withCredentials: true})
         setSuccessMessage(response.data.successMessage)
         setUser(response.data.userData)        
         history.push('/signup/category')
@@ -110,10 +110,9 @@ function App() {
         <Route path={'/login'} render={(routeProps) => {
           return <Login onLogin={handleLogin} {...routeProps} />
         }}/>
-        <Route path={'/signup'} render={(routeProps) => {
+        <Route exact path={'/signup'} render={(routeProps) => {
           return <Signup {...routeProps} onSignUp={handleSignUp}/>
         }}/>
-        {/* NEED PROPS user, onUpdateUser */}
         <Route path={'/signup/category'} render={(routeProps) => {
           return <SignupCategoryPage {...routeProps}/>
         }}/>
