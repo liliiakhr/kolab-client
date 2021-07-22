@@ -110,8 +110,14 @@ function App() {
         <Route path={'/login'} render={(routeProps) => {
           return <Login onLogin={handleLogin} {...routeProps} />
         }}/>
-        <Route path={'/signup'} render={(routeProps) => {
+        <Route exact path={'/signup'} render={(routeProps) => {
           return <Signup {...routeProps} onSignUp={handleSignUp}/>
+        }}/>
+        <Route path={'/signup/category'} render={(routeProps) => {
+          return <SignupCategoryPage {...routeProps}/>
+        }}/>
+        <Route path={'/signup/group'} render={(routeProps) => {
+          return <SignupGroupPage {...routeProps}/>
         }}/>
       </Switch>
       {
