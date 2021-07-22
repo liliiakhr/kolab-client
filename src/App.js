@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
-import { Switch, Route, withRouter, useHistory } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import Login from './components/Login';
 import Signup from './components/Signup';
 import HomePage from './pages/HomePage'
-import { createTheme, Snackbar, ThemeProvider } from '@material-ui/core';
+import { createTheme, ThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from './config';
 import { EnhancedEncryptionTwoTone } from "@material-ui/icons";
+import FlashMessage from "./components/FlashMessage";
 
 
 
@@ -29,11 +30,21 @@ const theme = createTheme({
   })
 
 
-function App(props) {
+function App() {
 
-  const [user, updateUser] = useState(null)
-  const [errorMessage, updateErrorMessage] = useState(null)
-  const [successMessage, updateSuccessMessage] = useState(null)
+  const [user, setUser] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [snackbar, setSnackbar] = useState(null)
+
+
+  useEffect(() => {
+     (async () => {
+         let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
+         setUser(response.data)
+     })
+     ()
+  },[])
 
   let history = useHistory(); 
   
@@ -50,11 +61,12 @@ function App(props) {
 
     try {
       let response = await axios.post(`${API_URL}/api/login`, myUser, {withCredentials: true});
-      updateUser(response.data);
-      props.history.push('/home')
+      setSuccessMessage(response.data.successMessage)
+      setUser(response.data.userData);
+      history.push('/home')
     }
     catch(err){
-      updateErrorMessage(err.response.data.errorMessage)
+      setErrorMessage(err.response.data.errorMessage)
     }
 
   }
@@ -62,21 +74,30 @@ function App(props) {
   
   
   let handleSignUp = async (event) => {
+    const {username, email, password} = event.target
 
     let newUser = {
-        username: event.target.username.value,
-        email: event.target.email.value,
-        password: event.target.password.value
+        username: username.value,
+        email: email.value,
+        password: password.value
     } 
     try{
     let response = await axios.post(`${API_URL}/api/signup`, newUser, {withCredentials: true})
-        updateSuccessMessage(response.data.successMessage)        
-        props.history.push('/signup/category')
+        setSuccessMessage(response.data.successMessage)
+        setUser(response.data.userData)        
+        history.push('/signup/category')
     }
     catch (error) {
-        updateErrorMessage(error.response.data.errorMessage)
+        setErrorMessage(error.response.data.errorMessage)
     }
   }
+
+  useEffect(() => {
+     setSnackbar('success')
+  }, [successMessage])
+  useEffect(() => {
+    setSnackbar('error')
+  }, [errorMessage])
 
   return (
     <div>
@@ -90,13 +111,15 @@ function App(props) {
           return <Login onLogin={handleLogin} {...routeProps} />
         }}/>
         <Route path={'/signup'} render={(routeProps) => {
-          return <Signup {...routeProps}/>
+          return <Signup {...routeProps} onSignUp={handleSignUp}/>
         }}/>
       </Switch>
-      
+      {
+        snackbar === 'success' ? <FlashMessage messageType={snackbar}>{successMessage}</FlashMessage> : <FlashMessage messageType={snackbar}>{errorMessage}</FlashMessage> 
+      }
       </ThemeProvider>
     </div>
   );
 }
 
-export default withRouter(App);
+export default App;
