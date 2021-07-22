@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import CategoryCard from '../components/CategoryCard';
 import categoryData from '../json/categoryData.json';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import { Container, Typography, Button } from '@material-ui/core';
+import { Container, Typography, Button, Grid } from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import axios from 'axios';
 import API_URL from "../config"

@@ -3,7 +3,6 @@ import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 
-
 function CategoryCard({image, onUpdateCategories}) {
     const [ selected, setSelected ] = useState(false);
     
@@ -104,7 +103,6 @@ function CategoryCard({image, onUpdateCategories}) {
                 className={classes.image}
                 focusVisibleClassName={classes.focusVisible}
                 onClick={() => handleSelected(image.title)}
-                // disableRipple
             >
           <span
             className={classes.imageSrc}
