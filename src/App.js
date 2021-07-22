@@ -7,12 +7,9 @@ import { createTheme, ThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from './config';
 import { EnhancedEncryptionTwoTone } from "@material-ui/icons";
-<<<<<<< HEAD
 import SignupCategoryPage from "./pages/SignupCategoryPage";
 import SignupGroupPage from "./pages/SignupGroupPage";
-=======
 import FlashMessage from "./components/FlashMessage";
->>>>>>> 23eb12e86649f1d2e6c319340735f2e53ce8d20c
 
 
 
@@ -66,23 +63,12 @@ function App() {
 
     try {
       let response = await axios.post(`${API_URL}/api/login`, myUser, {withCredentials: true});
-<<<<<<< HEAD
-      updateUser(response.data);
-<<<<<<< HEAD
-=======
-      props.history.push('/home');
-    }
-    catch(err){
-      updateErrorMessage(err.response.data.errorMessage);
-=======
       setSuccessMessage(response.data.successMessage)
       setUser(response.data.userData);
->>>>>>> 23eb12e86649f1d2e6c319340735f2e53ce8d20c
       history.push('/home')
     }
     catch(err){
       setErrorMessage(err.response.data.errorMessage)
->>>>>>> e90eb164bf4f00eb8c64985bfaf3ed88ee520bf5
     }
 
   }
@@ -96,23 +82,15 @@ function App() {
         password: password.value
     } 
     try{
-<<<<<<< HEAD
-      let response = await axios.post(`${API_URL}/api/signup`, newUser, {withCredentials: true})
-          updateSuccessMessage(response.data.successMessage)        
-          props.history.push('/signup/category')
-=======
     let response = await axios.post(`${API_URL}/api/signup`, newUser, {withCredentials: true})
         setSuccessMessage(response.data.successMessage)
         setUser(response.data.userData)        
         history.push('/signup/category')
->>>>>>> e90eb164bf4f00eb8c64985bfaf3ed88ee520bf5
     }
     catch (error) {
         setErrorMessage(error.response.data.errorMessage)
     }
   }
-<<<<<<< HEAD
-=======
 
   useEffect(() => {
      setSnackbar('success')
@@ -120,7 +98,6 @@ function App() {
   useEffect(() => {
     setSnackbar('error')
   }, [errorMessage])
->>>>>>> e90eb164bf4f00eb8c64985bfaf3ed88ee520bf5
 
   return (
     <div>
@@ -133,15 +110,9 @@ function App() {
         <Route path={'/login'} render={(routeProps) => {
           return <Login onLogin={handleLogin} {...routeProps} />
         }}/>
-<<<<<<< HEAD
         <Route exact path={'/signup'} render={(routeProps) => {
-          return <Signup {...routeProps}/>
-=======
-        <Route path={'/signup'} render={(routeProps) => {
           return <Signup {...routeProps} onSignUp={handleSignUp}/>
->>>>>>> 23eb12e86649f1d2e6c319340735f2e53ce8d20c
         }}/>
-        {/* NEED PROPS user, onUpdateUser */}
         <Route path={'/signup/category'} render={(routeProps) => {
           return <SignupCategoryPage {...routeProps}/>
         }}/>
