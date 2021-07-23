@@ -1,25 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import API_URL from '../config';
 import { Link, useHistory } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Button, AppBar, CssBaseline, Drawer, Hidden, IconButton, Toolbar, Typography, Tabs, Tab, Box, Badge, Menu, MenuItem } from '@material-ui/core';
-import PropTypes from 'prop-types';
-// import { MailIcon, MenuIcon, ExploreIcon, AccountCircle, NotificationsIcon, MoreIcon, PeopleAltIcon } from '@material-ui/icons'
-import MailIcon from '@material-ui/icons/Mail';
+import { Button, AppBar, CssBaseline, Drawer, Hidden, IconButton, Toolbar, Tooltip, Tabs, Tab, Box, Badge, Menu, MenuItem, Zoom } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExploreIcon from '@material-ui/icons/Explore';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
-const drawerWidth = 240;
-const appBarHeight = 60;
-
-
-
 function NavBar(props) {
+    // Hardcoded values for the appBar & Drawer (sidemenu)
+    const drawerWidth = 240;
+    const appBarHeight = 60;
+
+    // DrawerStates
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [value, setValue] = useState(0);
+
+    // States related to the sub menu's from the appbar
+    // anchorEl is a prop from menu function that helps to find the position of the menu
+    // anchorEl is either null or an html-element (which you get frome event.currentTarget)
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+
+    // Boolean to open menu
+    // if anchorEl is not null it will become true, else it will be false, same for mobileMoreAnchorEl
+    const isMenuOpen = Boolean(anchorEl);                   // Menu are the menus for friends or when you click on your own avatar icon
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);   // Mobile menu is the menu for when a user is on mobile (3 dots appear)
+    
+    // Created to differentiate between the friends and user menu
+    const [selectedMenu, setSelectedMenu] = useState(null);
 
     const useStyles = makeStyles((theme) => ({
       root: {
@@ -34,6 +46,7 @@ function NavBar(props) {
       appBar: {
         height: appBarHeight,
         [theme.breakpoints.up('sm')]: {
+            height: 56,
         },
       },
       menuButton: {
@@ -51,6 +64,7 @@ function NavBar(props) {
       content: {
         flexGrow: 1,
         padding: theme.spacing(3),
+        marginTop: appBarHeight
       },
       moveDrawerDown: {
           marginTop: "50"
@@ -65,9 +79,9 @@ function NavBar(props) {
           display: 'block',
         },
       },
-      inputRoot: {
-        color: 'inherit',
-      },
+    //   inputRoot: {
+    //     color: 'inherit',
+    //   },
       inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
@@ -92,95 +106,47 @@ function NavBar(props) {
       },
     }));
 
-    // function TabPanel(props) {
-    //     const { children, value, index, ...other } = props;
-    //     console.log("children", children)
-    //     console.log("value", value)
-    //     console.log("index", index)
-    //     console.log("other", other)
-        
-    //     return (
-    //       <div
-    //         role="tabpanel"
-    //         hidden={value !== index}
-    //         id={`vertical-tabpanel-${index}`}
-    //         aria-labelledby={`vertical-tab-${index}`}
-    //         {...other}
-    //       >
-    //         {value === index && (
-    //           <Box p={3}>
-    //             <Typography>{children}</Typography>
-    //           </Box>
-    //         )}
-    //       </div>
-    //     );
-    //   }
-      
-    //   TabPanel.propTypes = {
-    //     children: PropTypes.node,
-    //     index: PropTypes.any.isRequired,
-    //     value: PropTypes.any.isRequired,
-    //   };
-    
-    // function a11yProps(index) {
-    //     return {
-    //       id: `vertical-tab-${index}`,
-    //       'aria-controls': `vertical-tabpanel-${index}`,
-    //     };
-    //   }
+    const classes = useStyles();
+    const theme = useTheme();
+    let history = useHistory();
 
-    // Window is always undefined, needs clean up ==> Needed for "container variable later"
-  const { window } = props;
-  const classes = useStyles();
-  const theme = useTheme();
-  let history = useHistory();
+    // Functions for opening/closing drawer
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
 
-    // This is for the drawer
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [value, setValue] = React.useState(0);
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+    // Render drawer
+    // !! NEEDS DYNAMIC RENDERING BASED ON GROUPS OF THE USER
+    const drawer = (
+        <div >
+            <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={value}
+            onChange={handleChange}
+            aria-label="Vertical tabs example"
+            className={classes.tabs}
+        >
+            <Tab label="Item One" />
+            <Tab label="Item Two"  />
+            <Tab label="Item Three" />
+            <Tab label="Item Four"  />
+            <Tab label="Item Five"  />
+            <Tab label="Item Six" />
+            <Tab label="Item Seven" />
+        </Tabs>
+        </div>
+    );
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const drawer = (
-    <div >
-        <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        className={classes.tabs}
-      >
-        {/* <Tab label="Item One" {...a11yProps(0)} /> */}
-        {/* <Tab label="Item Two" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
-        <Tab label="Item Four" {...a11yProps(3)} />
-        <Tab label="Item Five" {...a11yProps(4)} />
-        <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} /> */}
-        <Tab label="Item One" />
-        <Tab label="Item Two"  />
-        <Tab label="Item Three" />
-        <Tab label="Item Four"  />
-        <Tab label="Item Five"  />
-        <Tab label="Item Six" />
-        <Tab label="Item Seven" />
-      </Tabs>
-    </div>
-  );
-
-  const container = window !== undefined ? () => window().document.body : undefined;
-
+    // Log user out, clean session
+    // !! NEEDS TO BE UNCOMMENTED LATER, once the onUpdateUser function exists !!
     const handleLogOut = async () => {
         try {
             await axios.post(`${API_URL}/api/auth/logout`)
-            // !! NEEDS TO BE UNCOMMENTED LATER, onece the onUpdateUser function exists !!
             // props.onUpdateUser(null)
             history.push('/')
         }
@@ -188,23 +154,8 @@ function NavBar(props) {
             // ?? What is best to put in here?
         }
     }
-
-    // FUNCTIONS FROM NAVBAR 2
-    // anchorEl is a prop from menu function that helps to find the position of the menu
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    
-    // Boolean to open menu
-    // ?? why is this not directly set in the state
-    const [mobileMoreFriendsAnchorEl, setMobileMoreFriendsAnchorEl] = React.useState(null);
-    const isFriendMenuOpen = Boolean(mobileMoreFriendsAnchorEl);
-
-    // Created to differentiate between the friends and user menu
-    const [selectedMenu, setSelectedMenu] = React.useState(null);
  
+    // Functions for opening and closing the App bar menus
     const handleProfileMenuOpen = (event, menuType) => {
       setAnchorEl(event.currentTarget);
       setSelectedMenu(menuType)
@@ -223,6 +174,9 @@ function NavBar(props) {
       setMobileMoreAnchorEl(event.currentTarget);
     };
   
+    // Functions for rendering the menu JSX and the mobileMenu JSX
+    // They are created here and not in the render method to make things cleaner
+    // In the render method you will find {renderMenu} and {renderMobileMenu}
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
       <Menu
@@ -266,7 +220,7 @@ function NavBar(props) {
         <MenuItem onClick={() => {history.push('/explore')}}>
           <IconButton aria-label="show 4 new mails" color="inherit"   >
             <Badge badgeContent={4} color="secondary">
-              <MailIcon />
+              <ExploreIcon />
             </Badge>
           </IconButton>
           <p>Explore</p>
@@ -274,7 +228,7 @@ function NavBar(props) {
         <MenuItem onClick={(event) => handleProfileMenuOpen(event, 'friend') }>
           <IconButton aria-label="show 11 new notifications" color="inherit">
             <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
+              <PeopleAltIcon />
             </Badge>
           </IconButton>
           <p>Friends</p>
@@ -296,51 +250,61 @@ function NavBar(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Link to="/home">
-            <img src="/images/kolab_logo.png" style={{height: "50px" }} />
-          </Link>
-
-            {/* Stuff from NavBar 2 */} 
+      <AppBar position="fixed" className={classes.appBar} elevation={1}>
+        <Toolbar style={{ display: "flex", alignItems: "center"}}>
+            {/* Conditionally show the Drawer (sidemenu) based on the showDrawer prop */}
+            {
+                props.showDrawer &&
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        className={classes.menuButton}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+            }
+            <Tooltip TransitionComponent={Zoom} title="Go back to your feed">
+                <Link to="/home">
+                    <img src="/images/kolab_logo.png" style={{height: appBarHeight }} />
+                </Link>
+            </Tooltip>
             <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-                <Button onClick={() => {history.push('/explore')} }color="inherit" startIcon={
-                                    <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                                        <ExploreIcon />
-                                    </Badge>
-                    }> Explore
-                </Button>
-          <Button  
-                color="inherit" 
-                startIcon={
-                    <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                        <PeopleAltIcon />
-                    </Badge>
-                }
-                onClick={(event) => handleProfileMenuOpen(event, 'friend') }
-            > Friends
-            </Button>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={(event) => handleProfileMenuOpen(event, 'user') }
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
+                <div className={classes.sectionDesktop}>
+                        <Tooltip TransitionComponent={Zoom} title="What topics facinate you?">
+                            <Button onClick={() => {history.push('/explore')} }color="inherit" startIcon={
+                                                <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                                                    <ExploreIcon />
+                                                </Badge>
+                                }> Explore
+                            </Button>
+                        </Tooltip>
+                        <Tooltip TransitionComponent={Zoom} title="Connect with your partners in passion">
+                            <Button  
+                                    color="inherit" 
+                                    startIcon={
+                                        <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                                            <PeopleAltIcon />
+                                        </Badge>
+                                    }
+                                    onClick={(event) => handleProfileMenuOpen(event, 'friend') }
+                                > Friends
+                                </Button>
+                        </Tooltip>
+                        <Tooltip TransitionComponent={Zoom} title="Check your profile">
+                            <IconButton
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={menuId}
+                                aria-haspopup="true"
+                                onClick={(event) => handleProfileMenuOpen(event, 'user') }
+                                color="inherit"
+                                >
+                                <AccountCircle />
+                            </IconButton>
+                        </Tooltip>
+                </div>
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
@@ -356,41 +320,43 @@ function NavBar(props) {
 
         </Toolbar>
       </AppBar>
-      {/* NAVBAR TWO */}
+      {/* Puts the Mobile menu and menu in that we created above */}
       {renderMobileMenu}
       {renderMenu}
-      {/* NAVBAR TWO */}
-      <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
-          <Drawer
-            // container={container}
-            variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
+      {/* Conditionally render the drawer based on showDrawer prop */}
+      {
+        props.showDrawer &&
+        <nav className={classes.drawer} aria-label="mailbox folders">
+            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+            <Hidden smUp implementation="css">
+            <Drawer
+                variant="temporary"
+                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+                classes={{
+                paper: classes.drawerPaper,
+                }}
+                ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+                }}
+            >
+                {drawer}
+            </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+            <Drawer
+                classes={{
+                paper: classes.drawerPaper,
+                }}
+                variant="permanent"
+                open
+            >
+                {drawer}
+            </Drawer>
+            </Hidden>
+        </nav>
+      }
       <main className={classes.content}>
         { props.children }
       </main>
