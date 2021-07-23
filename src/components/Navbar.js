@@ -379,10 +379,7 @@ function NavBar(props) {
           </Drawer>
         </Hidden>
       </nav>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
- 
-      </main>
+      <main className={classes.content}> { props.children } </main> 
     </div>
   );
 }

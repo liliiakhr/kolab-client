@@ -11,6 +11,7 @@ import SignupCategoryPage from "./pages/SignupCategoryPage";
 import SignupGroupPage from "./pages/SignupGroupPage";
 import FlashMessage from "./components/FlashMessage";
 import ExploreGroupPage from "./pages/ExploreGroupPage";
+import HomePage from "./pages/HomePage";
 
 
 
@@ -119,6 +120,9 @@ function App() {
         }}/>
         <Route path={'/signup/group'} render={(routeProps) => {
           return <SignupGroupPage {...routeProps}/>
+        }}/>
+        <Route path={'/home'} render={(routeProps) => {
+          return <HomePage {...routeProps}/>
         }}/>
         <Route path={'/explore'} render={(routeProps) => {
           return <ExploreGroupPage {...routeProps}/>

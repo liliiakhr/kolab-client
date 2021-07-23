@@ -190,7 +190,7 @@ Messages model
 | GET         | `/signup/group`   |                           |                | 400          |  Querry for groups filter by categories of user (stored in session) elements                                                                                                            |
 | GET         | `/home`           |                             |                |              | Sort by timestamp limit by 10                                                                                                                |
 | GET         | `/:group`  |                             |                | Params, 2 querries, 1 for post model 1 for group model, populate comments             |                                                                                                              |
-| POST         | `/:group/join`  |     {userid}                        |                | find the group id and add user to group id        |                                                                                                              |
+| POST         | `/:group/join`  |     {userid}              |      | find the group id and add user to group id        |                                                                                                              |
 | GET         | `/:group/leave`  |     {userid}                      |                | find the group id and remove user to group id     comments             |                                                                                                              |
 | PUT         | `/:group/add-post`      |  {title, description, owner}                   | 200            | 400          | edit element                                                                                                                    |
 | DELETE         | `/:post/delete-post`      |  {post-id}                   | 200            | 400          | edit element                                                                                                                    |
@@ -203,15 +203,13 @@ Messages model
 | GET         | `/profile/:user`     |                             |                |              | Get posts with user id elements                                                                                                             |
 | PATCH         | `/profile/:user`     |  {name, description image} |                |              | elements                                                                                                             |
 | POST         | `/profile/:user/add-friend`     |  {your user id} |                |              | elements                                                                                                             |
-| GET         | `/people`     |      |                |              | Querry for random users elements                                                                                                             |
+| GET         | `/people`     |      |                |              | Querry for random users elements |
 | POST         | `/people/search`     |   {searchtext}     |                |              | elements                                                                                                             |
-| GET         | `/messages/:conversationId`     |        |                |              | elements                                                                                                             |
-| POST         | `/conversations`     |        |                |              |  elements                                                                                                             |
-
+| GET         | `/messages/:conversationId`     |        |                |              |                                                                                                            |
+| POST         | `/conversations`     |        |                |              |                                                                                                              |
 <br>
 
 ## Links
-
 ### Trello/Whimsical
 
 [Trello]()
