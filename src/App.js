@@ -10,6 +10,7 @@ import { EnhancedEncryptionTwoTone } from "@material-ui/icons";
 import SignupCategoryPage from "./pages/SignupCategoryPage";
 import SignupGroupPage from "./pages/SignupGroupPage";
 import FlashMessage from "./components/FlashMessage";
+import ExploreGroupPage from "./pages/ExploreGroupPage";
 
 
 
@@ -118,6 +119,9 @@ function App() {
         }}/>
         <Route path={'/signup/group'} render={(routeProps) => {
           return <SignupGroupPage {...routeProps}/>
+        }}/>
+        <Route path={'/explore'} render={(routeProps) => {
+          return <ExploreGroupPage {...routeProps}/>
         }}/>
       </Switch>
       {/* {

@@ -16,8 +16,8 @@ function CategoryCard({image, onUpdateCategories}) {
         image: {
           position: 'relative',
           height: 150,
-          marginLeft: "20%",
-          width: "60%", 
+          marginLeft: "15%",
+          width: "70%",
           [theme.breakpoints.down('xs')]: {
             width: '100% !important', // Overrides inline-style
             height: 100,
@@ -88,6 +88,7 @@ function CategoryCard({image, onUpdateCategories}) {
           borderRadius: "20px", 
         },
       }));
+      
     const classes = useStyles();
 
     const handleSelected = (category) => {
