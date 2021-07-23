@@ -8,8 +8,8 @@ import SignupGroupPage from './SignupGroupPage';
 function ExploreGroupPage({user, onUpdateUser}) {
     return (
         <div>
-            <Navbar user={user} onUpdateUser={onUpdateUser} >
-                <SignupGroupPage />
+            <Navbar user={user} onUpdateUser={onUpdateUser} showDrawer>
+                <SignupGroupPage  />
             </Navbar>
         </div>
     )

@@ -9,7 +9,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 function SignupCategoryPage( {user, onUpdateUser, history} ) {
 
-    // style={{ top: "0px", position: "absolute", right: "0px"}}
     const useStyles = makeStyles((theme) => ({
         btn: {
             position: "absolute",
@@ -47,34 +46,21 @@ function SignupCategoryPage( {user, onUpdateUser, history} ) {
                 categories
             }
             let response = await axios.post(`${API_URL}/api/signup/category`, categoryInfo);
-            onUpdateUser(response.data)
+            console.log(response.data)
+            // Await is neccessary since the updateuser and the get function that will run on the /signup/group function are both async
+            // So await in order to prevent that groups are loaded before categories are updated
+            await onUpdateUser(response.data)
             history.push('/signup/group')
         }
         catch(error) {
-             
+            console.log("I RUN" , error)
+            // ?? What is best to put in here?   
         }
     }
 
     return (
         <>
         <Container style={{ marginTop: "50px"}} >
-            {/* <div style={{ position: "relative"}} className="fly-top">
-                <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "30px"}}>
-                    What are your interests?
-                </Typography>
-                {
-                    categories.length > 0 && 
-                        <Button 
-                            color="primary" 
-                            size="large" 
-                            variant="contained" 
-                            style={{ top: "0px", position: "absolute", right: "0px"}}
-                            onClick={handleUpdateCategoriesUser}
-                            >
-                            {categories.length > 0 ? <ArrowRightAltIcon /> : ''}
-                        </Button> 
-                }
-            </div> */}
             <div style={{ position: "relative"}} className="fly-top">
                 <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "30px"}}>
                     What are your interests?

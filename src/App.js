@@ -9,7 +9,6 @@ import SignupGroupPage from "./pages/SignupGroupPage";
 import ExploreGroupPage from "./pages/ExploreGroupPage";
 import HomePage from "./pages/HomePage";
 
-
 const theme = createTheme({
   // You get the objects from the documentation
   palette: {
@@ -28,7 +27,6 @@ const theme = createTheme({
     }
   })
 
-
 function App() {
 
   const [user, setUser] = useState(null)
@@ -36,22 +34,20 @@ function App() {
   const [successMessage, setSuccessMessage] = useState(null)
   const [snackbar, setSnackbar] = useState('success')
   const [randomNumber, setRandomNumber] = useState(0)
+  let history = useHistory(); 
 
+  console.log(user)
 
   useEffect(() => {
      (async () => {
          let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
          setUser(response.data)
-     })
-     ()
-  },[])
+     })()
+  }, [])
 
-  let history = useHistory(); 
   
-  let handleLogin = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-
-    console.log("Login works")
     const { username, password} = event.target;
 
     let myUser = {
@@ -72,20 +68,20 @@ function App() {
       setRandomNumber(Math.random()*100)
       setErrorMessage(err.response.data.errorMessage)
     }
-
   }
   
-  let handleSignUp = async (event) => {
+  const handleSignUp = async (event) => {
     event.preventDefault()
-    const {username, email, password} = event.target
-
-    let newUser = {
-        username: username.value,
-        email: email.value,
-        password: password.value
-    } 
+    
     try{
-    let response = await axios.post(`${API_URL}/api/auth/signup`, newUser, {withCredentials: true})
+      const {username, email, password} = event.target
+      let newUser = {
+          username: username.value,
+          email: email.value,
+          password: password.value
+      } 
+
+      let response = await axios.post(`${API_URL}/api/auth/signup`, newUser, {withCredentials: true})
         setSnackbar('success')
         setRandomNumber(Math.random()*100)  
         setSuccessMessage(response.data.successMessage)
@@ -100,6 +96,16 @@ function App() {
     }
   }
 
+  const handleUpdateUser = async (userData) => {
+    try {
+      let response = await axios.post(`${API_URL}/api/user`, userData,  {withCredentials: true});
+      setUser(response.data.newUser)
+    }
+    catch(error) {
+      // TO DO: SNACKBAR MESSAGE 
+    }
+  }
+
 
   return (
     <div>
@@ -110,10 +116,10 @@ function App() {
           return <LandingPage trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
         }}/>
         <Route path={'/signup/category'} render={(routeProps) => {
-          return <SignupCategoryPage {...routeProps} user={user}/>
+          return <SignupCategoryPage user={user} onUpdateUser={handleUpdateUser} {...routeProps}/>
         }}/>
         <Route path={'/signup/group'} render={(routeProps) => {
-          return <SignupGroupPage {...routeProps} user={user}/>
+          return <SignupGroupPage user={user} {...routeProps}/>
         }}/>
         <Route path={'/home'} render={(routeProps) => {
           return <HomePage {...routeProps}/>

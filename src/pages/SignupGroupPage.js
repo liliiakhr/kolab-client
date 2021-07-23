@@ -14,10 +14,9 @@ function SignupGroupPage({user, history}) {
         const getGroupData = async () => {
             try {
                 let categoryInfo = {
-                    // categories: user.categories
-                    categories: ['magic', 'art', 'nature']
+                    categories: user.categories
                 }
-                // !! Is query the way to go here or do we have alternatives? !!
+
                 let response = await axios.get(`${API_URL}/api/signup/group`, { params: categoryInfo });
                 setGroups(response.data)
             }
@@ -39,6 +38,7 @@ function SignupGroupPage({user, history}) {
                         style={{ marginLeft: "20px"}}
                         endIcon={<NavigateNextIcon />}
                         variant="outlined"
+                        onClick={() => {history.push('/home')}}
                     >
                         Skip
                     </Button>
