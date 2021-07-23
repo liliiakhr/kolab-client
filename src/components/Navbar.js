@@ -1,146 +1,139 @@
 import React from 'react';
+import axios from 'axios';
+import API_URL from '../config';
+import { Link, useHistory } from 'react-router-dom';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Button, AppBar, CssBaseline, Drawer, Hidden, IconButton, Toolbar, Typography, Tabs, Tab, Box, Badge, Menu, MenuItem } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+// import { MailIcon, MenuIcon, ExploreIcon, AccountCircle, NotificationsIcon, MoreIcon, PeopleAltIcon } from '@material-ui/icons'
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-import { Button } from '@material-ui/core'
 import ExploreIcon from '@material-ui/icons/Explore';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
 const drawerWidth = 240;
 const appBarHeight = 60;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  appBar: {
-    height: appBarHeight,
-    [theme.breakpoints.up('sm')]: {
-    },
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
-  drawerPaper: {
-    marginTop: appBarHeight,
-    width: drawerWidth,
-    position: "relative"
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  moveDrawerDown: {
-      marginTop: "50"
-  },
-  // STYLES FROM NAVBAR TWO
-  grow: {
-    flexGrow: 1,
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-}));
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-  
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`vertical-tabpanel-${index}`}
-        aria-labelledby={`vertical-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box p={3}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    );
-  }
-  
-  TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-  };
-
-function a11yProps(index) {
-    return {
-      id: `vertical-tab-${index}`,
-      'aria-controls': `vertical-tabpanel-${index}`,
-    };
-  }
 
 function NavBar(props) {
+
+    const useStyles = makeStyles((theme) => ({
+      root: {
+        display: 'flex',
+      },
+      drawer: {
+        [theme.breakpoints.up('sm')]: {
+          width: drawerWidth,
+          flexShrink: 0,
+        },
+      },
+      appBar: {
+        height: appBarHeight,
+        [theme.breakpoints.up('sm')]: {
+        },
+      },
+      menuButton: {
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up('sm')]: {
+          display: 'none',
+        },
+      },
+      // necessary for content to be below app bar
+      toolbar: theme.mixins.toolbar,
+      drawerPaper: {
+        marginTop: appBarHeight,
+        width: drawerWidth,
+      },
+      content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+      },
+      moveDrawerDown: {
+          marginTop: "50"
+      },
+      // STYLES FROM NAVBAR TWO
+      grow: {
+        flexGrow: 1,
+      },
+      title: {
+        display: 'none',
+        [theme.breakpoints.up('sm')]: {
+          display: 'block',
+        },
+      },
+      inputRoot: {
+        color: 'inherit',
+      },
+      inputInput: {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+          width: '20ch',
+        },
+      },
+      sectionDesktop: {
+        display: 'none',
+        [theme.breakpoints.up('md')]: {
+          display: 'flex',
+        },
+      },
+      sectionMobile: {
+        display: 'flex',
+        [theme.breakpoints.up('md')]: {
+          display: 'none',
+        },
+      },
+    }));
+
+    // function TabPanel(props) {
+    //     const { children, value, index, ...other } = props;
+    //     console.log("children", children)
+    //     console.log("value", value)
+    //     console.log("index", index)
+    //     console.log("other", other)
+        
+    //     return (
+    //       <div
+    //         role="tabpanel"
+    //         hidden={value !== index}
+    //         id={`vertical-tabpanel-${index}`}
+    //         aria-labelledby={`vertical-tab-${index}`}
+    //         {...other}
+    //       >
+    //         {value === index && (
+    //           <Box p={3}>
+    //             <Typography>{children}</Typography>
+    //           </Box>
+    //         )}
+    //       </div>
+    //     );
+    //   }
+      
+    //   TabPanel.propTypes = {
+    //     children: PropTypes.node,
+    //     index: PropTypes.any.isRequired,
+    //     value: PropTypes.any.isRequired,
+    //   };
+    
+    // function a11yProps(index) {
+    //     return {
+    //       id: `vertical-tab-${index}`,
+    //       'aria-controls': `vertical-tabpanel-${index}`,
+    //     };
+    //   }
+
+    // Window is always undefined, needs clean up ==> Needed for "container variable later"
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
+  let history = useHistory();
 
     // This is for the drawer
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -164,19 +157,37 @@ function NavBar(props) {
         aria-label="Vertical tabs example"
         className={classes.tabs}
       >
-        <Tab label="Item One" {...a11yProps(0)} />
-        <Tab label="Item Two" {...a11yProps(1)} />
+        {/* <Tab label="Item One" {...a11yProps(0)} /> */}
+        {/* <Tab label="Item Two" {...a11yProps(1)} />
         <Tab label="Item Three" {...a11yProps(2)} />
         <Tab label="Item Four" {...a11yProps(3)} />
         <Tab label="Item Five" {...a11yProps(4)} />
         <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} />
+        <Tab label="Item Seven" {...a11yProps(6)} /> */}
+        <Tab label="Item One" />
+        <Tab label="Item Two"  />
+        <Tab label="Item Three" />
+        <Tab label="Item Four"  />
+        <Tab label="Item Five"  />
+        <Tab label="Item Six" />
+        <Tab label="Item Seven" />
       </Tabs>
     </div>
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
+    const handleLogOut = async () => {
+        try {
+            await axios.post(`${API_URL}/api/auth/logout`)
+            // !! NEEDS TO BE UNCOMMENTED LATER, onece the onUpdateUser function exists !!
+            // props.onUpdateUser(null)
+            history.push('/')
+        }
+        catch(error) {
+            // ?? What is best to put in here?
+        }
+    }
 
     // FUNCTIONS FROM NAVBAR 2
     // anchorEl is a prop from menu function that helps to find the position of the menu
@@ -212,8 +223,6 @@ function NavBar(props) {
       setMobileMoreAnchorEl(event.currentTarget);
     };
   
-    console.log(selectedMenu)
-
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
       <Menu
@@ -228,15 +237,15 @@ function NavBar(props) {
         {
             selectedMenu === 'user' ? (
                 <div>
-                    <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+                    <MenuItem onClick={() => {history.push(`/profile/${props.user._id}`)}}>Profile</MenuItem>
+                    <MenuItem onClick={handleLogOut}>Logout</MenuItem>
                 </ div>
             )
             :
             (
                 <div>
-                    <MenuItem onClick={handleMenuClose}>My Friends</MenuItem>
-                    <MenuItem onClick={handleMenuClose}>Explore People</MenuItem>
+                    <MenuItem onClick={() => {history.push('/friends')}}>My Friends</MenuItem>
+                    <MenuItem onClick={() => {history.push('/people')}}>Explore People</MenuItem>
                 </ div>
             )
         }
@@ -254,8 +263,8 @@ function NavBar(props) {
         open={isMobileMenuOpen}
         onClose={handleMobileMenuClose}
       >
-        <MenuItem>
-          <IconButton aria-label="show 4 new mails" color="inherit">
+        <MenuItem onClick={() => {history.push('/explore')}}>
+          <IconButton aria-label="show 4 new mails" color="inherit"   >
             <Badge badgeContent={4} color="secondary">
               <MailIcon />
             </Badge>
@@ -298,24 +307,27 @@ function NavBar(props) {
           >
             <MenuIcon />
           </IconButton>
-          <img src="/images/kolab_logo.png" style={{height: "50px" }} />
+          <Link to="/home">
+            <img src="/images/kolab_logo.png" style={{height: "50px" }} />
+          </Link>
 
-            {/* Stuff from NavBar 2 */}
+            {/* Stuff from NavBar 2 */} 
             <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-          <Button  color="inherit" startIcon={
-                            <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                                <ExploreIcon />
-                            </Badge>
-            }> Explore
-            </Button>
-          <Button  color="inherit" startIcon={
-                            <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                                <PeopleAltIcon />
-                            </Badge>
-                            
-            }
-            onClick={(event) => handleProfileMenuOpen(event, 'friend') }
+                <Button onClick={() => {history.push('/explore')} }color="inherit" startIcon={
+                                    <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                                        <ExploreIcon />
+                                    </Badge>
+                    }> Explore
+                </Button>
+          <Button  
+                color="inherit" 
+                startIcon={
+                    <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                        <PeopleAltIcon />
+                    </Badge>
+                }
+                onClick={(event) => handleProfileMenuOpen(event, 'friend') }
             > Friends
             </Button>
             <IconButton
@@ -352,7 +364,7 @@ function NavBar(props) {
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
-            container={container}
+            // container={container}
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={mobileOpen}
@@ -380,8 +392,7 @@ function NavBar(props) {
         </Hidden>
       </nav>
       <main className={classes.content}>
-        <div className={classes.toolbar} />
- 
+        { props.children }
       </main>
     </div>
   );

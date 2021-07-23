@@ -1,13 +1,16 @@
 import React from 'react'
+import Login from '../components/Login';
 import Navbar from '../components/Navbar';
 import SignupGroupPage from './SignupGroupPage';
+// import LandingPage from '../pages/LandingPage'
 
 
-function ExploreGroupPage() {
+function ExploreGroupPage({user, onUpdateUser}) {
     return (
         <div>
-            <Navbar />
-            <SignupGroupPage style={{ width: "80%"}}/>
+            <Navbar user={user} onUpdateUser={onUpdateUser}>
+                <SignupGroupPage />
+            </Navbar>
         </div>
     )
 }
