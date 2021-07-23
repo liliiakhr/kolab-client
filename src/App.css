@@ -3,6 +3,7 @@
 .landingPageWrapper{
     height: 100vh;
     background-image: url('./assets/images/background.jpg') ;
+    position: relative;
 }
 .landingBtnsWrapper{
     align-self: center;
@@ -11,14 +12,15 @@
     background-color: #6D4031;
 } */
 .popupOpacity {
-    width: 80%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
     background-color:rgba(0, 0, 0, 0.3);
     position: absolute;
-    margin-left: 10%;
     display: flex;
     align-items: center;
     justify-content: center;
+    top: 0px;
+    left: 0px;
 }
 
 @media (max-width: 400px) {

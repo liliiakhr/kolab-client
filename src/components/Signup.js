@@ -4,8 +4,10 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import logo from '../assets/images/logo_dark_transparent.png'
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
 
-function Signup() {
+function Signup(props) {
     return (
         <div style={{
             width: '25%',
@@ -15,10 +17,14 @@ function Signup() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            borderRadius: '30%',
+            borderRadius: '15%',
             }}>
+            <IconButton onClick={props.onSignUpPopUp} style={{marginTop: '-25%', marginBottom: '15%', marginLeft: '80%'}} >
+                <CloseIcon />
+            </IconButton>
+
         <img src={logo} alt='Kolab logo'style={{width: '50%', marginTop: '-20%'}}/>
-        <form style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <form autocomplete="off" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}} onSubmit={props.onSignUp} novalidate>
             <TextField
             id="outlined-password-input"
             label="Username"
@@ -30,7 +36,7 @@ function Signup() {
             <TextField
             id="outlined-password-input"
             label="Email"
-            type="email"
+            type="text"
             variant="outlined"
             name="email"
             style={{marginTop: '20px'}}
