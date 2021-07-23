@@ -88,6 +88,7 @@ function CategoryCard({image, onUpdateCategories}) {
           borderRadius: "20px", 
         },
       }));
+      
     const classes = useStyles();
 
     const handleSelected = (category) => {

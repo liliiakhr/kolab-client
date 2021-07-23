@@ -4,9 +4,24 @@ import categoryData from '../json/categoryData.json';
 import { Container, Typography, Button, Grid } from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import axios from 'axios';
-import API_URL from "../config"
+import API_URL from "../config";
+import { makeStyles } from '@material-ui/core/styles';
 
 function SignupCategoryPage( {user, onUpdateUser, history} ) {
+
+    // style={{ top: "0px", position: "absolute", right: "0px"}}
+    const useStyles = makeStyles((theme) => ({
+        btn: {
+            position: "absolute",
+            top: "0px",
+            right: "0px",
+            [theme.breakpoints.down('xs')]: {
+                left: "0",
+            },
+        }
+      }));
+
+    const classes = useStyles();
 
     const [ categories, setCategories ] = useState([]);
 
@@ -41,23 +56,41 @@ function SignupCategoryPage( {user, onUpdateUser, history} ) {
     }
 
     return (
+        <>
         <Container style={{ marginTop: "50px"}} >
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}} className="fly-top">
+            {/* <div style={{ position: "relative"}} className="fly-top">
                 <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "30px"}}>
                     What are your interests?
-                    {
-                        categories.length > 0 && 
-                            <Button 
-                                color="primary" 
-                                size="large" 
-                                variant="contained" 
-                                style={{ marginLeft: "20px"}}
-                                onClick={handleUpdateCategoriesUser}
-                                >
-                                <ArrowRightAltIcon />
-                            </Button> 
-                    }
                 </Typography>
+                {
+                    categories.length > 0 && 
+                        <Button 
+                            color="primary" 
+                            size="large" 
+                            variant="contained" 
+                            style={{ top: "0px", position: "absolute", right: "0px"}}
+                            onClick={handleUpdateCategoriesUser}
+                            >
+                            {categories.length > 0 ? <ArrowRightAltIcon /> : ''}
+                        </Button> 
+                }
+            </div> */}
+            <div style={{ position: "relative"}} className="fly-top">
+                <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "30px"}}>
+                    What are your interests?
+                </Typography>
+                {
+                    categories.length > 0 && 
+                        <Button 
+                            color="primary" 
+                            size="large" 
+                            variant="contained" 
+                            className={classes.btn}
+                            onClick={handleUpdateCategoriesUser}
+                            >
+                            {categories.length > 0 ? <ArrowRightAltIcon /> : ''}
+                        </Button> 
+                }
             </div>
             <Grid
                 container
@@ -80,6 +113,7 @@ function SignupCategoryPage( {user, onUpdateUser, history} ) {
                     }
             </Grid>
         </Container>
+        </>
     )
 }
 
