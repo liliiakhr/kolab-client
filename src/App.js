@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { Switch, Route, useHistory } from "react-router-dom";
-import Login from './components/Login';
-import Signup from './components/Signup';
 import LandingPage from './pages/LandingPage'
 import { createTheme, ThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from './config';
 import SignupCategoryPage from "./pages/SignupCategoryPage";
 import SignupGroupPage from "./pages/SignupGroupPage";
-import FlashMessage from "./components/FlashMessage";
 import ExploreGroupPage from "./pages/ExploreGroupPage";
 import HomePage from "./pages/HomePage";
 
@@ -37,7 +34,8 @@ function App() {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
-  const [snackbar, setSnackbar] = useState(null)
+  const [snackbar, setSnackbar] = useState('success')
+  const [randomNumber, setRandomNumber] = useState(0)
 
 
   useEffect(() => {
@@ -62,18 +60,23 @@ function App() {
     }
 
     try {
-      let response = await axios.post(`${API_URL}/api/login`, myUser, {withCredentials: true});
+      let response = await axios.post(`${API_URL}/api/auth/login`, myUser, {withCredentials: true});
+      setSnackbar('success')
+      setRandomNumber(Math.random()*100)  
       setSuccessMessage(response.data.successMessage)
       setUser(response.data.userData);
       history.push('/home')
     }
     catch(err){
+      setSnackbar('error') 
+      setRandomNumber(Math.random()*100)
       setErrorMessage(err.response.data.errorMessage)
     }
 
   }
   
   let handleSignUp = async (event) => {
+    event.preventDefault()
     const {username, email, password} = event.target
 
     let newUser = {
@@ -82,22 +85,21 @@ function App() {
         password: password.value
     } 
     try{
-    let response = await axios.post(`${API_URL}/api/signup`, newUser, {withCredentials: true})
+    let response = await axios.post(`${API_URL}/api/auth/signup`, newUser, {withCredentials: true})
+        setSnackbar('success')
+        setRandomNumber(Math.random()*100)  
         setSuccessMessage(response.data.successMessage)
-        setUser(response.data.userData)        
+        setUser(response.data.userData) 
+             
         history.push('/signup/category')
     }
     catch (error) {
+        setSnackbar('error') 
+        setRandomNumber(Math.random()*100)
         setErrorMessage(error.response.data.errorMessage)
     }
   }
 
-  useEffect(() => {
-     setSnackbar('success')
-  }, [successMessage])
-  useEffect(() => {
-    setSnackbar('error')
-  }, [errorMessage])
 
   return (
     <div>
@@ -105,30 +107,21 @@ function App() {
     
       <Switch>
         <Route exact path={'/'} render={() => {
-          return <LandingPage onLogin={handleLogin} onSignUp={handleSignUp}/>
+          return <LandingPage trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
         }}/>
-        {/* <Route path={'/login'} render={(routeProps) => {
-          return <Login onLogin={handleLogin} {...routeProps} />
-        }}/>
-        <Route exact path={'/signup'} render={(routeProps) => {
-          return <Signup {...routeProps} onSignUp={handleSignUp}/>
-        }}/> */}
         <Route path={'/signup/category'} render={(routeProps) => {
-          return <SignupCategoryPage {...routeProps}/>
+          return <SignupCategoryPage {...routeProps} user={user}/>
         }}/>
         <Route path={'/signup/group'} render={(routeProps) => {
-          return <SignupGroupPage {...routeProps}/>
+          return <SignupGroupPage {...routeProps} user={user}/>
         }}/>
         <Route path={'/home'} render={(routeProps) => {
           return <HomePage {...routeProps}/>
         }}/>
         <Route path={'/explore'} render={(routeProps) => {
-          return <ExploreGroupPage {...routeProps}/>
+          return <ExploreGroupPage {...routeProps} user={user}/>
         }}/>
       </Switch>
-      {/* {
-        snackbar === 'success' ? <FlashMessage messageType={snackbar}>{successMessage}</FlashMessage> : <FlashMessage messageType={snackbar}>{errorMessage}</FlashMessage> 
-      } */}
       </ThemeProvider>
     </div>
   );

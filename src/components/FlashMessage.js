@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -21,25 +21,22 @@ function FlashMessage (props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const handleClick = () => {
+  useEffect(() => {
     setOpen(true);
-  };
+  }, [props.trigger])
+    
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
  return (
     <div className={classes.root}>
-      <Button variant="outlined" onClick={handleClick}>
-        Open success snackbar
-      </Button>
-      <Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          This is a success message!
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={props.messageType}>
+          {props.children}
         </Alert>
       </Snackbar>
     </div>

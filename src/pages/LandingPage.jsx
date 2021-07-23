@@ -7,19 +7,31 @@ import Signup from "../components/Signup";
 import Paper from '@material-ui/core/Paper';
 import backgroundUrl from '../assets/images/background.jpg'
 import logo from '../assets/images/logo_dark_transparent.png'
+import FlashMessage from "../components/FlashMessage";
 
 function HomePage(props) {
+  const {messageType, error, success, trigger} = props
   const [signup, setSignUp] = useState(false);
   const [login, setLogin] = useState(false);
   
 
   let handleSignUpPopUp = () => {
-    setSignUp(true)
+    if(!signup){
+      setSignUp(true)
+    } else{
+      setSignUp(false)
+    } 
   }
   
   let handleLoginPopUp = () => {
-    setLogin(true)
+    if(!login){
+      setLogin(true)
+    } else{
+      setLogin(false)
+    }
   }
+
+
   
   return (
       <div className="landingPageWrapper">
@@ -43,9 +55,17 @@ function HomePage(props) {
         {
           signup && (
           <div className="popupOpacity">  
-             <Signup />
+             <Signup onSignUpPopUp={handleSignUpPopUp} onSignUp={props.onSignUp}/>               
           </div>
           )
+        } {
+          login && (
+            <div className="popupOpacity">  
+            <Login onLoginPopUp={handleLoginPopUp} onLogin={props.onLogin}/>               
+           </div>
+            )
+        } {
+           messageType === 'success' ? <FlashMessage trigger={trigger} messageType={messageType}>{success}</FlashMessage> : <FlashMessage trigger={trigger} messageType={messageType}>{error}</FlashMessage> 
         }
       </div>
     
