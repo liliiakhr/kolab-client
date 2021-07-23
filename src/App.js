@@ -6,13 +6,11 @@ import LandingPage from './pages/LandingPage'
 import { createTheme, ThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from './config';
-import { EnhancedEncryptionTwoTone } from "@material-ui/icons";
 import SignupCategoryPage from "./pages/SignupCategoryPage";
 import SignupGroupPage from "./pages/SignupGroupPage";
 import FlashMessage from "./components/FlashMessage";
 import ExploreGroupPage from "./pages/ExploreGroupPage";
 import HomePage from "./pages/HomePage";
-
 
 
 const theme = createTheme({
