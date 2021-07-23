@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { Switch, Route, useHistory } from "react-router-dom";
 import Login from './components/Login';
 import Signup from './components/Signup';
-import HomePage from './pages/HomePage'
+import LandingPage from './pages/LandingPage'
 import { createTheme, ThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from './config';
@@ -105,14 +105,14 @@ function App() {
     
       <Switch>
         <Route exact path={'/'} render={() => {
-          return <HomePage user={user}/>
+          return <LandingPage onLogin={handleLogin} onSignUp={handleSignUp}/>
         }}/>
-        <Route path={'/login'} render={(routeProps) => {
+        {/* <Route path={'/login'} render={(routeProps) => {
           return <Login onLogin={handleLogin} {...routeProps} />
         }}/>
         <Route exact path={'/signup'} render={(routeProps) => {
           return <Signup {...routeProps} onSignUp={handleSignUp}/>
-        }}/>
+        }}/> */}
         <Route path={'/signup/category'} render={(routeProps) => {
           return <SignupCategoryPage {...routeProps}/>
         }}/>
@@ -120,9 +120,9 @@ function App() {
           return <SignupGroupPage {...routeProps}/>
         }}/>
       </Switch>
-      {
+      {/* {
         snackbar === 'success' ? <FlashMessage messageType={snackbar}>{successMessage}</FlashMessage> : <FlashMessage messageType={snackbar}>{errorMessage}</FlashMessage> 
-      }
+      } */}
       </ThemeProvider>
     </div>
   );

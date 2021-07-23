@@ -1,0 +1,29 @@
+
+/* Start landing page */
+.landingPageWrapper{
+    height: 100vh;
+    background-image: url('./assets/images/background.jpg') ;
+}
+.landingBtnsWrapper{
+    align-self: center;
+}
+/* .landingBtnsWrapper button{
+    background-color: #6D4031;
+} */
+.popupOpacity {
+    width: 80%;
+    height: 80%;
+    background-color:rgba(0, 0, 0, 0.3);
+    position: absolute;
+    margin-left: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 400px) {
+    .popupOpacity {
+        display: hidden;
+    }
+}
+/* End landing page */
