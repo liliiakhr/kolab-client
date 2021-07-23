@@ -9,6 +9,8 @@ import SignupGroupPage from "./pages/SignupGroupPage";
 import ExploreGroupPage from "./pages/ExploreGroupPage";
 import HomePage from "./pages/HomePage";
 
+export const UserContext = React.createContext()
+
 const theme = createTheme({
   // You get the objects from the documentation
   palette: {
@@ -35,8 +37,6 @@ function App() {
   const [snackbar, setSnackbar] = useState('success')
   const [randomNumber, setRandomNumber] = useState(0)
   let history = useHistory(); 
-
-  console.log(user)
 
   useEffect(() => {
      (async () => {
@@ -100,34 +100,35 @@ function App() {
     try {
       let response = await axios.post(`${API_URL}/api/user`, userData,  {withCredentials: true});
       setUser(response.data.newUser)
+      console.log(" I RUN ")
     }
     catch(error) {
       // TO DO: SNACKBAR MESSAGE 
     }
   }
 
-
   return (
     <div>
-    <ThemeProvider theme={theme}>
-    
-      <Switch>
-        <Route exact path={'/'} render={() => {
-          return <LandingPage trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
-        }}/>
-        <Route path={'/signup/category'} render={(routeProps) => {
-          return <SignupCategoryPage user={user} onUpdateUser={handleUpdateUser} {...routeProps}/>
-        }}/>
-        <Route path={'/signup/group'} render={(routeProps) => {
-          return <SignupGroupPage user={user} {...routeProps}/>
-        }}/>
-        <Route path={'/home'} render={(routeProps) => {
-          return <HomePage {...routeProps}/>
-        }}/>
-        <Route path={'/explore'} render={(routeProps) => {
-          return <ExploreGroupPage {...routeProps} user={user}/>
-        }}/>
-      </Switch>
+      <ThemeProvider theme={theme}>
+        <UserContext.Provider value={user}>
+          <Switch>
+            <Route exact path={'/'} render={() => {
+              return <LandingPage trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
+            }}/>
+            <Route path={'/signup/category'} render={(routeProps) => {
+              return <SignupCategoryPage onUpdateUser={handleUpdateUser} {...routeProps}/>
+            }}/>
+            <Route path={'/signup/group'} render={(routeProps) => {
+              return <SignupGroupPage {...routeProps}/>
+            }}/>
+            <Route path={'/home'} render={(routeProps) => {
+              return <HomePage {...routeProps} onUpdateUser={handleUpdateUser}/>
+            }}/>
+            <Route path={'/explore'} render={(routeProps) => {
+              return <ExploreGroupPage {...routeProps} onUpdateUser={handleUpdateUser}/>
+            }}/>
+          </Switch>
+        </UserContext.Provider>
       </ThemeProvider>
     </div>
   );

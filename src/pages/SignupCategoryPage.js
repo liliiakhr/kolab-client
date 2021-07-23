@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../App';
 import CategoryCard from '../components/CategoryCard';
 import categoryData from '../json/categoryData.json';
 import { Container, Typography, Button, Grid } from '@material-ui/core';
@@ -7,7 +8,7 @@ import axios from 'axios';
 import API_URL from "../config";
 import { makeStyles } from '@material-ui/core/styles';
 
-function SignupCategoryPage( {user, onUpdateUser, history} ) {
+function SignupCategoryPage( {onUpdateUser, history} ) {
 
     const useStyles = makeStyles((theme) => ({
         btn: {
@@ -23,6 +24,7 @@ function SignupCategoryPage( {user, onUpdateUser, history} ) {
     const classes = useStyles();
 
     const [ categories, setCategories ] = useState([]);
+    const user = useContext(UserContext)
 
     const handleUpdateCategoriesState = (category) => {
         // This function when a category is clicked

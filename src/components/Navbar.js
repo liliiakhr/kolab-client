@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../App';
 import axios from 'axios';
 import API_URL from '../config';
 import { Link, useHistory } from 'react-router-dom';
@@ -11,6 +12,8 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
 function NavBar(props) {
+    const user = useContext(UserContext)
+
     // Hardcoded values for the appBar & Drawer (sidemenu)
     const drawerWidth = 240;
     const appBarHeight = 60;
@@ -142,12 +145,14 @@ function NavBar(props) {
         </div>
     );
 
-    // Log user out, clean session
-    // !! NEEDS TO BE UNCOMMENTED LATER, once the onUpdateUser function exists !!
+    // Log user out, destorys the session
     const handleLogOut = async () => {
         try {
-            await axios.post(`${API_URL}/api/auth/logout`)
-            // props.onUpdateUser(null)
+            let response = await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
+            console.log('response from server', response.data)
+            console.log(props.onUpdateUser)
+            props.onUpdateUser(null)
+
             history.push('/')
         }
         catch(error) {
@@ -191,7 +196,7 @@ function NavBar(props) {
         {
             selectedMenu === 'user' ? (
                 <div>
-                    <MenuItem onClick={() => {history.push(`/profile/${props.user._id}`)}}>Profile</MenuItem>
+                    <MenuItem onClick={() => {history.push(`/profile/${user._id}`)}}>Profile</MenuItem>
                     <MenuItem onClick={handleLogOut}>Logout</MenuItem>
                 </ div>
             )

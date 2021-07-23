@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { UserContext } from '../App';
 import GroupCard from '../components/GroupCard';
 import { Container, Typography, Grid, Button } from '@material-ui/core';
 import API_URL from "../config"
@@ -6,9 +7,11 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-function SignupGroupPage({user, history}) {
+
+function SignupGroupPage({history}) {
 
     const [ groups, setGroups ] = useState([])
+    const user = useContext(UserContext)
 
     useEffect(() => {
         const getGroupData = async () => {
@@ -27,6 +30,10 @@ function SignupGroupPage({user, history}) {
 
         getGroupData();
     }, [])
+
+    if (!groups.length) {
+        return <h1>Loading . . .</h1>
+    }
 
     return (
         <Container style={{ marginTop: "60px"}} >
