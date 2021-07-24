@@ -5,8 +5,8 @@ import React, {useState} from 'react'
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 import Paper from '@material-ui/core/Paper';
-import backgroundUrl from '../assets/images/background.jpg'
-import logo from '../assets/images/logo_dark_transparent.png'
+import backgroundUrl from '../assets/images/background.jpg';
+import logo from '../assets/images/logo_dark_transparent.png';
 import FlashMessage from "../components/FlashMessage";
 
 function HomePage(props) {
