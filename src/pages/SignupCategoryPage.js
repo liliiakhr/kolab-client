@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router';
 
 function SignupCategoryPage( {onUpdateUser, history} ) {
-    console.log(categoryData)
     
     const [ categories, setCategories ] = useState([]);
     const user = useContext(UserContext)
@@ -57,14 +56,13 @@ function SignupCategoryPage( {onUpdateUser, history} ) {
                 categories
             }
             let response = await axios.post(`${API_URL}/api/signup/category`, categoryInfo);
-            console.log(response.data)
             // Await is neccessary since the updateuser and the get function that will run on the /signup/group function are both async
             // So await in order to prevent that groups are loaded before categories are updated
+            console.log("RESPONSE FROM SIGNUP CATEGORY", response.data)
             await onUpdateUser(response.data)
             history.push('/signup/group')
         }
         catch(error) {
-            console.log("I RUN" , error)
             // ?? What is best to put in here?   
         }
     }

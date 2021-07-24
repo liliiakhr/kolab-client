@@ -13,11 +13,9 @@ function SignupGroupPage({history}) {
 
     const [ groups, setGroups ] = useState([])
     const user = useContext(UserContext)
-    console.log("User from context group page:", user)
     
     // ?? IS there a way to 
     useEffect(() => {
-        console.log("USE EFFECT TO GET GROUP DATA", user)
         const getGroupData = async () => {
             try {
                 let categoryInfo = {
@@ -82,7 +80,7 @@ function SignupGroupPage({history}) {
                         return (
                             <Grid item xs={12} sm={6} key={index}>
                                 <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
-                                    <Link to="/:group" style={{ textDecoration: "none"}} >
+                                    <Link to={`/${group.name}`} style={{ textDecoration: "none"}} >
                                         <GroupCard group={group} index={index} />
                                      </Link>
                                 </div>

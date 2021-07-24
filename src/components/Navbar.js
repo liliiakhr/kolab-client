@@ -149,8 +149,6 @@ function NavBar(props) {
     const handleLogOut = async () => {
         try {
             let response = await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
-            console.log('response from server', response.data)
-            console.log(props.onUpdateUser)
             props.onUpdateUser(null)
 
             history.push('/')

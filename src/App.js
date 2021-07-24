@@ -8,6 +8,7 @@ import SignupCategoryPage from "./pages/SignupCategoryPage";
 import SignupGroupPage from "./pages/SignupGroupPage";
 import ExploreGroupPage from "./pages/ExploreGroupPage";
 import HomePage from "./pages/HomePage";
+import GroupPage from "./pages/GroupPage";
 
 export const UserContext = React.createContext()
 
@@ -32,15 +33,13 @@ const theme = createTheme({
 function App() {
 
   const [user, setUser] = useState(null)
-  const [ fetchingUser, setFetchingUser ] = useState(true); 
+  const [fetchingUser, setFetchingUser] = useState(true); 
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [snackbar, setSnackbar] = useState('success')
   const [randomNumber, setRandomNumber] = useState(0)
   let history = useHistory(); 
   
-  console.log("APP.JS user:", user)
-
   useEffect(() => {
      (async () => {
           try {
@@ -54,7 +53,6 @@ function App() {
      })()
   }, [])
 
-  
   const handleLogin = async (event) => {
     event.preventDefault();
     const { username, password} = event.target;
@@ -106,10 +104,12 @@ function App() {
   }
 
   const handleUpdateUser = async (userData) => {
+    console.log(" HANDLE UPDATE USER USERDATA", userData)
+    console.log("handleUpdateUser before update", user.posts.length)
     try {
       let response = await axios.post(`${API_URL}/api/user`, userData,  {withCredentials: true});
+      console.log("handleUpdateUser after update", user.posts.length)
       setUser(response.data.newUser)
-      console.log(" I RUN ")
     }
     catch(error) {
       // TO DO: SNACKBAR MESSAGE 
@@ -139,6 +139,9 @@ function App() {
             }}/>
             <Route path={'/explore'} render={(routeProps) => {
               return <ExploreGroupPage {...routeProps} onUpdateUser={handleUpdateUser}/>
+            }}/>
+            <Route path={'/:group'} render={(routeProps) => {
+              return <GroupPage {...routeProps} onUpdateUser={handleUpdateUser}/>
             }}/>
           </Switch>
         </UserContext.Provider>

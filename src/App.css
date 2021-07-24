@@ -1,32 +1,33 @@
-
 /* Start landing page */
-.landingPageWrapper{
-    height: 100vh;
-    background-image: url('./assets/images/background.jpg') ;
-    position: relative;
+.landingPageWrapper {
+  height: 100vh;
+  background-image: url("./assets/images/background.jpg");
+  position: relative;
 }
-.landingBtnsWrapper{
-    align-self: center;
+.landingBtnsWrapper {
+  align-self: center;
 }
 /* .landingBtnsWrapper button{
     background-color: #6D4031;
 } */
 .popupOpacity {
-    width: 100%;
-    height: 100%;
-    background-color:rgba(0, 0, 0, 0.3);
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 0px;
-    left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0px;
+  left: 0px;
+  /* Strangely enough this works with z-index above 1000 */
+  z-index: 10000;
 }
 
 @media (max-width: 400px) {
-    .popupOpacity {
-        display: hidden;
-    }
+  .popupOpacity {
+    display: hidden;
+  }
 }
 /* End landing page */
 @import "./css/pagetransitions.css";
