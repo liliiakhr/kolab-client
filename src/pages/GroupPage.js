@@ -9,15 +9,18 @@ import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
+import EditGroup from '../components/EditGroup';
 
 
 function GroupPage({user, onUpdateUser, match: {params}}) {
 
-    console.log('user group:', user)
-
     const [group, setGroup] = useState(null);
     const [posts, setPosts] = useState([]);
     const [showAddPost, setShowAddPost] = useState(false);
+    const [showEditGroup, setShowEditGroup] = useState(false);
+
+    console.log(user)
+    console.log(group)
 
     useEffect(() => {
         (async () => {
@@ -62,6 +65,10 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
         setShowAddPost(false);
     }
 
+    const handleCloseEditGroup = () => {
+        setShowEditGroup(false);
+    }
+
     const handleAddPost = async (event) => {
         event.preventDefault();
         try {
@@ -75,6 +82,31 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             user.posts.push(response.data._id)
             onUpdateUser(user)
             setShowAddPost(false)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+
+    // When the group name is updated the UserModel.groupNames is not updated
+    // It's probably best to get rid off this value
+    // It's probably best to use the embedding technique only when values will never change
+    // The option is to make the query in the navbar for the names of the user or update all the UserModel.groupNames in the function below
+    // The first option is less writes to the database
+    const handleEditGroup = async (event) => {
+        event.preventDefault();
+        try {
+            const { name, description, tags, category } = event.target;
+            let newGroup = {
+                ...group,
+                name: name.value,
+                description: description.value,
+                tags: tags.value,
+                category: category.value
+            }
+            let response = await axios.patch(`${API_URL}/api/edit-group`, newGroup, {withCredentials: true})
+            console.log(response.data)
+            setGroup(response.data)
         }
         catch(error) {
             console.log(error)
@@ -127,11 +159,17 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
                     <Typography variant="subtitle1">{group.description}</Typography>
                     <ButtonGroup variant="contained" color="secondary">
                         {
-                            (!group.users.includes(user._id)) &&
+                            (!group.users.includes(user._id)) && (user._id !== group.admin) &&
                             <Button startIcon={<AccessibilityNewIcon />} onClick={handleJoinGroup}>Join</Button>
                         }
-                        <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
-                        <Button startIcon={<SettingsIcon />}>Manage Group</Button>
+                        {
+                            ((group.users.includes(user._id)) || user._id === group.admin) &&
+                            <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
+                        }
+                        {   
+                            (user._id === group.admin) &&
+                            <Button startIcon={<SettingsIcon /> } onClick={() => {setShowEditGroup(true)}}>Manage Group</Button>
+                        }
                         {
                             (group.users.includes(user._id)) &&
                             <Button startIcon={<ExitToAppIcon />} onClick={handleLeaveGroup}>Leave</Button>
@@ -153,6 +191,11 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             {showAddPost && (
                 <div className="popupOpacity">
                     <AddPost onCloseAddPost={handleCloseAddPost} onAddPost={handleAddPost}/>
+                </div>
+            )}
+            {showEditGroup && (
+                <div className="popupOpacity">
+                    <EditGroup onCloseEditGroup={handleCloseEditGroup} onEditGroup={handleEditGroup} group={group}/>
                 </div>
             )}
         </>

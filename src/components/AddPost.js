@@ -12,7 +12,7 @@ function AddPost({onCloseAddPost, onAddPost}) {
                 </IconButton> 
             </div>  
             <Paper>
-                <form onSubmit={onAddPost} style={{display: "flex", flexDirection: "column"}}>
+                <form onSubmit={onAddPost} style={{display: "flex", flexDirection: "column"}} autocomplete="off" novalidate>
                     <TextField 
                         placeholder="Title" 
                         variant="filled" 
