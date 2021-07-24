@@ -13,6 +13,8 @@ import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 
 function GroupPage({user, onUpdateUser, match: {params}}) {
 
+    console.log('user group:', user)
+
     const [group, setGroup] = useState(null);
     const [posts, setPosts] = useState([]);
     const [showAddPost, setShowAddPost] = useState(false);
@@ -61,7 +63,6 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
     }
 
     const handleAddPost = async (event) => {
-        console.log("Handle Add Post before update", user.posts.length)
         event.preventDefault();
         try {
             let newPost = {
@@ -97,6 +98,24 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
         }
     }
 
+    const handleLeaveGroup = async () => {
+        try {
+            let leaveInfo = {
+                groupId: group._id,
+                userId: user._id
+            }
+            let response =  await axios.post(`${API_URL}/api/leave-group`, leaveInfo, {withCredentials: true})
+            setGroup(response.data)
+            user.groupNames = user.groupNames.filter(oldGroupName => oldGroupName !== group.name) 
+            user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
+            onUpdateUser(user)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+
+
     if (!group) {
         return <h1>Loading . . .</h1>
     }
@@ -113,7 +132,10 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
                         }
                         <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
                         <Button startIcon={<SettingsIcon />}>Manage Group</Button>
-                        <Button startIcon={<ExitToAppIcon />}>Leave</Button>
+                        {
+                            (group.users.includes(user._id)) &&
+                            <Button startIcon={<ExitToAppIcon />} onClick={handleLeaveGroup}>Leave</Button>
+                        }
                     </ButtonGroup>
                     {   
                         !showAddPost && 
