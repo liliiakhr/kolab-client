@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../App';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 import API_URL from "../config"
@@ -12,14 +11,11 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 
 
-function GroupPage({onUpdateUser, match: {params}}) {
+function GroupPage({user, onUpdateUser, match: {params}}) {
 
-    // const user = useContext(UserContext);
-    const [user, setUser] = useState(useContext(UserContext))
     const [group, setGroup] = useState(null);
+    const [posts, setPosts] = useState([]);
     const [showAddPost, setShowAddPost] = useState(false);
-
-    console.log("USER GROUP PAGE", user.posts.length)
 
     useEffect(() => {
         (async () => {
@@ -34,8 +30,24 @@ function GroupPage({onUpdateUser, match: {params}}) {
                 }} />
             }
        })()
-
     }, [])
+
+    useEffect(() => {
+        (async () => {
+            try {
+                let groupInfo = {
+                    id: group._id
+                }
+                let response = await axios.post(`${API_URL}/api/posts`, groupInfo, {withCredentials: true})
+                setPosts(response.data)
+            }
+            catch(error) {
+                console.log("Something went wrong while getting the posts // maybe none exist", error)
+                setPosts([])
+            }
+       })()
+    }, [group, user])
+
 
     if (!user) {
         return <Redirect to={{
@@ -61,6 +73,24 @@ function GroupPage({onUpdateUser, match: {params}}) {
             let response = await axios.post(`${API_URL}/api/${params.group}/add-post`, newPost, {withCredentials: true})
             user.posts.push(response.data._id)
             onUpdateUser(user)
+            setShowAddPost(false)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+
+    const handleJoinGroup = async () => {
+        try {
+            let joinInfo = {
+                groupId: group._id,
+                userId: user._id
+            }
+            let response =  await axios.post(`${API_URL}/api/join-group`, joinInfo, {withCredentials: true})
+            setGroup(response.data)
+            user.groupNames.push(group.name)
+            user.groups.push(group._id)
+            onUpdateUser(user)
         }
         catch(error) {
             console.log(error)
@@ -77,11 +107,26 @@ function GroupPage({onUpdateUser, match: {params}}) {
                     <Typography variant="h2">{group.name}</Typography>
                     <Typography variant="subtitle1">{group.description}</Typography>
                     <ButtonGroup variant="contained" color="secondary">
-                        <Button startIcon={<AccessibilityNewIcon />}>Join</Button>
+                        {
+                            (!group.users.includes(user._id)) &&
+                            <Button startIcon={<AccessibilityNewIcon />} onClick={handleJoinGroup}>Join</Button>
+                        }
                         <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
                         <Button startIcon={<SettingsIcon />}>Manage Group</Button>
                         <Button startIcon={<ExitToAppIcon />}>Leave</Button>
                     </ButtonGroup>
+                    {   
+                        !showAddPost && 
+                        posts.map((post, index) => {
+                            return (
+                                <>
+                                    <h1>{`${post.title}`}</h1> 
+                                    <h5>{`Created by: ${post.creator.username}`}</h5>
+                                    <p>{`${post.content}`}</p>
+                                </>
+                            )
+                        })
+                    }
             </NavBar>
             {showAddPost && (
                 <div className="popupOpacity">

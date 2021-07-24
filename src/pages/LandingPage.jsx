@@ -10,7 +10,6 @@ import logo from "../assets/images/logo_dark_transparent.png";
 import FlashMessage from "../components/FlashMessage";
 
 function HomePage(props) {
-  console.log(props);
   const { messageType, error, success, trigger } = props;
   const [signup, setSignUp] = useState(false);
   // This conditional checks if a props.location.state.renderLogin prop is passed from any page

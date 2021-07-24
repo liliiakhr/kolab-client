@@ -9,7 +9,7 @@ import SignupGroupPage from "./pages/SignupGroupPage";
 import ExploreGroupPage from "./pages/ExploreGroupPage";
 import HomePage from "./pages/HomePage";
 import GroupPage from "./pages/GroupPage";
-
+import FlashMessage from "./components/FlashMessage";
 export const UserContext = React.createContext()
 
 const theme = createTheme({
@@ -31,17 +31,17 @@ const theme = createTheme({
   })
 
 function App() {
-
   const [user, setUser] = useState(null)
   const [fetchingUser, setFetchingUser] = useState(true); 
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [snackbar, setSnackbar] = useState('success')
   const [randomNumber, setRandomNumber] = useState(0)
+
   let history = useHistory(); 
-  
+
   useEffect(() => {
-     (async () => {
+       (async () => {
           try {
             let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
             setUser(response.data)
@@ -50,13 +50,12 @@ function App() {
           catch(error) {
             setFetchingUser(false);
           }
-     })()
-  }, [])
+       })()
+    }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault();
     const { username, password} = event.target;
-
     let myUser = {
       username: username.value,
       password: password.value
@@ -76,10 +75,9 @@ function App() {
       setErrorMessage(err.response.data.errorMessage)
     }
   }
-  
+
   const handleSignUp = async (event) => {
     event.preventDefault()
-    
     try{
       const {username, email, password} = event.target
       let newUser = {
@@ -92,8 +90,7 @@ function App() {
         setSnackbar('success')
         setRandomNumber(Math.random()*100)  
         setSuccessMessage(response.data.successMessage)
-        setUser(response.data.userData) 
-             
+        setUser(response.data.userData)      
         history.push('/signup/category')
     }
     catch (error) {
@@ -104,20 +101,31 @@ function App() {
   }
 
   const handleUpdateUser = async (userData) => {
-    console.log(" HANDLE UPDATE USER USERDATA", userData)
-    console.log("handleUpdateUser before update", user.posts.length)
     try {
       let response = await axios.post(`${API_URL}/api/user`, userData,  {withCredentials: true});
-      console.log("handleUpdateUser after update", user.posts.length)
       setUser(response.data.newUser)
     }
     catch(error) {
-      // TO DO: SNACKBAR MESSAGE 
+      setSnackbar('error') 
+      setRandomNumber(Math.random()*100)
+      setErrorMessage(error.response.data.errorMessage) 
     }
   }
 
+  const handleSuccessMessage = (success) => {
+    setSnackbar('success')
+    setRandomNumber(Math.random()*100)  
+    setSuccessMessage(success)
+  }
+
+  const handleErrorMessage = (error) => {
+    setSnackbar('error') 
+    setRandomNumber(Math.random()*100)
+    setErrorMessage(error)
+  }
+
   if (fetchingUser) {
-    return <h1>Loading . . .</h1>
+      return <h1>Loading . . .</h1>
   }
 
   return (
@@ -138,12 +146,15 @@ function App() {
               return <HomePage {...routeProps} onUpdateUser={handleUpdateUser}/>
             }}/>
             <Route path={'/explore'} render={(routeProps) => {
-              return <ExploreGroupPage {...routeProps} onUpdateUser={handleUpdateUser}/>
+              return <ExploreGroupPage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage}/>
             }}/>
             <Route path={'/:group'} render={(routeProps) => {
-              return <GroupPage {...routeProps} onUpdateUser={handleUpdateUser}/>
+              return <GroupPage {...routeProps} onUpdateUser={handleUpdateUser} user={user}/>
             }}/>
           </Switch>
+          {
+           snackbar === 'success' ? <FlashMessage trigger={randomNumber} messageType={snackbar}>{successMessage}</FlashMessage> : <FlashMessage trigger={randomNumber} messageType={snackbar}>{errorMessage}</FlashMessage> 
+          }
         </UserContext.Provider>
       </ThemeProvider>
     </div>
