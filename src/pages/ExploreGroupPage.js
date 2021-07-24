@@ -15,6 +15,7 @@ function ExploreGroupPage({user, onUpdateUser}) {
     const [groups, setGroups] = useState([])
 
     useEffect(() => {
+        console.log("USE EFFECT TO GET GROUP DATA")
         let getGroups = async () => {
             let response = await axios.get(`${API_URL}/api/groups`, {withCredentials: true})
             setGroups(response.data)

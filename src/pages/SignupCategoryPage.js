@@ -7,8 +7,13 @@ import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import axios from 'axios';
 import API_URL from "../config";
 import { makeStyles } from '@material-ui/core/styles';
+import { Redirect } from 'react-router';
 
 function SignupCategoryPage( {onUpdateUser, history} ) {
+    console.log(categoryData)
+    
+    const [ categories, setCategories ] = useState([]);
+    const user = useContext(UserContext)
 
     const useStyles = makeStyles((theme) => ({
         btn: {
@@ -19,13 +24,17 @@ function SignupCategoryPage( {onUpdateUser, history} ) {
                 left: "0",
             },
         }
-      }));
+    }));
 
     const classes = useStyles();
 
-    const [ categories, setCategories ] = useState([]);
-    const user = useContext(UserContext)
-
+    if (!user) {
+        return <Redirect to={{
+            pathname: "/",
+            state: { renderLogin: true }
+        }} />
+    }
+    
     const handleUpdateCategoriesState = (category) => {
         // This function when a category is clicked
         // it removes it from the categories when it's in there

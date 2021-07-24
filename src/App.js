@@ -32,16 +32,25 @@ const theme = createTheme({
 function App() {
 
   const [user, setUser] = useState(null)
+  const [ fetchingUser, setFetchingUser ] = useState(true); 
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [snackbar, setSnackbar] = useState('success')
   const [randomNumber, setRandomNumber] = useState(0)
   let history = useHistory(); 
+  
+  console.log("APP.JS user:", user)
 
   useEffect(() => {
      (async () => {
-         let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
-         setUser(response.data)
+          try {
+            let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
+            setUser(response.data)
+            setFetchingUser(false);
+          }
+          catch(error) {
+            setFetchingUser(false);
+          }
      })()
   }, [])
 
@@ -107,13 +116,17 @@ function App() {
     }
   }
 
+  if (fetchingUser) {
+    return <h1>Loading . . .</h1>
+  }
+
   return (
     <div>
       <ThemeProvider theme={theme}>
         <UserContext.Provider value={user}>
           <Switch>
-            <Route exact path={'/'} render={() => {
-              return <LandingPage trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
+            <Route exact path={'/'} render={(routeProps) => {
+              return <LandingPage {...routeProps} trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
             }}/>
             <Route path={'/signup/category'} render={(routeProps) => {
               return <SignupCategoryPage onUpdateUser={handleUpdateUser} {...routeProps}/>
