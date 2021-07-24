@@ -1,8 +1,7 @@
-import React, { useState, useContext } from 'react';
-import { UserContext } from '../App';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import API_URL from '../config';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, Redirect, useLocation } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Button, AppBar, CssBaseline, Drawer, Hidden, IconButton, Toolbar, Tooltip, Tabs, Tab, Box, Badge, Menu, MenuItem, Zoom } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -12,243 +11,264 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
 function NavBar(props) {
-    const user = useContext(UserContext)
+  
+  // Variables that help with display and navigation of the sidebar
+  let location = useLocation();
+  let selectedGroup = location.pathname.replace("/", '')
+  const groupNames = props.user.groups.map(group => group.name)
+  let menuIndex = groupNames.indexOf(selectedGroup)
+  
 
-    // Hardcoded values for the appBar & Drawer (sidemenu)
-    const drawerWidth = 240;
-    const appBarHeight = 60;
+  // Hardcoded values for the appBar & Drawer (sidemenu)
+  const drawerWidth = 240;
+  const appBarHeight = 60;
 
-    // DrawerStates
-    const [mobileOpen, setMobileOpen] = useState(false);
-    const [value, setValue] = useState(0);
+  // DrawerStates
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [value, setValue] = useState(0);
 
-    // States related to the sub menu's from the appbar
-    // anchorEl is a prop from menu function that helps to find the position of the menu
-    // anchorEl is either null or an html-element (which you get frome event.currentTarget)
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  // States related to the sub menu's from the appbar
+  // anchorEl is a prop from menu function that helps to find the position of the menu
+  // anchorEl is either null or an html-element (which you get frome event.currentTarget)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
-    // Boolean to open menu
-    // if anchorEl is not null it will become true, else it will be false, same for mobileMoreAnchorEl
-    const isMenuOpen = Boolean(anchorEl);                   // Menu are the menus for friends or when you click on your own avatar icon
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);   // Mobile menu is the menu for when a user is on mobile (3 dots appear)
-    
-    // Created to differentiate between the friends and user menu
-    const [selectedMenu, setSelectedMenu] = useState(null);
+  // Boolean to open menu
+  // if anchorEl is not null it will become true, else it will be false, same for mobileMoreAnchorEl
+  const isMenuOpen = Boolean(anchorEl);                   // Menu are the menus for friends or when you click on your own avatar icon
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);   // Mobile menu is the menu for when a user is on mobile (3 dots appear)
+  
+  // Created to differentiate between the friends and user menu
+  const [selectedMenu, setSelectedMenu] = useState(null);
 
-    const useStyles = makeStyles((theme) => ({
-      root: {
-        display: 'flex',
-      },
-      drawer: {
-        [theme.breakpoints.up('sm')]: {
-          width: drawerWidth,
-          flexShrink: 0,
-        },
-      },
-      appBar: {
-        height: appBarHeight,
-        [theme.breakpoints.up('sm')]: {
-            height: 56,
-        },
-      },
-      menuButton: {
-        marginRight: theme.spacing(2),
-        [theme.breakpoints.up('sm')]: {
-          display: 'none',
-        },
-      },
-      // necessary for content to be below app bar
-      toolbar: theme.mixins.toolbar,
-      drawerPaper: {
-        marginTop: appBarHeight,
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+    },
+    drawer: {
+      [theme.breakpoints.up('sm')]: {
         width: drawerWidth,
+        flexShrink: 0,
       },
-      content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        marginTop: appBarHeight
+    },
+    appBar: {
+      height: appBarHeight,
+      [theme.breakpoints.up('sm')]: {
+          height: 56,
       },
-      moveDrawerDown: {
-          marginTop: "50"
-      },
-      // STYLES FROM NAVBAR TWO
-      grow: {
-        flexGrow: 1,
-      },
-      title: {
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+      [theme.breakpoints.up('sm')]: {
         display: 'none',
-        [theme.breakpoints.up('sm')]: {
-          display: 'block',
-        },
       },
-    //   inputRoot: {
-    //     color: 'inherit',
-    //   },
-      inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-          width: '20ch',
-        },
+    },
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+      marginTop: appBarHeight,
+      width: drawerWidth,
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      marginTop: appBarHeight
+    },
+    moveDrawerDown: {
+        marginTop: "50"
+    },
+    // STYLES FROM NAVBAR TWO
+    grow: {
+      flexGrow: 1,
+    },
+    title: {
+      display: 'none',
+      [theme.breakpoints.up('sm')]: {
+        display: 'block',
       },
-      sectionDesktop: {
-        display: 'none',
-        [theme.breakpoints.up('md')]: {
-          display: 'flex',
-        },
+    },
+  //   inputRoot: {
+  //     color: 'inherit',
+  //   },
+    inputInput: {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      [theme.breakpoints.up('md')]: {
+        width: '20ch',
       },
-      sectionMobile: {
+    },
+    sectionDesktop: {
+      display: 'none',
+      [theme.breakpoints.up('md')]: {
         display: 'flex',
-        [theme.breakpoints.up('md')]: {
-          display: 'none',
-        },
       },
-    }));
+    },
+    sectionMobile: {
+      display: 'flex',
+      [theme.breakpoints.up('md')]: {
+        display: 'none',
+      },
+    },
+  }));
 
-    const classes = useStyles();
-    const theme = useTheme();
-    let history = useHistory();
+  const classes = useStyles();
+  const theme = useTheme();
+  let history = useHistory();
 
-    // Functions for opening/closing drawer
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
+  // Functions for opening/closing drawer
+  const handleDrawerToggle = () => {
+      setMobileOpen(!mobileOpen);
+  };
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+  const handleChange = (event, newValue) => {
+      setValue(newValue);
+  };
 
-    // Render drawer
-    // !! NEEDS DYNAMIC RENDERING BASED ON GROUPS OF THE USER
-    const drawer = (
-        <div >
-            <Tabs
-            orientation="vertical"
-            variant="scrollable"
-            value={value}
-            onChange={handleChange}
-            aria-label="Vertical tabs example"
-            className={classes.tabs}
+  // Render drawer
+  // !! NEEDS DYNAMIC RENDERING BASED ON GROUPS OF THE USER
+  const drawer = (
+      <div >
+          <Tabs
+          orientation="vertical"
+          variant="scrollable"
+          value={menuIndex}
+          // value={value}
+          onChange={handleChange}
+          aria-label="Vertical tabs example"
+          className={classes.tabs}
+      >   
+          {
+            groupNames.map(groupName => {
+              return (               
+
+                // With the Link only it does not work
+                // This changes the URL but doesn't re-render the page, so that's where the onNavBarChange prop  comes in toplay
+                // This triggers a useEffect on the GroupPage
+                
+                <Link to={`${groupName}`} style={{ textDecoration: "none", color: "black", textAlign: "center"}} >
+                  <Tab label={groupName} onClick={props.onNavBarChange}/>
+                </Link>
+
+                // This doesn't work either
+                // <Tab label={groupName} onClick={(groupName) => displayRightGroup(groupName)}/>
+              )
+            })
+          }
+      </Tabs>
+      </div>
+  );
+
+  // const displayRightGroup = (groupName) => {
+  //   return <Redirect to= {`${groupName}`} />
+  // }
+
+  // Log user out, destorys the session
+  const handleLogOut = async () => {
+      try {
+          let response = await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
+          props.onUpdateUser(null)
+
+          history.push('/')
+      }
+      catch(error) {
+          // ?? What is best to put in here?
+      }
+  }
+
+  // Functions for opening and closing the App bar menus
+  const handleProfileMenuOpen = (event, menuType) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedMenu(menuType)
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  // Functions for rendering the menu JSX and the mobileMenu JSX
+  // They are created here and not in the render method to make things cleaner
+  // In the render method you will find {renderMenu} and {renderMobileMenu}
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      {
+          selectedMenu === 'user' ? (
+              <div>
+                  <MenuItem onClick={() => {history.push(`/profile/${props.user._id}`)}}>Profile</MenuItem>
+                  <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+              </ div>
+          )
+          :
+          (
+              <div>
+                  <MenuItem onClick={() => {history.push('/friends')}}>My Friends</MenuItem>
+                  <MenuItem onClick={() => {history.push('/people')}}>Explore People</MenuItem>
+              </ div>
+          )
+      }
+    </Menu>
+  );
+
+  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <MenuItem onClick={() => {history.push('/explore')}}>
+        <IconButton aria-label="show 4 new mails" color="inherit"   >
+          <Badge badgeContent={4} color="secondary">
+            <ExploreIcon />
+          </Badge>
+        </IconButton>
+        <p>Explore</p>
+      </MenuItem>
+      <MenuItem onClick={(event) => handleProfileMenuOpen(event, 'friend') }>
+        <IconButton aria-label="show 11 new notifications" color="inherit">
+          <Badge badgeContent={11} color="secondary">
+            <PeopleAltIcon />
+          </Badge>
+        </IconButton>
+        <p>Friends</p>
+      </MenuItem>
+      <MenuItem onClick={(event) => handleProfileMenuOpen(event, 'user') } >
+        <IconButton
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
         >
-            <Tab label="Item One" />
-            <Tab label="Item Two"  />
-            <Tab label="Item Three" />
-            <Tab label="Item Four"  />
-            <Tab label="Item Five"  />
-            <Tab label="Item Six" />
-            <Tab label="Item Seven" />
-        </Tabs>
-        </div>
-    );
-
-    // Log user out, destorys the session
-    const handleLogOut = async () => {
-        try {
-            let response = await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
-            props.onUpdateUser(null)
-
-            history.push('/')
-        }
-        catch(error) {
-            // ?? What is best to put in here?
-        }
-    }
- 
-    // Functions for opening and closing the App bar menus
-    const handleProfileMenuOpen = (event, menuType) => {
-      setAnchorEl(event.currentTarget);
-      setSelectedMenu(menuType)
-    };
-  
-    const handleMobileMenuClose = () => {
-      setMobileMoreAnchorEl(null);
-    };
-  
-    const handleMenuClose = () => {
-      setAnchorEl(null);
-      handleMobileMenuClose();
-    };
-  
-    const handleMobileMenuOpen = (event) => {
-      setMobileMoreAnchorEl(event.currentTarget);
-    };
-  
-    // Functions for rendering the menu JSX and the mobileMenu JSX
-    // They are created here and not in the render method to make things cleaner
-    // In the render method you will find {renderMenu} and {renderMobileMenu}
-    const menuId = 'primary-search-account-menu';
-    const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        id={menuId}
-        keepMounted
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
-        onClose={handleMenuClose}
-      >
-        {
-            selectedMenu === 'user' ? (
-                <div>
-                    <MenuItem onClick={() => {history.push(`/profile/${user._id}`)}}>Profile</MenuItem>
-                    <MenuItem onClick={handleLogOut}>Logout</MenuItem>
-                </ div>
-            )
-            :
-            (
-                <div>
-                    <MenuItem onClick={() => {history.push('/friends')}}>My Friends</MenuItem>
-                    <MenuItem onClick={() => {history.push('/people')}}>Explore People</MenuItem>
-                </ div>
-            )
-        }
-      </Menu>
-    );
-  
-    const mobileMenuId = 'primary-search-account-menu-mobile';
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        id={mobileMenuId}
-        keepMounted
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={handleMobileMenuClose}
-      >
-        <MenuItem onClick={() => {history.push('/explore')}}>
-          <IconButton aria-label="show 4 new mails" color="inherit"   >
-            <Badge badgeContent={4} color="secondary">
-              <ExploreIcon />
-            </Badge>
-          </IconButton>
-          <p>Explore</p>
-        </MenuItem>
-        <MenuItem onClick={(event) => handleProfileMenuOpen(event, 'friend') }>
-          <IconButton aria-label="show 11 new notifications" color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <PeopleAltIcon />
-            </Badge>
-          </IconButton>
-          <p>Friends</p>
-        </MenuItem>
-        <MenuItem onClick={(event) => handleProfileMenuOpen(event, 'user') } >
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Menu>
-    );  
+          <AccountCircle />
+        </IconButton>
+        <p>Profile</p>
+      </MenuItem>
+    </Menu>
+  );  
 
   return (
     <div className={classes.root}>

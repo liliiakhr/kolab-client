@@ -18,9 +18,7 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
     const [posts, setPosts] = useState([]);
     const [showAddPost, setShowAddPost] = useState(false);
     const [showEditGroup, setShowEditGroup] = useState(false);
-
-    console.log(user)
-    console.log(group)
+    const [navBarChanged, setNavBarChanged] = useState(false)
 
     useEffect(() => {
         (async () => {
@@ -35,7 +33,7 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
                 }} />
             }
        })()
-    }, [])
+    }, [navBarChanged])
 
     useEffect(() => {
         (async () => {
@@ -139,7 +137,15 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             let response =  await axios.post(`${API_URL}/api/leave-group`, leaveInfo, {withCredentials: true})
             setGroup(response.data)
             user.groupNames = user.groupNames.filter(oldGroupName => oldGroupName !== group.name) 
+            // Because the user.groups is populated now this doesn't work anymore
+            // user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
+            
+            // In order to make the onUpdateUser function work for the user.groups, it needs to take an array of ids
+            // Therefore this helper function is created
+            user.groups = user.groups.map(group => group._id)
             user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
+
+            console.log(user)
             onUpdateUser(user)
         }
         catch(error) {
@@ -147,6 +153,9 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
         }
     }
 
+    const handleNavBarChange = () => {
+        setNavBarChanged(!navBarChanged)
+    }
 
     if (!group) {
         return <h1>Loading . . .</h1>
@@ -154,7 +163,7 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
 
     return (
         <>
-            <NavBar onUpdateUser={onUpdateUser} showDrawer>
+            <NavBar onUpdateUser={onUpdateUser} user={user} onNavBarChange={handleNavBarChange} showDrawer>
                     <Typography variant="h2">{group.name}</Typography>
                     <Typography variant="subtitle1">{group.description}</Typography>
                     <ButtonGroup variant="contained" color="secondary">
