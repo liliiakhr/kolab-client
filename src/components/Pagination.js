@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 function Pagination({ data, RenderComponent, dataLimit}) {
     
-    const [pages] = useState(Math.round(data.length / dataLimit));
+    const [pages] = useState(Math.ceil(data.length / dataLimit));
     const [currentPage, setCurrentPage] = useState(1);
   
     const changePage = (event, value) => {
@@ -21,22 +21,24 @@ function Pagination({ data, RenderComponent, dataLimit}) {
    
     return (
         <div>                                    
-     
-             <div className="dataContainer">
+            <Grid   container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    alignContent="center"
+                    spacing={4}
+                >
                     {getPaginatedData().map((group, idx) => (
                        <Grid item xs={12} sm={6} key={idx}>
                          <div className={idx % 2 === 0 ? 'fly-left' : 'fly-right'}>
-                            <Link to={`/${group._id}`} style={{ textDecoration: "none"}} >
+                            <Link to={`/${group.name}`} style={{ textDecoration: "none"}} >
                                 <RenderComponent group={group}/>
                             </Link>
                          </div>
                     </Grid>
                 ))}
-             </div>
-           {
-             data.length > 10 && <PageNumbers count={pages} page={currentPage} onChange={changePage}/> 
-           }
-             
+             </Grid>
+           <PageNumbers count={pages} page={currentPage} onChange={changePage} style={{marginTop: '30px'}}/>   
         </div>
     )
 }

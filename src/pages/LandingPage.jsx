@@ -7,10 +7,9 @@ import Signup from "../components/Signup";
 import Paper from '@material-ui/core/Paper';
 import backgroundUrl from '../assets/images/background.jpg';
 import logo from '../assets/images/logo_dark_transparent.png';
-import FlashMessage from "../components/FlashMessage";
+
 
 function HomePage(props) {
-  const {messageType, error, success, trigger} = props
   const [signup, setSignUp] = useState(false);
   const [login, setLogin] = useState(false);
   
@@ -64,8 +63,6 @@ function HomePage(props) {
             <Login onLoginPopUp={handleLoginPopUp} onLogin={props.onLogin}/>               
            </div>
             )
-        } {
-           messageType === 'success' ? <FlashMessage trigger={trigger} messageType={messageType}>{success}</FlashMessage> : <FlashMessage trigger={trigger} messageType={messageType}>{error}</FlashMessage> 
         }
       </div>
     
