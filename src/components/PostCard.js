@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -11,8 +10,6 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -22,14 +19,16 @@ import ShareIcon from '@material-ui/icons/Share';
 import CommentCard from './CommentCard';
 import axios from 'axios';
 import API_URL from '../config';
-import { SportsMmaOutlined } from '@material-ui/icons';
+import LikeAnimation from '../json/like.json'
+import Animation from './Animation'
+
 
 function PostCard({postData, user}) {
     const cardWidth = 500;
 
     // rename later
     const [post, setPost] = useState(postData);
-    const [commentContent, setCommentContent] = useState('');
+    const [showLikeAnimation, setShowLikeAnimation] = useState(false);
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -54,9 +53,6 @@ function PostCard({postData, user}) {
         },
         comment: {
             width: cardWidth - 80,
-            // [theme.breakpoints.only('sm')]: {
-            //     width: 200,
-            // },
         }
       }));
 
@@ -99,6 +95,11 @@ function PostCard({postData, user}) {
     }
 
     const handleLikesAndDislikes = async (type, action, postOrCommentId) => {
+        if (type === 'post' && action ==="likes") {
+            temporaryShowLikeAnimation()
+        }
+
+
         let likeAndDislikeData = {
             type,
             action,
@@ -106,6 +107,13 @@ function PostCard({postData, user}) {
             userId: user._id,
         }
         updateLikesAndDislikes(likeAndDislikeData)
+    }
+
+    const temporaryShowLikeAnimation = () => {
+        setShowLikeAnimation(true)
+        setTimeout(() => {
+            setShowLikeAnimation(false)
+        }, 2000);
     }
     
     return (
@@ -129,13 +137,20 @@ function PostCard({postData, user}) {
                 </Typography>
             </CardContent>
             <CardActions disableSpacing >
-                        <IconButton 
-                            onClick={() => handleLikesAndDislikes("post", "likes", post._id)} 
-                            name="likes" 
-                            color={post.likes.includes(user._id) ? 'primary' : ''}
-                        >
-                            <ThumbUpIcon />
-                        </IconButton>
+                        {   
+                            !showLikeAnimation && 
+                            <IconButton 
+                                onClick={() => handleLikesAndDislikes("post", "likes", post._id)} 
+                                name="likes" 
+                                color={post.likes.includes(user._id) ? 'primary' : ''}
+                            >
+                                <ThumbUpIcon />
+                            </IconButton>
+                        }
+                        {
+                            showLikeAnimation && 
+                            <Animation width={50} height={50} animation={LikeAnimation} />
+                        }
                         <Typography>{post.likes.length}</Typography>
                         <IconButton 
                             onClick={() => handleLikesAndDislikes("post", "dislikes", post._id)} 
@@ -190,3 +205,15 @@ function PostCard({postData, user}) {
 }
 
 export default PostCard
+
+
+// npm install react-share
+// import {
+//     EmailShareButton,
+//     FacebookShareButton,
+//     InstapaperShareButton,
+//     LinkedinShareButton,
+//     PinterestShareButton,
+//     TwitterShareButton,
+//     WhatsappShareButton,
+//   } from "react-share";

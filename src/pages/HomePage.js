@@ -30,20 +30,17 @@ function HomePage({user, onUpdateUser}) {
             <Container>
                 <Grid
                     container
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    alignContent="center"
                     spacing={4}
+                    // direction="column"
                 >
                     {
                         posts.map((postData, index) => {
                             return (
-                                <Grid item xs={12} sm={12} key={index}>
-                                    <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
+                                    <Grid item xs={12} sm={6} key={index} style={{ display: "flex", justifyContent: "center"}} >
+                                        <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
                                             <PostCard user={user} postData={postData} index={index} />
-                                    </div>
-                                </Grid>
+                                        </div>  
+                                    </Grid>
                                 )
                         })
                     }
