@@ -32,8 +32,8 @@ function FlashMessage ({trigger, children, messageType}) {
     <div className={classes.root}>
         { 
           (children !== null) &&
-          <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-              <MuiAlert elevation={6} variant="filled" onClose={handleClose} severity={messageType}> 
+          <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} >
+              <MuiAlert elevation={6} variant="filled" onClose={handleClose} severity={messageType !== null ? messageType : ''}> 
                 {
                   children
                 }

@@ -17,7 +17,6 @@ function HomePage({user, onUpdateUser}) {
                 setPosts(response.data)
             }
             catch(error) {
-                console.log("ERROR RUNS")
                 console.log(error)
             }
         }

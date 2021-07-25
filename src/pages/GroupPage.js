@@ -125,7 +125,6 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
                 category: category.value
             }
             let response = await axios.patch(`${API_URL}/api/edit-group`, newGroup, {withCredentials: true})
-            console.log(response.data)
             setGroup(response.data)
             setShowEditGroup(false)
             setSuccessMessage(`The Owner of ${response.data.name} has spoken.`)
@@ -148,9 +147,9 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             user.groupNames.push(group.name)
             user.groups.push(group._id)
             onUpdateUser(user)
-            setSuccessMessage(`Welome to ${group.name}!`)
-            setSnackbar('success');
-            setShowFlashMessage(Math.random()*100)
+            await setSuccessMessage(`Welome to ${group.name}!`)
+            await setSnackbar('success');
+            await setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -174,6 +173,7 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             user.groups = user.groups.map(group => group._id)
             user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
             onUpdateUser(user)
+            console.log(group.name)
             setSuccessMessage(`The members of ${group.name} will miss you, come back whenever you want!`)
             setSnackbar('success');
             setShowFlashMessage(Math.random()*100)

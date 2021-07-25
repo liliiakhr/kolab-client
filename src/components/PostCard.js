@@ -91,7 +91,6 @@ function PostCard({postData, user}) {
     const updateLikesAndDislikes = async (likeAndDislikeData) => {
         try {
             let response = await axios.post(`${API_URL}/api/post/likes`, likeAndDislikeData, {withCredentials: true})
-            console.log(response.data)
             setPost(response.data)
         }
         catch(error) {
@@ -130,11 +129,19 @@ function PostCard({postData, user}) {
                 </Typography>
             </CardContent>
             <CardActions disableSpacing >
-                        <IconButton onClick={() => handleLikesAndDislikes("post", "likes", post._id)} name="likes">
+                        <IconButton 
+                            onClick={() => handleLikesAndDislikes("post", "likes", post._id)} 
+                            name="likes" 
+                            color={post.likes.includes(user._id) ? 'primary' : ''}
+                        >
                             <ThumbUpIcon />
                         </IconButton>
                         <Typography>{post.likes.length}</Typography>
-                        <IconButton onClick={() => handleLikesAndDislikes("post", "dislikes", post._id)} name="dislikes">
+                        <IconButton 
+                            onClick={() => handleLikesAndDislikes("post", "dislikes", post._id)} 
+                            name="dislikes"
+                            color={post.dislikes.includes(user._id) ? 'primary' : ''}
+                        >
                             <ThumbDownIcon />
                         </IconButton>
                         <Typography style={{flexGrow: "1"}}>{post.dislikes.length}</Typography>
@@ -154,7 +161,7 @@ function PostCard({postData, user}) {
                 <CardContent>
                     {
                         post.comments.map((comment, index) => {
-                           return <CommentCard key={index} comment={comment} onHandleLikesAndDislikes={handleLikesAndDislikes}/>
+                           return <CommentCard key={index} user={user} comment={comment} onHandleLikesAndDislikes={handleLikesAndDislikes}/>
                         })
                     }
                 </CardContent>
