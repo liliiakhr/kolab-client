@@ -8,7 +8,7 @@ import SignupCategoryPage from "./pages/SignupCategoryPage";
 import SignupGroupPage from "./pages/SignupGroupPage";
 import ExploreGroupPage from "./pages/ExploreGroupPage";
 import HomePage from "./pages/HomePage";
-// import GroupPage from "./pages/GroupPage";
+import GroupPage from "./pages/GroupPage";
 import FlashMessage from "./components/FlashMessage";
 export const UserContext = React.createContext()
 //
@@ -40,18 +40,18 @@ function App() {
 
   let history = useHistory(); 
 
-  useEffect(() => {
-       (async () => {
-          try {
-            let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
-            setUser(response.data)
-            setFetchingUser(false);
-          }
-          catch(error) {
-            setFetchingUser(false);
-          }
-       })()
-    }, [])
+  useEffect(() => {
+       (async () => {
+          try {
+            let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
+            setUser(response.data)
+            setFetchingUser(false);
+          }
+          catch(error) {
+            setFetchingUser(false);
+          }
+       })()
+    }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -133,8 +133,8 @@ function App() {
       <ThemeProvider theme={theme}>
         <UserContext.Provider value={user}>
           <Switch>
-            <Route exact path={'/'} render={() => {
-              return <LandingPage trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
+            <Route exact path={'/'} render={(routeProps) => {
+              return <LandingPage {...routeProps} trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
             }}/>
             <Route path={'/signup/category'} render={(routeProps) => {
               return <SignupCategoryPage onUpdateUser={handleUpdateUser} {...routeProps}/>
@@ -143,14 +143,14 @@ function App() {
               return <SignupGroupPage {...routeProps}/>
             }}/>
             <Route path={'/home'} render={(routeProps) => {
-              return <HomePage {...routeProps} onUpdateUser={handleUpdateUser}/>
+              return <HomePage {...routeProps} user={user} onUpdateUser={handleUpdateUser}/>
             }}/>
             <Route path={'/explore'} render={(routeProps) => {
               return <ExploreGroupPage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>
             }}/>
-            {/* <Route path={'/:group'} render={(routeProps) => {
+            <Route path={'/:group'} render={(routeProps) => {
               return <GroupPage {...routeProps} onUpdateUser={handleUpdateUser} user={user}/>
-            }}/> */}
+            }}/>
           </Switch>
           {
            snackbar === 'success' ? <FlashMessage trigger={randomNumber} messageType={snackbar}>{successMessage}</FlashMessage> : <FlashMessage trigger={randomNumber} messageType={snackbar}>{errorMessage}</FlashMessage> 

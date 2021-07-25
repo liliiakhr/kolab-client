@@ -1,12 +1,11 @@
-
 /* Start landing page */
-.landingPageWrapper{
-    height: 100vh;
-    background-image: url('./assets/images/background.jpg') ;
-    position: relative;
+.landingPageWrapper {
+  height: 100vh;
+  background-image: url("./assets/images/background.jpg");
+  position: relative;
 }
-.landingBtnsWrapper{
-    align-self: center;
+.landingBtnsWrapper {
+  align-self: center;
 }
 /* .landingBtnsWrapper button{
     background-color: #6D4031;
@@ -25,9 +24,9 @@
 }
 
 @media (max-width: 400px) {
-    .popupOpacity {
-        display: hidden;
-    }
+  .popupOpacity {
+    display: hidden;
+  }
 }
 /* End landing page */
 @import "./css/pagetransitions.css";

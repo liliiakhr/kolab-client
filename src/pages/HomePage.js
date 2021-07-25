@@ -7,7 +7,8 @@ import API_URL from "../config";
 
 
 
-function HomePage() {
+function HomePage({user, onUpdateUser}) {
+    
 
     const [posts, setPosts] = useState([]);
     
@@ -29,7 +30,7 @@ function HomePage() {
 
     return (
         <div>
-        <Navbar>
+        <Navbar user={user} onUpdateUser={onUpdateUser}>
 
 
         <Grid

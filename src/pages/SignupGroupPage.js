@@ -4,15 +4,17 @@ import GroupCard from '../components/GroupCard';
 import { Container, Typography, Grid, Button } from '@material-ui/core';
 import API_URL from "../config"
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import LandingPage from './LandingPage'
 
 
 function SignupGroupPage({history}) {
 
     const [ groups, setGroups ] = useState([])
     const user = useContext(UserContext)
-
+    
+    // ?? IS there a way to 
     useEffect(() => {
         const getGroupData = async () => {
             try {
@@ -29,11 +31,24 @@ function SignupGroupPage({history}) {
         }
 
         getGroupData();
-    }, [])
+    }, [user])
+
+    // This is the way to pass extra data with Redirect component
+    // State is accessible via: props.location.state (assuming the routeProps are spreaded)
+    // The extra routeProps need to be passed into the Route in app.js
+    if (!user) {
+        return <Redirect to={{
+            pathname: "/",
+            state: { renderLogin: true }
+        }} />
+    }
+
+
 
     if (!groups.length) {
         return <h1>Loading . . .</h1>
     }
+
 
     return (
         <Container style={{ marginTop: "60px"}} >
@@ -65,7 +80,7 @@ function SignupGroupPage({history}) {
                         return (
                             <Grid item xs={12} sm={6} key={index}>
                                 <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
-                                    <Link to="/:group" style={{ textDecoration: "none"}} >
+                                    <Link to={`/${group.name}`} style={{ textDecoration: "none"}} >
                                         <GroupCard group={group} index={index} />
                                      </Link>
                                 </div>
