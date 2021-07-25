@@ -135,7 +135,6 @@ function NavBar(props) {
           orientation="vertical"
           variant="scrollable"
           value={menuIndex}
-          // value={value}
           onChange={handleChange}
           aria-label="Vertical tabs example"
           className={classes.tabs}

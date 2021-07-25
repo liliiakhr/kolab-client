@@ -105,6 +105,7 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             let response = await axios.patch(`${API_URL}/api/edit-group`, newGroup, {withCredentials: true})
             console.log(response.data)
             setGroup(response.data)
+            setShowEditGroup(false)
         }
         catch(error) {
             console.log(error)
