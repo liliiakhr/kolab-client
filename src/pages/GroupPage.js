@@ -10,6 +10,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import EditGroup from '../components/EditGroup';
+import FlashMessage from '../components/FlashMessage';
 
 
 function GroupPage({user, onUpdateUser, match: {params}}) {
@@ -18,7 +19,11 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
     const [posts, setPosts] = useState([]);
     const [showAddPost, setShowAddPost] = useState(false);
     const [showEditGroup, setShowEditGroup] = useState(false);
-    const [navBarChanged, setNavBarChanged] = useState(false)
+    const [navBarChanged, setNavBarChanged] = useState(false);
+    const [showFlashMessage, setShowFlashMessage] = useState(false);
+    const [successMessage, setSuccessMessage] = useState(null)
+    // Is either 'success' or 'error'
+    const [snackbar, setSnackbar] = useState(null)
 
     useEffect(() => {
         (async () => {
@@ -69,6 +74,13 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
 
     const handleAddPost = async (event) => {
         event.preventDefault();
+        if (!event.target.title.value || !event.target.content.value) {
+            setSuccessMessage('Please fill in a title and share your message')
+            setSnackbar('error');
+            setShowFlashMessage(Math.random()*100)
+            return 0 
+        }
+
         try {
             let newPost = {
                 title: event.target.title.value,
@@ -80,6 +92,9 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             user.posts.push(response.data._id)
             onUpdateUser(user)
             setShowAddPost(false)
+            setSuccessMessage('Awesome! New post has been added.')
+            setSnackbar('success');
+            setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -93,6 +108,14 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
     // The first option is less writes to the database
     const handleEditGroup = async (event) => {
         event.preventDefault();
+
+        if (!event.target.name.value || !event.target.description.value) {
+            setSuccessMessage('What is the name of your group? And could you share some info about it?')
+            setSnackbar('error');
+            setShowFlashMessage(Math.random()*100)
+            return 0 
+        }
+
         try {
             const { name, description, tags, category } = event.target;
             let newGroup = {
@@ -106,6 +129,9 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             console.log(response.data)
             setGroup(response.data)
             setShowEditGroup(false)
+            setSuccessMessage(`The Owner of ${response.data.name} has spoken.`)
+            setSnackbar('success');
+            setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -123,6 +149,9 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             user.groupNames.push(group.name)
             user.groups.push(group._id)
             onUpdateUser(user)
+            setSuccessMessage(`Welome to ${group.name}!`)
+            setSnackbar('success');
+            setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -145,9 +174,10 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
             // Therefore this helper function is created
             user.groups = user.groups.map(group => group._id)
             user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
-
-            console.log(user)
             onUpdateUser(user)
+            setSuccessMessage(`The members of ${group.name} will miss you, come back whenever you want!`)
+            setSnackbar('success');
+            setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -208,6 +238,7 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
                     <EditGroup onCloseEditGroup={handleCloseEditGroup} onEditGroup={handleEditGroup} group={group}/>
                 </div>
             )}
+            <FlashMessage trigger={showFlashMessage} messageType={snackbar}>{successMessage}</FlashMessage>
         </>
     )
 }
