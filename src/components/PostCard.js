@@ -20,6 +20,7 @@ import CommentCard from './CommentCard';
 import axios from 'axios';
 import API_URL from '../config';
 import LikeAnimation from '../json/like.json'
+import MessageAnimation from '../json/message.json'
 import Animation from './Animation'
 
 
@@ -28,7 +29,9 @@ function PostCard({postData, user}) {
 
     // rename later
     const [post, setPost] = useState(postData);
+    const [commentContent, setCommentContent] = useState('')
     const [showLikeAnimation, setShowLikeAnimation] = useState(false);
+    const [showMessageAnimation, setShowMessageAnimation] = useState(false);
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -65,11 +68,16 @@ function PostCard({postData, user}) {
 
     const handleAddComment = async (event) => {
         event.preventDefault();
+        
+        if (!commentContent.length) {
+            return 0
+        }
+
         try {
             let commentData = {
                 postId: post._id,
                 comment: {
-                    content: event.target.content.value,
+                    content: commentContent,
                     owner: user._id,
                     likes: [],
                     dislikes: [],
@@ -77,7 +85,9 @@ function PostCard({postData, user}) {
                 }
             }
             let response = await axios.post(`${API_URL}/api/post/comment`, commentData, {withCredentials: true})
+            setCommentContent('')
             setPost(response.data)
+            temporaryShowAnimation(setShowMessageAnimation, 1700)
         }
         catch(error) {
             console.log(error)
@@ -96,9 +106,8 @@ function PostCard({postData, user}) {
 
     const handleLikesAndDislikes = async (type, action, postOrCommentId) => {
         if (type === 'post' && action ==="likes") {
-            temporaryShowLikeAnimation()
+            temporaryShowAnimation(setShowLikeAnimation, 2000)
         }
-
 
         let likeAndDislikeData = {
             type,
@@ -109,11 +118,15 @@ function PostCard({postData, user}) {
         updateLikesAndDislikes(likeAndDislikeData)
     }
 
-    const temporaryShowLikeAnimation = () => {
-        setShowLikeAnimation(true)
+    const temporaryShowAnimation = (animationFunction, duration) => {
+        animationFunction(true)
         setTimeout(() => {
-            setShowLikeAnimation(false)
-        }, 2000);
+            animationFunction(false)
+        }, duration);
+    }
+
+    const changeCommentContent = event => {
+        setCommentContent(event.target.value)
     }
     
     return (
@@ -160,6 +173,10 @@ function PostCard({postData, user}) {
                             <ThumbDownIcon />
                         </IconButton>
                         <Typography style={{flexGrow: "1"}}>{post.dislikes.length}</Typography>
+                        {
+                            showMessageAnimation && 
+                            <Animation width={211} height={100} animation={MessageAnimation} />
+                        }
                         <Typography>{post.comments.length}</Typography>
                         <IconButton
                             onClick={handleExpandClick}
@@ -192,6 +209,8 @@ function PostCard({postData, user}) {
                         rowsMax="10"
                         multiline
                         name="content"
+                        onChange={changeCommentContent}
+                        value={commentContent}
                     />
                     <IconButton type="submit">
                         <CommentIcon/>
