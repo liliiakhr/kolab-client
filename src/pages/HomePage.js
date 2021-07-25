@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import UserContext from '../contexts/UserContext';
 import Navbar from "../components/Navbar";
 import PostCard from '../components/PostCard';
 import { Container, Typography, Grid, Button } from '@material-ui/core';
@@ -7,10 +8,11 @@ import API_URL from "../config";
 
 
 
-function HomePage({user, onUpdateUser}) {
+function HomePage() {
     
 
     const [posts, setPosts] = useState([]);
+    const {user, onUpdateUser} = useContext(UserContext);
     
     useEffect(() => {
         const getPosts = async () => {

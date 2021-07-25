@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Switch, Route, useHistory } from "react-router-dom";
-import LandingPage from './pages/LandingPage'
+import LandingPage from './pages/LandingPage';
 import { createTheme, ThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from './config';
@@ -10,7 +10,8 @@ import ExploreGroupPage from "./pages/ExploreGroupPage";
 import HomePage from "./pages/HomePage";
 import GroupPage from "./pages/GroupPage";
 import FlashMessage from "./components/FlashMessage";
-export const UserContext = React.createContext()
+import UserPage from './pages/UserPage';
+import UserContext from './contexts/UserContext';
 //
 const theme = createTheme({
   // You get the objects from the documentation
@@ -45,6 +46,7 @@ function App() {
           try {
             let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
             setUser(response.data)
+            console.log(response.data)
             setFetchingUser(false);
           }
           catch(error) {
@@ -87,6 +89,7 @@ function App() {
       } 
 
       let response = await axios.post(`${API_URL}/api/auth/signup`, newUser, {withCredentials: true})
+      console.log(response)
         setSnackbar('success')
         setRandomNumber(Math.random()*100)  
         setSuccessMessage(response.data.successMessage)
@@ -131,26 +134,30 @@ function App() {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <UserContext.Provider value={user}>
+        <UserContext.Provider value={{user, onUpdateUser: handleUpdateUser}}>
           <Switch>
             <Route exact path={'/'} render={(routeProps) => {
               return <LandingPage {...routeProps} trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
             }}/>
             <Route path={'/signup/category'} render={(routeProps) => {
-              return <SignupCategoryPage onUpdateUser={handleUpdateUser} {...routeProps}/>
+              return <SignupCategoryPage {...routeProps}/>
             }}/>
             <Route path={'/signup/group'} render={(routeProps) => {
               return <SignupGroupPage {...routeProps}/>
             }}/>
             <Route path={'/home'} render={(routeProps) => {
-              return <HomePage {...routeProps} user={user} onUpdateUser={handleUpdateUser}/>
+              return <HomePage {...routeProps} />
             }}/>
             <Route path={'/explore'} render={(routeProps) => {
-              return <ExploreGroupPage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>
+              return <ExploreGroupPage {...routeProps} onError={handleErrorMessage} onSuccess={handleSuccessMessage}/>
             }}/>
-            <Route path={'/:group'} render={(routeProps) => {
-              return <GroupPage {...routeProps} onUpdateUser={handleUpdateUser} user={user}/>
+            <Route exact path={'/profile/:user'} render={(routeProps) => {
+              return <UserPage {...routeProps}/>
             }}/>
+            <Route path={'/:group'} render={(routeProps) => {
+              return <GroupPage {...routeProps} />
+            }}/>
+              {/* Props will be passed with Context */}
           </Switch>
           {
            snackbar === 'success' ? <FlashMessage trigger={randomNumber} messageType={snackbar}>{successMessage}</FlashMessage> : <FlashMessage trigger={randomNumber} messageType={snackbar}>{errorMessage}</FlashMessage> 

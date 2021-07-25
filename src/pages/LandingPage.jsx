@@ -5,31 +5,17 @@ import React, { useState } from "react";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 import Paper from '@material-ui/core/Paper';
-import backgroundUrl from '../assets/images/background.jpg';
 import logo from '../assets/images/logo_dark_transparent.png';
 
 
-function HomePage(props) {
+function LandingPage(props) {
   const [signup, setSignUp] = useState(false);
   // This conditional checks if a props.location.state.renderLogin prop is passed from any page
   // If this is the case the login will be set to true by default
   const [login, setLogin] = useState(props.location.state ? true : false);
 
-  let handleSignUpPopUp = () => {
-    if (!signup) {
-      setSignUp(true);
-    } else {
-      setSignUp(false);
-    }
-  };
-
-  let handleLoginPopUp = () => {
-    if (!login) {
-      setLogin(true);
-    } else {
-      setLogin(false);
-    }
-  };
+  let handleSignUpPopUp = () => setSignUp(!signup);
+  let handleLoginPopUp = () => setLogin(!login);
 
   return (
     <div className="landingPageWrapper">
@@ -82,4 +68,4 @@ function HomePage(props) {
   );
 }
 
-export default HomePage;
+export default LandingPage;

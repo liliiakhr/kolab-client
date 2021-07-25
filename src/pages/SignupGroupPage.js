@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { UserContext } from '../App';
+import UserContext from '../contexts/UserContext';
 import GroupCard from '../components/GroupCard';
 import { Container, Typography, Grid, Button } from '@material-ui/core';
 import API_URL from "../config"
@@ -12,7 +12,7 @@ import LandingPage from './LandingPage'
 function SignupGroupPage({history}) {
 
     const [ groups, setGroups ] = useState([])
-    const user = useContext(UserContext)
+    const {user} = useContext(UserContext)
     
     // ?? IS there a way to 
     useEffect(() => {

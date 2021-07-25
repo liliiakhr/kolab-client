@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { UserContext } from '../App';
+import UserContext from '../contexts/UserContext';
 import CategoryCard from '../components/CategoryCard';
 import categoryData from '../json/categoryData.json';
 import { Container, Typography, Button, Grid } from '@material-ui/core';
@@ -9,10 +9,10 @@ import API_URL from "../config";
 import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router';
 
-function SignupCategoryPage( {onUpdateUser, history} ) {
+function SignupCategoryPage( { history} ) {
     
     const [ categories, setCategories ] = useState([]);
-    const user = useContext(UserContext)
+    const {user, onUpdateUser} = useContext(UserContext);
 
     const useStyles = makeStyles((theme) => ({
         btn: {

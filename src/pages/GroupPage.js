@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import UserContext from '../contexts/UserContext';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 import API_URL from "../config"
@@ -12,13 +13,14 @@ import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import EditGroup from '../components/EditGroup';
 
 
-function GroupPage({user, onUpdateUser, match: {params}}) {
+function GroupPage({ match: {params}}) {
 
     const [group, setGroup] = useState(null);
     const [posts, setPosts] = useState([]);
     const [showAddPost, setShowAddPost] = useState(false);
     const [showEditGroup, setShowEditGroup] = useState(false);
-    const [navBarChanged, setNavBarChanged] = useState(false)
+    const [navBarChanged, setNavBarChanged] = useState(false);
+    const {user, onUpdateUser} = useContext(UserContext);
 
     useEffect(() => {
         (async () => {

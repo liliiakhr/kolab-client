@@ -1,5 +1,6 @@
 import Navbar from '../components/Navbar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import UserContext from '../contexts/UserContext';
 import GroupCard from '../components/GroupCard';
 import { Container, Typography, Grid, Button } from '@material-ui/core';
 import API_URL from "../config"
@@ -11,10 +12,11 @@ import IconButton from '@material-ui/core/IconButton';
 import AddGroup from '../components/AddGroup';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
-function ExploreGroupPage({user, onUpdateUser, onError, onSuccess, history}) {
+function ExploreGroupPage({onError, onSuccess, history}) {
 
-    const [groups, setGroups] = useState([])
-    const [addGroup, setAddGroup] = useState(false)
+    const [groups, setGroups] = useState([]);
+    const [addGroup, setAddGroup] = useState(false);
+    const {user, onUpdateUser} = useContext(UserContext);
 
     useEffect(() => {
         console.log("USE EFFECT TO GET GROUP DATA")
@@ -85,7 +87,7 @@ function ExploreGroupPage({user, onUpdateUser, onError, onSuccess, history}) {
             addGroup && (
                     <div className="popupOpacity">  
                         <AddGroup onAddGroupPopUp={handleAddGroupPopUp} onAddGroup={handleCreateGroup}/>
-                    </ div>
+                    </div>
                     )
                 }
             </div>
