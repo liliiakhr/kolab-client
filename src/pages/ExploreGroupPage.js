@@ -43,7 +43,7 @@ function ExploreGroupPage({user, onUpdateUser, onError, onSuccess, history}) {
           let response = await axios.post(`${API_URL}/api/add-group`, groupData, {withCredentials: true})
           onSuccess(response.data.successMessage)
           setGroups([response.data.group,...groups])
-          onUpdateUser({...user, groupNames: [...user.groupNames, response.data.group.name]})
+          onUpdateUser({...user, groupNames: [...user.groups, response.data.group._id]})
           history.push(`/${response.data.group.name}`)  
         } catch (error) {
           onError(error.response.data.errorMessage)
