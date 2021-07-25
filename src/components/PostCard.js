@@ -88,15 +88,6 @@ function PostCard({postData, user}) {
         }
     }
 
-    // Option 1: 
-    // Make seperate back-end route for all 4 functions, like post, dislike post, like comment, dislike comment etc.
-    // Option 2:
-    // Create 1 route for updating the post
-    // Put this thing in a useEffect and run it whenever the post is updated
-    // Then the handleLikePost etc would only update the post state
-    // Post state will trigger the back-end function
-    // This function will be passed on as prop to the comment section
-    
     const updateLikesAndDislikes = async (likeAndDislikeData) => {
         try {
             let response = await axios.post(`${API_URL}/api/post/likes`, likeAndDislikeData, {withCredentials: true})
