@@ -24,31 +24,19 @@ function EditGroup({onCloseEditGroup, onEditGroup, group}) {
         })
     }
 
-    return (
-        // <div style={{
-        //     width: '30%',
-        //     height: '65%',
-        //     background: 'white',
-        //     display: 'flex',
-        //     flexDirection: 'column',
-        //     alignItems: 'center',
-        //     boxShadow: '15px 20px aqua, 17px 22px black',
-        //     border: '2px solid black'
-        //     }}>        
+    return (  
         <Container maxWidth="xs"> 
-            <Paper>
+            <Paper className="pop-up-styling"> 
                 <div style={{display: "flex", justifyContent: "flex-end"}}>
-                    {/* <Typography variant='h4' >Edit group
-                    </Typography>       */}
                     <IconButton onClick={onCloseEditGroup} >
                         <CloseIcon />
                     </IconButton> 
-
                 </div>
               <form autocomplete="off" style={{display: 'flex', flexDirection: 'column'}} onSubmit={onEditGroup} novalidate>
                 <TextField 
                     placeholder="Name" 
-                    variant="filled" 
+                    variant="standard" 
+                    margin="normal"
                     label="Name" 
                     type="text" 
                     name="name"
@@ -59,7 +47,8 @@ function EditGroup({onCloseEditGroup, onEditGroup, group}) {
                 <TextField 
                     style={{marginTop: '10px'}} 
                     placeholder="Image Url" 
-                    variant="filled" 
+                    variant="standard" 
+                    margin="normal"
                     label="Image" 
                     type="text" 
                     name="image_url"
@@ -73,7 +62,8 @@ function EditGroup({onCloseEditGroup, onEditGroup, group}) {
                     multiline
                     rows={5}
                     maxRows={10}
-                    variant="filled"
+                    variant="standard" 
+                    margin="normal"
                     value={temporaryGroup.description}
                     onChange={changeInputData}
                     >
@@ -81,7 +71,8 @@ function EditGroup({onCloseEditGroup, onEditGroup, group}) {
                 <TextField 
                     style={{marginTop: '10px'}} 
                     placeholder="Tags (Place a ',' between tags and no spaces)" 
-                    variant="filled" 
+                    variant="standard" 
+                    margin="normal"
                     label="Tags" 
                     type="text" 
                     name="tags"
@@ -117,7 +108,6 @@ function EditGroup({onCloseEditGroup, onEditGroup, group}) {
                </form>            
             </Paper>
         </Container>
-        // </div>
     )
 }
 
