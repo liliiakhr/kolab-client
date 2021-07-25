@@ -25,11 +25,9 @@ function ExploreGroupPage({user, onUpdateUser, onError, onSuccess, history}) {
         getGroups()
     }, [])
 
-    console.log(groups)
     let handleCreateGroup = async (event) => {
         event.preventDefault()
         const {name, image_url, description, category, tags} = event.target
-        console.log(category)
         let groupData = {
             name: name.value.trim(),
             image_url: image_url.value,
@@ -44,7 +42,11 @@ function ExploreGroupPage({user, onUpdateUser, onError, onSuccess, history}) {
           let response = await axios.post(`${API_URL}/api/add-group`, groupData, {withCredentials: true})
           onSuccess(response.data.successMessage)
           setGroups([response.data.group,...groups])
-          onUpdateUser({...user, groupNames: [...user.groups, response.data.group._id]})
+          onUpdateUser({
+              ...user, 
+              groupNames: [...user.groupNames, response.data.group.name],
+              groups: [...user.groups, response.data.group._id]
+            })
           history.push(`/${response.data.group.name}`)  
         } catch (error) {
           onError(error.response.data.errorMessage)

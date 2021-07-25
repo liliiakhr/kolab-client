@@ -181,7 +181,7 @@ function GroupPage({user, onUpdateUser, match: {params}}) {
                             <Button startIcon={<SettingsIcon /> } onClick={() => {setShowEditGroup(true)}}>Manage Group</Button>
                         }
                         {
-                            (group.users.includes(user._id)) &&
+                            (group.users.includes(user._id) && user._id !== group.admin) &&
                             <Button startIcon={<ExitToAppIcon />} onClick={handleLeaveGroup}>Leave</Button>
                         }
                     </ButtonGroup>
