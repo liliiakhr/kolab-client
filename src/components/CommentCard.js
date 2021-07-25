@@ -5,8 +5,7 @@ import { IconButton } from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
-export default function CommentCard({comment: {createdAt, content, likes, dislikes, owner}}) {
-    
+export default function CommentCard({onHandleLikesAndDislikes, comment: {createdAt, content, likes, dislikes, owner, _id}}) {
     return (
         <div style={{display: "flex", marginTop: "20px"}}>
             <Avatar style={{marginRight: "10px"}}>
@@ -19,11 +18,11 @@ export default function CommentCard({comment: {createdAt, content, likes, dislik
                 </div> 
                 <Typography variant="body2" style={{wordBreak: "break-word"}}>{content}</Typography>
                 <div style={{display: "flex", alignItems: "center"}}>
-                    <IconButton>
+                    <IconButton onClick={() => onHandleLikesAndDislikes("comment", "likes", _id)}>
                         <ThumbUpIcon />
                     </IconButton>
                     <Typography>{likes.length}</Typography>
-                    <IconButton >
+                    <IconButton onClick={() => onHandleLikesAndDislikes("comment", "dislikes", _id)}>
                         <ThumbDownIcon />
                     </IconButton>
                     <Typography>{dislikes.length}</Typography>
