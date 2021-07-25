@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -16,31 +16,49 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import CommentIcon from '@material-ui/icons/Comment';
+import moment from 'moment';
+import { Button, TextField } from '@material-ui/core';
+import ShareIcon from '@material-ui/icons/Share';
+import CommentCard from './CommentCard';
+import axios from 'axios';
+import API_URL from '../config';
+import { SportsMmaOutlined } from '@material-ui/icons';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      maxWidth: 345,
-    },
-    media: {
-      height: 0,
-      paddingTop: '56.25%', // 16:9
-    },
-    expand: {
-      transform: 'rotate(0deg)',
-      marginLeft: 'auto',
-      transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-      }),
-    },
-    expandOpen: {
-      transform: 'rotate(180deg)',
-    },
-    avatar: {
-      backgroundColor: red[500],
-    },
-  }));
+function PostCard({postData, user}) {
+    const cardWidth = 500;
 
-function PostCard() {
+    // rename later
+    const [post, setPost] = useState(postData);
+    const [commentContent, setCommentContent] = useState('');
+
+    const useStyles = makeStyles((theme) => ({
+        root: {
+          maxWidth: cardWidth,
+        },
+        media: {
+          height: 0,
+          paddingTop: '56.25%', // 16:9
+        },
+        expand: {
+          transform: 'rotate(0deg)',
+          marginLeft: 'auto',
+          transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+          }),
+        },
+        expandOpen: {
+          transform: 'rotate(180deg)',
+        },
+        avatar: {
+          backgroundColor: red[500],
+        },
+        comment: {
+            width: cardWidth - 80,
+            // [theme.breakpoints.only('sm')]: {
+            //     width: 200,
+            // },
+        }
+      }));
 
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
@@ -49,11 +67,57 @@ function PostCard() {
       setExpanded(!expanded);
     };
 
+    const handleAddComment = async (event) => {
+        event.preventDefault();
+        try {
+            let commentData = {
+                postId: post._id,
+                comment: {
+                    content: event.target.content.value,
+                    owner: user._id,
+                    likes: [],
+                    dislikes: [],
+                    createdAt: new Date()
+                }
+            }
+            let response = await axios.post(`${API_URL}/api/post/comment`, commentData, {withCredentials: true})
+            setPost(response.data)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
 
+    // Option 1: 
+    // Make seperate back-end route for all 4 functions, like post, dislike post, like comment, dislike comment etc.
+    // Option 2:
+    // Create 1 route for updating the post
+    // Put this thing in a useEffect and run it whenever the post is updated
+    // Then the handleLikePost etc would only update the post state
+    // Post state will trigger the back-end function
+    // This function will be passed on as prop to the comment section
+    
+    const updateLikesAndDislikes = async (likeAndDislikeData) => {
+        try {
+            let response = await axios.post(`${API_URL}/api/post/likes`, likeAndDislikeData, {withCredentials: true})
+            setPost(response.data)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+
+    const handleLikesAndDislikes = async (type) => {
+        let likeAndDislikeData = {
+            postOrCommentId: post._id,
+            userId: user._id,
+            type: type
+        }
+        updateLikesAndDislikes(likeAndDislikeData)
+    }
+    
     return (
         <div>
-            <div style={{marginTop:"80px"}}> </div>
-
             <Card className={classes.root}>
             <CardHeader
                 avatar={
@@ -62,56 +126,64 @@ function PostCard() {
                 </Avatar>
                 }
                 action={
-                <IconButton aria-label="settings">
-                    <MoreVertIcon />
-                </IconButton>
+                    <Typography variant="body2">{moment(post.createdAt).format("MMM Do YY") }</Typography>    
                 }
-                title="10 Clever JavaScript Tricks That Every Developer Should Know"
-                subheader="September 14, 2016"
+                title={post.title}
+                subheader={post.creator.username}
             />
             <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                This is a post preview. It is limited to nnn characters. 
+                <Typography variant="body1" color="textSecondary" component="p">
+                {post.content}
                 </Typography>
             </CardContent>
-            <CardActions disableSpacing>
-                <IconButton>
-                    <ThumbUpIcon />
-                </IconButton>
-                <IconButton>
-                    <ThumbDownIcon />
-                </IconButton>
-                <IconButton>
-                    <CommentIcon/>
-                </IconButton>
-                <IconButton
-                className={clsx(classes.expand, {
-                    [classes.expandOpen]: expanded,
-                })}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label="show more"
-                >
-                <ExpandMoreIcon />
-                </IconButton>
+            <CardActions disableSpacing >
+                        <IconButton onClick={(event) => handleLikesAndDislikes("likes")} name="likes">
+                            <ThumbUpIcon />
+                        </IconButton>
+                        <Typography>{post.likes.length}</Typography>
+                        <IconButton onClick={() => handleLikesAndDislikes("dislikes")} name="dislikes">
+                            <ThumbDownIcon />
+                        </IconButton>
+                        <Typography style={{flexGrow: "1"}}>{post.dislikes.length}</Typography>
+                        <Typography>{post.comments.length}</Typography>
+                        <IconButton
+                            onClick={handleExpandClick}
+                            aria-label="show more"
+                        >
+                            <CommentIcon/>
+                        </IconButton>
+                        <IconButton aria-label="share">
+                            <ShareIcon />
+                        </IconButton>
+
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                <Typography paragraph>Method:</Typography>
-                <Typography paragraph>
-                    Here is the expanded post.
-                </Typography>
-                <Typography paragraph>
-                    Here is the expanded post.
-                </Typography>
-                <Typography paragraph>
-                    Here is the expanded post.
-                </Typography>
-                <Typography>
-                    Here is the expanded post.
-                </Typography>
+                    {
+                        post.comments.map((comment, index) => {
+                           return <CommentCard key={index} comment={comment} />
+                        })
+                    }
                 </CardContent>
             </Collapse>
+            <div style={{display: "flex", alignItems: "center"}}>
+            <CardContent>
+                <form onSubmit={handleAddComment}>
+                    <TextField 
+                        label="Comment" 
+                        variant="outlined" 
+                        size="small" 
+                        className={classes.comment}
+                        rowsMax="10"
+                        multiline
+                        name="content"
+                    />
+                    <IconButton type="submit">
+                        <CommentIcon/>
+                    </IconButton>
+                </form>
+            </CardContent>
+            </div>
             </Card>            
         </div>
     )

@@ -12,7 +12,6 @@ import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import EditGroup from '../components/EditGroup';
 import FlashMessage from '../components/FlashMessage';
 
-
 function GroupPage({user, onUpdateUser, match: {params}}) {
 
     const [group, setGroup] = useState(null);

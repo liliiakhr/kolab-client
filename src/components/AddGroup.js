@@ -22,7 +22,6 @@ function AddGroup(props) {
                 <IconButton onClick={props.onAddGroupPopUp} style={{marginLeft: '15%'}} >
                     <CloseIcon />
                 </IconButton> 
-
             </div>
               <form autocomplete="off" style={{display: 'flex', flexDirection: 'column'}} onSubmit={props.onAddGroup} novalidate>
                 <TextField 
