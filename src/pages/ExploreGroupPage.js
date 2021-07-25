@@ -27,7 +27,6 @@ function ExploreGroupPage({onError, onSuccess, history}) {
         getGroups()
     }, [])
 
-    console.log(groups)
     let handleCreateGroup = async (event) => {
         event.preventDefault()
         const {name, image_url, description, category, tags} = event.target

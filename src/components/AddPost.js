@@ -12,7 +12,7 @@ function AddPost({onCloseAddPost, onAddPost}) {
                 </IconButton> 
             </div>  
             <Paper>
-                <form onSubmit={onAddPost} style={{display: "flex", flexDirection: "column"}} autocomplete="off" novalidate>
+                <form onSubmit={onAddPost} encType="multipart/form-data" style={{display: "flex", flexDirection: "column"}} autocomplete="off" novalidate>
                     <TextField 
                         placeholder="Title" 
                         variant="filled" 
@@ -28,6 +28,7 @@ function AddPost({onCloseAddPost, onAddPost}) {
                         variant="filled"
                         name="content"
                     />
+                    <input type="file" name="imageUrl" accept="image/png, image/jpg"/>                  
                     <Button variant="contained" color="primary" type="submit" >Create Post</Button>
                 </form>
             </Paper>

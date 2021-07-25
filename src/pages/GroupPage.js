@@ -71,13 +71,23 @@ function GroupPage({ match: {params}}) {
 
     const handleAddPost = async (event) => {
         event.preventDefault();
+
+        var formData = new FormData();
+        formData.append('imageUrl', event.target.imageUrl.files[0])
+
+        let imgResponse = await axios.post(`${API_URL}/api/upload`, formData)
+        console.log(imgResponse);
+
         try {
+
             let newPost = {
                 title: event.target.title.value,
                 content: event.target.content.value,
                 creator: user._id,
-                groupOrigin: group._id
+                groupOrigin: group._id,
+                image_url: imgResponse.data.image_url
             }
+            console.log(newPost)
             let response = await axios.post(`${API_URL}/api/${params.group}/add-post`, newPost, {withCredentials: true})
             user.posts.push(response.data._id)
             onUpdateUser(user)
@@ -195,6 +205,7 @@ function GroupPage({ match: {params}}) {
                                     <h1>{`${post.title}`}</h1> 
                                     <h5>{`Created by: ${post.creator.username}`}</h5>
                                     <p>{`${post.content}`}</p>
+                                    <img width="100px" src={post.image_url}/>
                                 </>
                             )
                         })

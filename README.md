@@ -184,29 +184,28 @@ Messages model
 | GET         | `/auth/profile`  | Saved session               | 200            | 404          | Check if user is logged in and return profile page                                                                              |
 | POST        | `/auth/signup`    | {name, email, password}     | 201            | 404          | Checks if fields not empty (422) and user not exists (409), then create user with encrypted password, and store user in session |
 | POST        | `/auth/login`     | {username, password}        | 200            | 401          | Checks if fields not empty (422), if user exists (404), and if password matches (404), then stores user in session              |
-| POST        | `/auth/login/google`     | {username, password}        | 200            | 401          | Checks if fields not empty (422), if user exists (404), and if password matches (404), then stores user in session              |
+| POST        | `/auth/login/google`     | {username, password}        | 200            | 401          | Checks if fields not empty (422), if user exists (404), and if password matches (404), then stores user in session        |
 | POST        | `/auth/logout`    | (empty)                     | 204            | 400          | Logs out the user                                                                                                               |
-| POST        | `/signup/category`     | {categories} |                | 400          | Add new backlog   and add to user                                                                                         |
-| GET         | `/signup/group`   |                           |                | 400          |  Querry for groups filter by categories of user (stored in session) elements                                                                                                            |
-| GET         | `/home`           |                             |                |              | Sort by timestamp limit by 10                                                                                                                |
+| POST        | `/signup/category`     | {categories} |                | 400          | Add new backlog   and add to user    |
+| GET         | `/signup/group`   |                           |                | 400          |  Querry for groups filter by categories of user (stored in session) elements     |
+| GET         | `/home`           |                             |                |              | Sort by timestamp limit by 10   |
 | GET         | `/:group`  |                             |                | Params, 2 querries, 1 for post model 1 for group model, populate comments             |                                                                                                              |
-| POST         | `/:group/join`  |     {userid}              |      | find the group id and add user to group id        |                                                                                                              |
+| POST         | `/:group/join`  |     {userid}              |      | find the group id and add user to group id        |    |
 | GET         | `/:group/leave`  |     {userid}                      |                | find the group id and remove user to group id     comments             |                                                                                                              |
-| PUT         | `/:group/add-post`      |  {title, description, owner}                   | 200            | 400          | edit element                                                                                                                    |
-| DELETE         | `/:post/delete-post`      |  {post-id}                   | 200            | 400          | edit element                                                                                                                    |
-| POST         | `/:post/comment`      |  {comment}                           | 201            | 400          | Show specific element                                                                                                           |
-| POST         | `/:post/like`      |  {userid}                           | 201            | 400          | Show specific element                                                                                                           |
-| POST         | `/:post/dislike`      |  {userid}                           | 201            | 400          | Show specific element                                                                                                           |
-| GET      | `/explore`      |                             | 201            | 400          | delete element                                                                                                                  |
-| POST         | `/add-group`    |     {all group information}                        |                | 400          | Show series elements                                                                                                            |
-| GET         | `/friends`     |                             |  find the user and populate friends             |                                                                                                                         |
-| GET         | `/profile/:user`     |                             |                |              | Get posts with user id elements                                                                                                             |
-| PATCH         | `/profile/:user`     |  {name, description image} |                |              | elements                                                                                                             |
-| POST         | `/profile/:user/add-friend`     |  {your user id} |                |              | elements                                                                                                             |
+| PUT         | `/:group/add-post`      |  {title, description, owner}                   | 200            | 400          | edit element       |
+| DELETE         | `/:post/delete-post`      |  {post-id}                   | 200            | 400          | edit element                  |
+| POST         | `/:post/comment`      |  {comment}                           | 201            | 400          | Show specific element        |
+| POST         | `/:post/like`      |  {userid}                           | 201            | 400          | Show specific element           |
+| POST         | `/:post/dislike`      |  {userid}                           | 201            | 400          | Show specific element |
+| GET      | `/explore`      |                             | 201            | 400          | delete element   |
+| POST         | `/add-group`    |     {all group information}                        |                | 400          | Show series elements  |
+| GET         | `/friends`     |                             |  find the user and populate friends             |      |
+| GET         | `/profile/:user`     |                             |                |              | Get posts with user id elements   |
+| POST         | `/profile/:user/add-friend`     |  {your user id} |                |              | elements          |
 | GET         | `/people`     |      |                |              | Querry for random users elements |
-| POST         | `/people/search`     |   {searchtext}     |                |              | elements                                                                                                             |
-| GET         | `/messages/:conversationId`     |        |                |              |                                                                                                            |
-| POST         | `/conversations`     |        |                |              |                                                                                                              |
+| POST         | `/people/search`     |   {searchtext}     |                |              | elements     |
+| GET         | `/messages/:conversationId`     |        |                |              |   |
+| POST         | `/conversations`     |        |                |              |     |
 <br>
 
 ## Links
