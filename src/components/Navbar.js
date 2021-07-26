@@ -339,7 +339,6 @@ function NavBar(props) {
                                 onClick={(event) => handleProfileMenuOpen(event, 'user') }
                                 color="inherit"
                                 >
-                                {/* <AccountCircle /> */}
                                 <Avatar alt={user.username} src={user.image_url} />
                             </IconButton>
                         </Tooltip>

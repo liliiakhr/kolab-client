@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container } from '@material-ui/core'
+import { Container, Paper } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
@@ -9,21 +9,13 @@ import IconButton from '@material-ui/core/IconButton';
 
 function Signup(props) {
     return (
-        <div style={{
-            width: '25%',
-            height: '70%',
-            background: 'white',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '15%',
-            }}>
-            <IconButton onClick={props.onSignUpPopUp} style={{marginTop: '-25%', marginBottom: '15%', marginLeft: '80%'}} >
+        <Container maxWidth="xs">
+        <Paper className="pop-up-styling" style={{display: "flex", flexDirection: "column", alignItems: "center", position: "relative"}}>    
+            <IconButton onClick={props.onSignUpPopUp} style={{position: "absolute", top: "0", right: "0"}} >
                 <CloseIcon />
             </IconButton>
 
-        <img src={logo} alt='Kolab logo'style={{width: '50%', marginTop: '-20%'}}/>
+        <img src={logo} alt='Kolab logo' style={{width: '50%'}}/>
         <form autocomplete="off" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}} onSubmit={props.onSignUp} novalidate>
             <TextField
             id="outlined-password-input"
@@ -53,7 +45,8 @@ function Signup(props) {
               Sign Up
             </Button>
         </form>
-    </div>
+        </Paper>
+    </Container>
     )
 }
 

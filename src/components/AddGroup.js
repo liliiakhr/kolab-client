@@ -16,20 +16,14 @@ import Select from '@material-ui/core/Select';
 function AddGroup(props) {
     const [category, setCategory] = useState('')
     return (
-        <div style={{
-            width: '23%',
-            height: '65%',
-            background: 'white',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            boxShadow: '15px 20px aqua, 17px 22px black',
-            border: '2px solid black'
-            }}>        
         <Container maxWidth="xs"> 
-           <Typography variant='h4' style={{marginTop: '10%'}}>Create your group <IconButton onClick={props.onAddGroupPopUp} style={{marginLeft: '15%'}} >
-                <CloseIcon />
-            </IconButton> </Typography>      
+        <Paper className="pop-up-styling">
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                    <Typography variant='h6' style={{marginTop: '10px'}}>Create your group</Typography>
+                    <IconButton onClick={props.onAddGroupPopUp} >
+                        <CloseIcon />
+                    </IconButton> 
+                </div>  
               <form autocomplete="off" style={{display: 'flex', flexDirection: 'column'}} onSubmit={props.onAddGroup} novalidate>
                 <TextField placeholder="Name" variant="filled" label="Name" type="text" name="name"></TextField>
                 <TextField style={{marginTop: '10px'}} placeholder="Image Url" variant="filled" label="Image" type="text" name="image_url"></TextField>
@@ -70,8 +64,8 @@ function AddGroup(props) {
                 </FormControl>
                 <Button type="submit" variant="contained" color="primary">Create Group</Button>
                </form>            
+            </Paper>
         </Container>
-        </div>
     )
 }
 

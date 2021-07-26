@@ -48,7 +48,7 @@ function ExploreGroupPage({onError, onSuccess, history}) {
               groupNames: [...user.groupNames, response.data.group.name],
               groups: [...user.groups, response.data.group._id]
             })
-          history.push(`/${response.data.group.name}`)  
+          history.push(`/group/${response.data.group.name}`)  
         } catch (error) {
           onError(error.response.data.errorMessage)
         }
