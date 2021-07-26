@@ -3,7 +3,7 @@ import axios from 'axios';
 import API_URL from '../config';
 import { Link, useHistory, Redirect, useLocation } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Button, AppBar, CssBaseline, Drawer, Hidden, IconButton, Toolbar, Tooltip, Tabs, Tab, Box, Badge, Menu, MenuItem, Zoom } from '@material-ui/core';
+import { Button, AppBar, CssBaseline, Drawer, Hidden, IconButton, Toolbar, Tooltip, Tabs, Tab, Box, Badge, Menu, MenuItem, Zoom, Avatar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExploreIcon from '@material-ui/icons/Explore';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -283,6 +283,8 @@ function NavBar(props) {
     </Menu>
   );  
 
+  console.log("IMAGE", user.image_url)
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -337,7 +339,8 @@ function NavBar(props) {
                                 onClick={(event) => handleProfileMenuOpen(event, 'user') }
                                 color="inherit"
                                 >
-                                <AccountCircle />
+                                {/* <AccountCircle /> */}
+                                <Avatar alt={user.username} src={user.image_url} />
                             </IconButton>
                         </Tooltip>
                 </div>
