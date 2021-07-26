@@ -1,7 +1,7 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import UserContext from '../contexts/UserContext';
 import Navbar from '../components/Navbar';
-import { Button, Container, Grid } from '@material-ui/core';
+import {Container, Grid } from '@material-ui/core';
 import ProfileInfo from '../components/ProfileInfo';
 import UpdateProfile from '../components/UpdateProfile';
 import axios from 'axios';
@@ -10,10 +10,24 @@ import API_URL from "../config";
 function UserPage(props) {
     const {user, onUpdateUser} = useContext(UserContext);
     const [editProfile, setEditProfile] = useState(false);
+    const [profile, setProfile] = useState(null)
 
-    const urlId = props.match.params.id;
-    const isLoggedInUser = user.id == urlId;
+    const urlId = props.match.params.userId;
+    const isLoggedInUser = (user.id === urlId);
 
+    useEffect(async () => {
+        try {
+            console.log("First console")
+            let response = await axios.get(`${API_URL}/api/profile/${urlId}`, {withCredentials: true})
+            console.log(response.data)
+            setProfile(response.data)
+            
+        }
+        catch(error) {
+            console.log(error)
+        }
+       
+    }, [urlId]);
 
     const handleEditProfile = async (event) => {
         event.preventDefault();
@@ -74,8 +88,7 @@ function UserPage(props) {
 
                     <Grid item xs={12} sm={6}>
                         <div>
-                            <ProfileInfo onEditProfilePopUp = {handleEditProfilePopUp} isLoggedInUser={isLoggedInUser}/>
-                            
+                            {profile && <ProfileInfo profile={profile} onEditProfilePopUp = {handleEditProfilePopUp} isLoggedInUser={isLoggedInUser}/>}
                         </div>
                     </Grid> 
                 </Grid>
@@ -83,7 +96,7 @@ function UserPage(props) {
         </Navbar> {
             editProfile && (
                 <div className="popupOpacity">  
-                    <UpdateProfile onEditProfile = {handleEditProfile} onEditProfilePopUp = {handleEditProfilePopUp}/>
+                    <UpdateProfile  onEditProfile = {handleEditProfile} onEditProfilePopUp = {handleEditProfilePopUp}/>
                 </div>
                 )
         }

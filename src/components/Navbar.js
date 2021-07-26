@@ -229,14 +229,14 @@ function NavBar(props) {
               <div>
                   <MenuItem onClick={() => {history.push(`/profile/${user._id}`)}}>Profile</MenuItem>
                   <MenuItem onClick={handleLogOut}>Logout</MenuItem>
-              </ div>
+              </div>
           )
           :
           (
               <div>
                   <MenuItem onClick={() => {history.push('/friends')}}>My Friends</MenuItem>
                   <MenuItem onClick={() => {history.push('/people')}}>Explore People</MenuItem>
-              </ div>
+              </div>
           )
       }
     </Menu>

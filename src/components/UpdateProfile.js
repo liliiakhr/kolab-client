@@ -11,6 +11,7 @@ import UserContext from '../contexts/UserContext';
 function UpdateProfile(props) {
     const {user, onUpdateUser} = useContext(UserContext);
 
+
     return (
         <div style={{
         background: 'white',

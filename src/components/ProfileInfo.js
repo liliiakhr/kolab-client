@@ -8,8 +8,10 @@ import avatarImg from "../assets/images/avatar.png"
 
 
 
-function ProfileInfo({isLoggedInUser, onEditProfilePopUp}) {
+function ProfileInfo(props) {
     const {user, onUpdateUser} = useContext(UserContext);
+    const {isLoggedInUser, onEditProfilePopUp, profile} = props;
+    console.log(profile)
     
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -32,15 +34,15 @@ function ProfileInfo({isLoggedInUser, onEditProfilePopUp}) {
         <Card className={classes.root} >
         <Avatar className={classes.large} alt="User avatar" src={user.image_url} />
         <CardContent>
-            <Typography variant="subtitle1">{user.username}</Typography>
+            <Typography variant="subtitle1">{profile.username}</Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-            {user.description}
+            {profile.description}
             </Typography>
-            {
+            {/* {
                 user.groups.map((group)=> {
                     return <Chip label= {group.name} />
                 })
-            }
+            } */}
         </CardContent>
         <CardActions style={{display: "flex", justifyContent: "space-between"}}>
             {isLoggedInUser && <Button onClick = {onEditProfilePopUp}>Edit your profile</Button>}

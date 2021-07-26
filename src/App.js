@@ -151,7 +151,7 @@ function App() {
             <Route path={'/explore'} render={(routeProps) => {
               return <ExploreGroupPage {...routeProps} onError={handleErrorMessage} onSuccess={handleSuccessMessage}/>
             }}/>
-            <Route exact path={'/profile/:user'} render={(routeProps) => {
+            <Route exact path={'/profile/:userId'} render={(routeProps) => {
               return <UserPage {...routeProps}/>
             }}/>
             <Route path={'/people'} render={(routeProps) => {
