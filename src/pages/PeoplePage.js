@@ -43,14 +43,13 @@ function PeoplePage({user, onUpdateUser}) {
                     >
                     {
                        users.map((user, i) => {
+                           let username = user.username[0].toUpperCase() + user.username.slice(1, user.username.length)
                            return(
-                           
                             <Grid item xs={12} sm={6} key={i}>
                             <div className={i % 2 === 0 ? 'fly-left' : 'fly-right'}>
-                                    <UserCard key={i} categories={user.categories} id={user._id} username={user.username} description={user.description}/>
+                                    <UserCard key={i} categories={user.categories} id={user._id} username={username} description={user.description}/>
                                 </div>
-                            </Grid>
-                            
+                            </Grid>                            
                            )
                        }) 
                     }
