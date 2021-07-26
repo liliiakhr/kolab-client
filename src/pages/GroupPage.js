@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import UserContext from '../contexts/UserContext';
 import { Redirect } from 'react-router';
 import axios from 'axios';
-import API_URL from "../config";
-import { Typography, Button, ButtonGroup } from '@material-ui/core';
+import API_URL from "../config"
+import { Typography, Button, ButtonGroup, Container, Grid } from '@material-ui/core';
 import NavBar from '../components/Navbar';
 import AddPost from '../components/AddPost';
 import AddIcon from '@material-ui/icons/Add';
@@ -12,6 +12,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import EditGroup from '../components/EditGroup';
 import FlashMessage from '../components/FlashMessage';
+import PostCard from '../components/PostCard';
 
 function GroupPage({ match: {params}}) {
 
@@ -23,9 +24,17 @@ function GroupPage({ match: {params}}) {
     const {user, onUpdateUser} = useContext(UserContext);
     const [showFlashMessage, setShowFlashMessage] = useState(false);
     const [successMessage, setSuccessMessage] = useState(null)
-    // Is either 'success' or 'error'
     const [snackbar, setSnackbar] = useState(null)
 
+    useEffect(() => {
+        if (!user) {
+            return <Redirect to={{
+                pathname: "/",
+                state: { renderLogin: true }
+            }} />
+        }
+    }, [user])
+    
     useEffect(() => {
         (async () => {
             try {
@@ -38,9 +47,9 @@ function GroupPage({ match: {params}}) {
                     pathname: "/home",
                 }} />
             }
-       })()
+        })()
     }, [navBarChanged])
-
+    
     useEffect(() => {
         (async () => {
             try {
@@ -54,19 +63,12 @@ function GroupPage({ match: {params}}) {
                 console.log("Something went wrong while getting the posts // maybe none exist", error)
                 setPosts([])
             }
-       })()
+        })()
     }, [group, user])
-
-
-    if (!user) {
-        return <Redirect to={{
-            pathname: "/",
-            state: { renderLogin: true }
-        }} />
-    }
-
+    
     const handleCloseAddPost = () => {
         setShowAddPost(false);
+
     }
 
     const handleCloseEditGroup = () => {
@@ -83,21 +85,25 @@ function GroupPage({ match: {params}}) {
             return 0 
         }
 
-        var formData = new FormData();
-        formData.append('imageUrl', event.target.imageUrl.files[0]);
 
-        let imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
-
+        
         try {
-
+            let imgResponse = '' 
+            console.log(event.target.imageUrl.value)
+            if (event.target.imageUrl.value) {
+                var formData = new FormData();
+                formData.append('imageUrl', event.target.imageUrl.files[0]);
+                imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
+            }
+            
             let newPost = {
                 title: event.target.title.value,
                 content: event.target.content.value,
                 creator: user._id,
                 groupOrigin: group._id,
-                image_url: imgResponse.data.image_url
+                image_url: imgResponse.data ? imgResponse.data.image_url : '' 
             }
-            console.log(newPost)
+            
             let response = await axios.post(`${API_URL}/api/${params.group}/add-post`, newPost, {withCredentials: true})
             user.posts.push(response.data._id)
             onUpdateUser(user)
@@ -157,6 +163,7 @@ function GroupPage({ match: {params}}) {
             setGroup(response.data)
             user.groupNames.push(group.name)
             user.groups.push(group._id)
+            console.log("JOIN GROUP", user.groups)
             onUpdateUser(user)
             await setSuccessMessage(`Welome to ${group.name}!`)
             await setSnackbar('success');
@@ -204,39 +211,51 @@ function GroupPage({ match: {params}}) {
 
     return (
         <>
-            <NavBar onUpdateUser={onUpdateUser} user={user} onNavBarChange={handleNavBarChange} showDrawer>
-                    <Typography variant="h2">{group.name}</Typography>
-                    <Typography variant="subtitle1">{group.description}</Typography>
-                    <ButtonGroup variant="contained" color="secondary">
-                        {
-                            (!group.users.includes(user._id)) && (user._id !== group.admin) &&
-                            <Button startIcon={<AccessibilityNewIcon />} onClick={handleJoinGroup}>Join</Button>
-                        }
-                        {
-                            ((group.users.includes(user._id)) || user._id === group.admin) &&
-                            <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
-                        }
-                        {   
-                            (user._id === group.admin) &&
-                            <Button startIcon={<SettingsIcon /> } onClick={() => {setShowEditGroup(true)}}>Manage Group</Button>
-                        }
-                        {
-                            (group.users.includes(user._id) && user._id !== group.admin) &&
-                            <Button startIcon={<ExitToAppIcon />} onClick={handleLeaveGroup}>Leave</Button>
-                        }
-                    </ButtonGroup>
+            <NavBar onNavBarChange={handleNavBarChange} showDrawer>
+                <div style={{position: "relative"}}>
+                    <div style = {{marginLeft: "20px", position: "absolute", color: "white"}}>
+                        <Typography variant="h2">{group.name}</Typography>
+                        <Typography variant="subtitle1">{group.description}</Typography>
+                    </div>
+                    <img src={group.image_url} style={{width: "100%", height: "150px", objectFit: "cover"}}/>
+                </div>
+                <ButtonGroup variant="contained" color="secondary">
+                    {
+                        (!group.users.includes(user._id)) && (user._id !== group.admin) &&
+                        <Button startIcon={<AccessibilityNewIcon />} onClick={handleJoinGroup}>Join</Button>
+                    }
+                    {
+                        ((group.users.includes(user._id)) || user._id === group.admin) &&
+                        <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
+                    }
+                    {   
+                        (user._id === group.admin) &&
+                        <Button startIcon={<SettingsIcon /> } onClick={() => {setShowEditGroup(true)}}>Manage Group</Button>
+                    }
+                    {
+                        (group.users.includes(user._id) && user._id !== group.admin) &&
+                        <Button startIcon={<ExitToAppIcon />} onClick={handleLeaveGroup}>Leave</Button>
+                    }
+                </ButtonGroup>
                     {   
                         !showAddPost && 
-                        posts.map((post, index) => {
-                            return (
-                                <>
-                                    <h1>{`${post.title}`}</h1> 
-                                    <h5>{`Created by: ${post.creator.username}`}</h5>
-                                    <p>{`${post.content}`}</p>
-                                    <img width="100px" src={post.image_url}/>
-                                </>
-                            )
-                        })
+                            <Grid
+                                container
+                                spacing={4}
+                                style={{paddingTop: "20px"}}
+                            >
+                                {
+                                    posts.map((post, index) => {
+                                        return (
+                                                <Grid item xs={12} sm={12} key={index} style={{ display: "flex"}} >
+                                                    <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
+                                                        <PostCard postData={post} index={index} user={user} />
+                                                    </div>  
+                                                </Grid>
+                                            )
+                                    })
+                                }
+                            </Grid>
                     }
             </NavBar>
             {showAddPost && (
