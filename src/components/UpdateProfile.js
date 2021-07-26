@@ -9,7 +9,7 @@ import UserContext from '../contexts/UserContext';
 
 
 function UpdateProfile(props) {
-    const {user, onUpdateUser} = useContext(UserContext);
+    const {user} = useContext(UserContext);
 
 
     return (
@@ -26,7 +26,7 @@ function UpdateProfile(props) {
             </IconButton> </Typography>      
             <form encType="multipart/form-data" style={{display: 'flex', flexDirection: 'column'}} onSubmit={props.onEditProfile} noValidate>
                 <TextField  variant="filled" label="Username" type="text" name="username" defaultValue={user.username}></TextField>
-{/*                 <TextField placeholder="Password" variant="filled" label="Password" type="password" name="password"></TextField> */}
+                <TextField placeholder="Email" variant="filled" label="Email" defaultValue={user.email} type="text" name="email"></TextField>
                 <TextField 
                     label="Description"
 //                     placeholder={user.description}
@@ -39,7 +39,7 @@ function UpdateProfile(props) {
                     defaultValue={user.description}
                     >
                 </TextField>
-                <input className="cloudinary-btn" type="file" name="imageUrl" accept="image/png, image/jpg"/>                  
+                <input className="cloudinary-btn"  type="file" name="imageUrl" accept="image/png, image/jpg"/>                  
                 <Button style={{marginBottom: '10%'}} type="submit" variant="contained" color="primary">Update my profile</Button>
             </form>            
         </Container>

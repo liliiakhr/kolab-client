@@ -1,5 +1,4 @@
 import React, {useContext, useState} from 'react';
-import UserContext from '../contexts/UserContext';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Typography, CardActions, Card, CardMedia, CardContent, Container } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
@@ -9,10 +8,9 @@ import avatarImg from "../assets/images/avatar.png"
 
 
 function ProfileInfo(props) {
-    const {user, onUpdateUser} = useContext(UserContext);
+
     const {isLoggedInUser, onEditProfilePopUp, profile} = props;
-    console.log(profile)
-    
+
     const useStyles = makeStyles((theme) => ({
         root: {
           maxWidth: 700,
@@ -32,7 +30,7 @@ function ProfileInfo(props) {
 
     return (
         <Card className={classes.root} >
-        <Avatar className={classes.large} alt="User avatar" src={user.image_url} />
+        <Avatar className={classes.large} alt="User avatar" src={profile.image_url} />
         <CardContent>
             <Typography variant="subtitle1">{profile.username}</Typography>
             <Typography variant="body2" color="textSecondary" component="p">

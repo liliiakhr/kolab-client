@@ -13,11 +13,11 @@ function UserPage(props) {
     const [profile, setProfile] = useState(null)
 
     const urlId = props.match.params.userId;
-    const isLoggedInUser = (user.id === urlId);
+    const isLoggedInUser = (user._id == urlId);
+
 
     useEffect(async () => {
         try {
-            console.log("First console")
             let response = await axios.get(`${API_URL}/api/profile/${urlId}`, {withCredentials: true})
             console.log(response.data)
             setProfile(response.data)
@@ -31,29 +31,35 @@ function UserPage(props) {
 
     const handleEditProfile = async (event) => {
         event.preventDefault();
-        const {username, description} = event.target;
+        const {username, description, email} = event.target;
+        let imgData = {}
         
-
-        let formData = new FormData();
-        formData.append('imageUrl', event.target.imageUrl.files[0]);
     
         try{
-            let imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
+
+            if (event.target.imageUrl.files[0]){
+                let formData = new FormData();
+                formData.append('imageUrl', event.target.imageUrl.files[0]);
+                let imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
+                imgData = {
+                    image_url: imgResponse.data.image_url
+                }
+            }
+        
             
             let newUserData = {
                 username: username.value,
                 description: description.value, 
-                image_url: imgResponse.data.image_url,
+                email: email.value,
+                ...imgData
             }
 
-            onUpdateUser({
+            await onUpdateUser({
                 ...user, 
-                username: newUserData.username,
-                description: newUserData.description, 
-                image_url: newUserData.image_url
+                ...newUserData
             })
-            console.log(user.id)
-            props.history.push(`/profile/${user._id}`);
+
+
             handleEditProfilePopUp()
 
             // let response = await axios.get
@@ -88,7 +94,7 @@ function UserPage(props) {
 
                     <Grid item xs={12} sm={6}>
                         <div>
-                            {profile && <ProfileInfo profile={profile} onEditProfilePopUp = {handleEditProfilePopUp} isLoggedInUser={isLoggedInUser}/>}
+                            {profile && <ProfileInfo profile={isLoggedInUser ? user : profile} onEditProfilePopUp = {handleEditProfilePopUp} isLoggedInUser={isLoggedInUser}/>}
                         </div>
                     </Grid> 
                 </Grid>
