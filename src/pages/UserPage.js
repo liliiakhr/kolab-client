@@ -6,6 +6,7 @@ import ProfileInfo from '../components/ProfileInfo';
 import UpdateProfile from '../components/UpdateProfile';
 import axios from 'axios';
 import API_URL from "../config";
+import PostCard from '../components/PostCard';
 
 function UserPage(props) {
     const {user, onUpdateUser} = useContext(UserContext);
@@ -13,7 +14,7 @@ function UserPage(props) {
     const [profile, setProfile] = useState(null)
 
     const urlId = props.match.params.userId;
-    const isLoggedInUser = (user._id == urlId);
+    const isLoggedInUser = (user._id === urlId);
 
 
     useEffect(async () => {
@@ -27,7 +28,7 @@ function UserPage(props) {
             console.log(error)
         }
        
-    }, [urlId]);
+    }, [urlId, user]);
 
     const handleEditProfile = async (event) => {
         event.preventDefault();
@@ -92,11 +93,24 @@ function UserPage(props) {
                         spacing={4}
                     >
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={7}>
                         <div>
-                            {profile && <ProfileInfo profile={isLoggedInUser ? user : profile} onEditProfilePopUp = {handleEditProfilePopUp} isLoggedInUser={isLoggedInUser}/>}
+                            {profile && <ProfileInfo profile={profile} onEditProfilePopUp = {handleEditProfilePopUp} isLoggedInUser={isLoggedInUser}/>}
                         </div>
                     </Grid> 
+
+                {
+                    profile && profile.posts.map((post, index)=> {
+                        return (
+                            <Grid item xs={12} sm={6} key={index} style={{ display: "flex", justifyContent: "center"}} >
+                                <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
+                                    <PostCard user={profile} postData={post} index={index} />
+                                </div>  
+                            </Grid>
+                        )})
+                }
+
+                    
                 </Grid>
             </Container>
         </Navbar> {

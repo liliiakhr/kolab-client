@@ -48,6 +48,7 @@ function App() {
           try {
             let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
             setUser(response.data)
+            console.log(response.data)
             setFetchingUser(false);
           }
           catch(error) {
