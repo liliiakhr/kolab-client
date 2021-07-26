@@ -10,6 +10,8 @@ import ExploreGroupPage from "./pages/ExploreGroupPage";
 import HomePage from "./pages/HomePage";
 import GroupPage from "./pages/GroupPage";
 import FlashMessage from "./components/FlashMessage";
+import PeoplePage from "./pages/PeoplePage";
+import FriendsPage from "./pages/FriendsPage";
 export const UserContext = React.createContext()
 //
 const theme = createTheme({
@@ -44,7 +46,7 @@ function App() {
        (async () => {
           try {
             let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
-            setUser(response.data)
+            await setUser(response.data)
             setFetchingUser(false);
           }
           catch(error) {
@@ -66,7 +68,7 @@ function App() {
       setSnackbar('success')
       setRandomNumber(Math.random()*100)  
       setSuccessMessage(response.data.successMessage)
-      setUser(response.data.userData);
+      await setUser(response.data.userData);
       history.push('/home')
     }
     catch(err){
@@ -90,7 +92,7 @@ function App() {
         setSnackbar('success')
         setRandomNumber(Math.random()*100)  
         setSuccessMessage(response.data.successMessage)
-        setUser(response.data.userData)      
+        await setUser(response.data.userData)      
         history.push('/signup/category')
     }
     catch (error) {
@@ -123,7 +125,7 @@ function App() {
     setRandomNumber(Math.random()*100)
     setErrorMessage(error)
   }
-
+  console.log(fetchingUser)
   if (fetchingUser) {
       return <h1>Loading . . .</h1>
   }
@@ -148,6 +150,13 @@ function App() {
             <Route path={'/explore'} render={(routeProps) => {
               return <ExploreGroupPage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>
             }}/>
+
+            <Route path={'/people'} render={(routeProps) => {
+              return <PeoplePage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>
+            }}/>
+            <Route path={'/friends'} render={(routeProps) => {
+              return <FriendsPage {...routeProps} onUpdateUser={handleUpdateUser} user={user}/>
+            }}/>
             <Route path={'/:group'} render={(routeProps) => {
               return <GroupPage {...routeProps} onUpdateUser={handleUpdateUser} user={user}/>
             }}/>
