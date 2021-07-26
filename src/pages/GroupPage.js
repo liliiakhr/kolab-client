@@ -3,7 +3,7 @@ import UserContext from '../contexts/UserContext';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 import API_URL from "../config"
-import { Typography, Button, ButtonGroup } from '@material-ui/core';
+import { Typography, Button, ButtonGroup, Container } from '@material-ui/core';
 import NavBar from '../components/Navbar';
 import AddPost from '../components/AddPost';
 import AddIcon from '@material-ui/icons/Add';
@@ -12,6 +12,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import EditGroup from '../components/EditGroup';
 import FlashMessage from '../components/FlashMessage';
+import PostCard from '../components/PostCard';
 
 function GroupPage({ match: {params}}) {
 
@@ -24,7 +25,6 @@ function GroupPage({ match: {params}}) {
     const [showFlashMessage, setShowFlashMessage] = useState(false);
     const [successMessage, setSuccessMessage] = useState(null)
     const [snackbar, setSnackbar] = useState(null)
-
 
     useEffect(() => {
         if (!user) {
@@ -68,6 +68,7 @@ function GroupPage({ match: {params}}) {
     
     const handleCloseAddPost = () => {
         setShowAddPost(false);
+
     }
 
     const handleCloseEditGroup = () => {
@@ -229,16 +230,17 @@ function GroupPage({ match: {params}}) {
                     </ButtonGroup>
                     {   
                         !showAddPost && 
-                        posts.map((post, index) => {
-                            return (
-                                <>
-                                    <h1>{`${post.title}`}</h1> 
-                                    <h5>{`Created by: ${post.creator.username}`}</h5>
-                                    <p>{`${post.content}`}</p>
-                                    <img width="100px" src={post.image_url}/>
-                                </>
-                            )
-                        })
+                        <div style={{paddingTop: "20px"}}>
+                            {
+                                posts.map((post, index) => {
+                                    return (
+                                        <>
+                                            <PostCard postData={post} index={index} user={user} />
+                                        </>
+                                    )
+                                })
+                            }
+                        </div>
                     }
             </NavBar>
             {showAddPost && (
