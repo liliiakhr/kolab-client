@@ -5,15 +5,17 @@ import PostCard from '../components/PostCard';
 import { Container, Typography, Grid, Button } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from "../config";
-
+import { Redirect } from 'react-router';
 
 
 function HomePage() {
     
     const [posts, setPosts] = useState([]);
     const {user, onUpdateUser} = useContext(UserContext);
-    
+    const [navBarChanged, setNavBarChanged] = useState(false);
+
     useEffect(() => {
+
         const getPosts = async () => {
             try {
                 let response = await axios.get(`${API_URL}/api/home`);
@@ -27,9 +29,20 @@ function HomePage() {
         getPosts();
     }, [])
 
+    if (!user) {
+        return <Redirect to={{
+            pathname: "/",
+            state: { renderLogin: true }
+        }} />
+    }
+
+
+    const handleNavBarChange = () => {
+        setNavBarChanged(!navBarChanged)
+    }
 
     return (
-        <Navbar onUpdateUser={onUpdateUser} user={user} showDrawer>
+        <Navbar showDrawer onNavBarChange={handleNavBarChange}>
             <Container>
                 <Grid
                     container

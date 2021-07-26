@@ -148,6 +148,8 @@ function PostCard({postData, user}) {
                 <Typography variant="body1" color="textSecondary" component="p">
                 {post.content}
                 </Typography>
+                <img src={post.image_url} style={{width: `${cardWidth - 40}px`} }/>
+                {/* <img src={post.image_url} style={{width: "auto"} }/> */}
             </CardContent>
             <CardActions disableSpacing >
                         {   

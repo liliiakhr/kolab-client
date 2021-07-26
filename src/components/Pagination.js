@@ -31,7 +31,7 @@ function Pagination({ data, RenderComponent, dataLimit}) {
                     {getPaginatedData().map((group, idx) => (
                        <Grid item xs={12} sm={6} key={idx}>
                          <div className={idx % 2 === 0 ? 'fly-left' : 'fly-right'}>
-                            <Link to={`/${group.name}`} style={{ textDecoration: "none"}} >
+                            <Link to={`/group/${group.name}`} style={{ textDecoration: "none"}} >
                                 <RenderComponent group={group}/>
                             </Link>
                          </div>
