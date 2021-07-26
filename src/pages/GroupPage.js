@@ -3,7 +3,7 @@ import UserContext from '../contexts/UserContext';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 import API_URL from "../config"
-import { Typography, Button, ButtonGroup, Container } from '@material-ui/core';
+import { Typography, Button, ButtonGroup, Container, Grid } from '@material-ui/core';
 import NavBar from '../components/Navbar';
 import AddPost from '../components/AddPost';
 import AddIcon from '@material-ui/icons/Add';
@@ -85,21 +85,25 @@ function GroupPage({ match: {params}}) {
             return 0 
         }
 
-        var formData = new FormData();
-        formData.append('imageUrl', event.target.imageUrl.files[0]);
 
-        let imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
-
+        
         try {
-
+            let imgResponse = '' 
+            console.log(event.target.imageUrl.value)
+            if (event.target.imageUrl.value) {
+                var formData = new FormData();
+                formData.append('imageUrl', event.target.imageUrl.files[0]);
+                imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
+            }
+            
             let newPost = {
                 title: event.target.title.value,
                 content: event.target.content.value,
                 creator: user._id,
                 groupOrigin: group._id,
-                image_url: imgResponse.data.image_url
+                image_url: imgResponse.data ? imgResponse.data.image_url : '' 
             }
-            console.log(newPost)
+            
             let response = await axios.post(`${API_URL}/api/${params.group}/add-post`, newPost, {withCredentials: true})
             user.posts.push(response.data._id)
             onUpdateUser(user)
@@ -208,39 +212,50 @@ function GroupPage({ match: {params}}) {
     return (
         <>
             <NavBar onNavBarChange={handleNavBarChange} showDrawer>
-                    <Typography variant="h2">{group.name}</Typography>
-                    <Typography variant="subtitle1">{group.description}</Typography>
-                    <ButtonGroup variant="contained" color="secondary">
-                        {
-                            (!group.users.includes(user._id)) && (user._id !== group.admin) &&
-                            <Button startIcon={<AccessibilityNewIcon />} onClick={handleJoinGroup}>Join</Button>
-                        }
-                        {
-                            ((group.users.includes(user._id)) || user._id === group.admin) &&
-                            <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
-                        }
-                        {   
-                            (user._id === group.admin) &&
-                            <Button startIcon={<SettingsIcon /> } onClick={() => {setShowEditGroup(true)}}>Manage Group</Button>
-                        }
-                        {
-                            (group.users.includes(user._id) && user._id !== group.admin) &&
-                            <Button startIcon={<ExitToAppIcon />} onClick={handleLeaveGroup}>Leave</Button>
-                        }
-                    </ButtonGroup>
+                <div style={{position: "relative"}}>
+                    <div style = {{marginLeft: "20px", position: "absolute", color: "white"}}>
+                        <Typography variant="h2">{group.name}</Typography>
+                        <Typography variant="subtitle1">{group.description}</Typography>
+                    </div>
+                    <img src={group.image_url} style={{width: "100%", height: "150px", objectFit: "cover"}}/>
+                </div>
+                <ButtonGroup variant="contained" color="secondary">
+                    {
+                        (!group.users.includes(user._id)) && (user._id !== group.admin) &&
+                        <Button startIcon={<AccessibilityNewIcon />} onClick={handleJoinGroup}>Join</Button>
+                    }
+                    {
+                        ((group.users.includes(user._id)) || user._id === group.admin) &&
+                        <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
+                    }
+                    {   
+                        (user._id === group.admin) &&
+                        <Button startIcon={<SettingsIcon /> } onClick={() => {setShowEditGroup(true)}}>Manage Group</Button>
+                    }
+                    {
+                        (group.users.includes(user._id) && user._id !== group.admin) &&
+                        <Button startIcon={<ExitToAppIcon />} onClick={handleLeaveGroup}>Leave</Button>
+                    }
+                </ButtonGroup>
                     {   
                         !showAddPost && 
-                        <div style={{paddingTop: "20px"}}>
-                            {
-                                posts.map((post, index) => {
-                                    return (
-                                        <>
-                                            <PostCard postData={post} index={index} user={user} />
-                                        </>
-                                    )
-                                })
-                            }
-                        </div>
+                            <Grid
+                                container
+                                spacing={4}
+                                style={{paddingTop: "20px"}}
+                            >
+                                {
+                                    posts.map((post, index) => {
+                                        return (
+                                                <Grid item xs={12} sm={12} key={index} style={{ display: "flex"}} >
+                                                    <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
+                                                        <PostCard postData={post} index={index} user={user} />
+                                                    </div>  
+                                                </Grid>
+                                            )
+                                    })
+                                }
+                            </Grid>
                     }
             </NavBar>
             {showAddPost && (

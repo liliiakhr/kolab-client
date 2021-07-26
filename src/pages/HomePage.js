@@ -67,20 +67,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
-// useEffect(() => {
-//     const getGroupNames = async () => {
-//       try {
-//         let response = axios.get(`${API_URL}/navbar/groupnames/${user._id}`, { params: user.groups }, {withCredentials: true})
-//         setGroupNames(response.data)
-//       }
-//       let selectedGroup = location.pathname.replace("/group/", '')
-//       // const groupNames = user.groups.map(group => group.name)
-//       let menuIndex = groupNames.indexOf(selectedGroup)
-//       catch(error) {
-//         setGroupNames(true)
-//       }
-//     }
-
-//     getGroupNames();
-//   }, [user])

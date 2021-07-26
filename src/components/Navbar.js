@@ -55,7 +55,7 @@ function NavBar(props) {
     appBar: {
       height: appBarHeight,
       [theme.breakpoints.up('sm')]: {
-          height: 56,
+          // height: 56,
       },
     },
     menuButton: {
@@ -72,8 +72,8 @@ function NavBar(props) {
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3),
-      marginTop: appBarHeight
+      // padding: theme.spacing(3),
+      marginTop: appBarHeight - 3
     },
     moveDrawerDown: {
         marginTop: "50"
