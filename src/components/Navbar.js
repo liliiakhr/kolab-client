@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import API_URL from '../config';
 import { Link, useHistory, Redirect, useLocation } from 'react-router-dom';
@@ -9,15 +9,16 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import UserContext from '../contexts/UserContext';
 
 function NavBar(props) {
-  
+  const {user, onUpdateUser} = useContext(UserContext);
+  const [groupNames, setGroupNames] = useState([])
+  const [menuIndex, setMenuIndex] = useState(null)
   // Variables that help with display and navigation of the sidebar
   let location = useLocation();
-  let selectedGroup = location.pathname.replace("/", '')
-  const groupNames = props.user.groups.map(group => group.name)
-  let menuIndex = groupNames.indexOf(selectedGroup)
-  
+  let selectedGroup = location.pathname.replace("/group/", '')
+  // let menuIndex = groupNames.indexOf(selectedGroup)
 
   // Hardcoded values for the appBar & Drawer (sidemenu)
   const drawerWidth = 240;
@@ -114,6 +115,20 @@ function NavBar(props) {
     },
   }));
 
+  useEffect(() => {
+    const getGroupNames = async () => {
+      try {
+        let response = await axios.get(`${API_URL}/api/navbar/groupnames/${user._id}`, {withCredentials: true})
+        let groupNamesTemporary = response.data.map(group => group.name)
+        setMenuIndex(groupNamesTemporary.indexOf(selectedGroup) + 1)
+        setGroupNames(groupNamesTemporary)
+      }
+      catch(error) {
+      }
+    }
+    getGroupNames();
+  }, [user])
+
   const classes = useStyles();
   const theme = useTheme();
   let history = useHistory();
@@ -127,8 +142,15 @@ function NavBar(props) {
       setValue(newValue);
   };
 
-  // Render drawer
-  // !! NEEDS DYNAMIC RENDERING BASED ON GROUPS OF THE USER
+  const handleMenuChange = (name) => {
+    console.log(name)
+    if (!groupNames.includes(name)) {
+      setMenuIndex(0)
+    }
+    setMenuIndex(groupNames.indexOf(name) + 1)
+    props.onNavBarChange()
+  }
+
   const drawer = (
       <div >
           <Tabs
@@ -139,20 +161,17 @@ function NavBar(props) {
           aria-label="Vertical tabs example"
           className={classes.tabs}
       >   
+          <Link to={`/home`} style={{ textDecoration: "none", color: "black", textAlign: "center"}} >
+            <Tab label="Feed" onClick={props.onNavBarChange}/>
+          </Link>
           {
+            groupNames && 
             groupNames.map(groupName => {
               return (               
-
-                // With the Link only it does not work
-                // This changes the URL but doesn't re-render the page, so that's where the onNavBarChange prop  comes in toplay
-                // This triggers a useEffect on the GroupPage
-                
-                <Link to={`${groupName}`} style={{ textDecoration: "none", color: "black", textAlign: "center"}} >
-                  <Tab label={groupName} onClick={props.onNavBarChange}/>
+                <Link to={`/group/${groupName}`} style={{ textDecoration: "none", color: "black", textAlign: "center"}} >
+                  {/* <Tab label={groupName} onClick={props.onNavBarChange} name={groupName}/> */}
+                  <Tab label={groupName} onClick={() => handleMenuChange(groupName)} name={groupName}/>
                 </Link>
-
-                // This doesn't work either
-                // <Tab label={groupName} onClick={(groupName) => displayRightGroup(groupName)}/>
               )
             })
           }
@@ -160,16 +179,11 @@ function NavBar(props) {
       </div>
   );
 
-  // const displayRightGroup = (groupName) => {
-  //   return <Redirect to= {`${groupName}`} />
-  // }
-
   // Log user out, destorys the session
   const handleLogOut = async () => {
       try {
           let response = await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
-          props.onUpdateUser(null)
-
+          onUpdateUser(null)
           history.push('/')
       }
       catch(error) {
@@ -213,7 +227,7 @@ function NavBar(props) {
       {
           selectedMenu === 'user' ? (
               <div>
-                  <MenuItem onClick={() => {history.push(`/profile/${props.user._id}`)}}>Profile</MenuItem>
+                  <MenuItem onClick={() => {history.push(`/profile/${user._id}`)}}>Profile</MenuItem>
                   <MenuItem onClick={handleLogOut}>Logout</MenuItem>
               </ div>
           )

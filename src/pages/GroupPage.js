@@ -23,9 +23,18 @@ function GroupPage({ match: {params}}) {
     const {user, onUpdateUser} = useContext(UserContext);
     const [showFlashMessage, setShowFlashMessage] = useState(false);
     const [successMessage, setSuccessMessage] = useState(null)
-    // Is either 'success' or 'error'
     const [snackbar, setSnackbar] = useState(null)
 
+
+    useEffect(() => {
+        if (!user) {
+            return <Redirect to={{
+                pathname: "/",
+                state: { renderLogin: true }
+            }} />
+        }
+    }, [user])
+    
     useEffect(() => {
         (async () => {
             try {
@@ -38,9 +47,9 @@ function GroupPage({ match: {params}}) {
                     pathname: "/home",
                 }} />
             }
-       })()
+        })()
     }, [navBarChanged])
-
+    
     useEffect(() => {
         (async () => {
             try {
@@ -54,17 +63,9 @@ function GroupPage({ match: {params}}) {
                 console.log("Something went wrong while getting the posts // maybe none exist", error)
                 setPosts([])
             }
-       })()
+        })()
     }, [group, user])
-
-
-    if (!user) {
-        return <Redirect to={{
-            pathname: "/",
-            state: { renderLogin: true }
-        }} />
-    }
-
+    
     const handleCloseAddPost = () => {
         setShowAddPost(false);
     }
@@ -157,6 +158,7 @@ function GroupPage({ match: {params}}) {
             setGroup(response.data)
             user.groupNames.push(group.name)
             user.groups.push(group._id)
+            console.log("JOIN GROUP", user.groups)
             onUpdateUser(user)
             await setSuccessMessage(`Welome to ${group.name}!`)
             await setSnackbar('success');
@@ -204,7 +206,7 @@ function GroupPage({ match: {params}}) {
 
     return (
         <>
-            <NavBar onUpdateUser={onUpdateUser} user={user} onNavBarChange={handleNavBarChange} showDrawer>
+            <NavBar onNavBarChange={handleNavBarChange} showDrawer>
                     <Typography variant="h2">{group.name}</Typography>
                     <Typography variant="subtitle1">{group.description}</Typography>
                     <ButtonGroup variant="contained" color="secondary">

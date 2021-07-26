@@ -80,7 +80,7 @@ function SignupGroupPage({history}) {
                         return (
                             <Grid item xs={12} sm={6} key={index}>
                                 <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
-                                    <Link to={`/${group.name}`} style={{ textDecoration: "none"}} >
+                                    <Link to={`/group/${group.name}`} style={{ textDecoration: "none"}} >
                                         <GroupCard group={group} index={index} />
                                      </Link>
                                 </div>

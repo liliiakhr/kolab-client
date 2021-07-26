@@ -14,7 +14,7 @@ import UserPage from './pages/UserPage';
 import UserContext from './contexts/UserContext';
 import PeoplePage from "./pages/PeoplePage";
 import FriendsPage from "./pages/FriendsPage";
-//
+
 const theme = createTheme({
   // You get the objects from the documentation
   palette: {
@@ -127,7 +127,7 @@ function App() {
     setRandomNumber(Math.random()*100)
     setErrorMessage(error)
   }
-  console.log(fetchingUser)
+
   if (fetchingUser) {
       return <h1>Loading . . .</h1>
   }
@@ -161,7 +161,7 @@ function App() {
             <Route path={'/friends'} render={(routeProps) => {
               return <FriendsPage {...routeProps} onUpdateUser={handleUpdateUser} user={user}/>
             }}/>
-            <Route path={'/:group'} render={(routeProps) => {
+            <Route path={'/group/:group'} render={(routeProps) => {
               return <GroupPage {...routeProps} />
             }}/>
               {/* Props will be passed with Context */}
