@@ -11,11 +11,12 @@ function AddPost({onCloseAddPost, onAddPost}) {
                     <CloseIcon />
                 </IconButton> 
             </div>  
-            <Paper>
+            <Paper className="pop-up-styling">
                 <form onSubmit={onAddPost} encType="multipart/form-data" style={{display: "flex", flexDirection: "column"}} autocomplete="off" novalidate>
                     <TextField 
                         placeholder="Title" 
-                        variant="filled" 
+                        variant="standard" 
+                        margin="normal"
                         label="Title"
                         name="title"
                     />
@@ -25,7 +26,8 @@ function AddPost({onCloseAddPost, onAddPost}) {
                         multiline
                         rows={5}
                         maxRows={10}
-                        variant="filled"
+                        variant="standard" 
+                        margin="normal"
                         name="content"
                     />
                     <input type="file" name="imageUrl" accept="image/png, image/jpg"/>                  

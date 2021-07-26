@@ -11,7 +11,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import EditGroup from '../components/EditGroup';
-
+import FlashMessage from '../components/FlashMessage';
 
 function GroupPage({ match: {params}}) {
 
@@ -21,6 +21,10 @@ function GroupPage({ match: {params}}) {
     const [showEditGroup, setShowEditGroup] = useState(false);
     const [navBarChanged, setNavBarChanged] = useState(false);
     const {user, onUpdateUser} = useContext(UserContext);
+    const [showFlashMessage, setShowFlashMessage] = useState(false);
+    const [successMessage, setSuccessMessage] = useState(null)
+    // Is either 'success' or 'error'
+    const [snackbar, setSnackbar] = useState(null)
 
     useEffect(() => {
         (async () => {
@@ -72,10 +76,17 @@ function GroupPage({ match: {params}}) {
     const handleAddPost = async (event) => {
         event.preventDefault();
 
-        var formData = new FormData();
-        formData.append('imageUrl', event.target.imageUrl.files[0])
+        if (!event.target.title.value || !event.target.content.value) {
+            setSuccessMessage('Please fill in a title and share your message');
+            setSnackbar('error');
+            setShowFlashMessage(Math.random()*100);
+            return 0 
+        }
 
-        let imgResponse = await axios.post(`${API_URL}/api/upload`, formData)
+        var formData = new FormData();
+        formData.append('imageUrl', event.target.imageUrl.files[0]);
+
+        let imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
 
         try {
 
@@ -91,6 +102,9 @@ function GroupPage({ match: {params}}) {
             user.posts.push(response.data._id)
             onUpdateUser(user)
             setShowAddPost(false)
+            setSuccessMessage('Awesome! New post has been added.')
+            setSnackbar('success');
+            setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -104,6 +118,14 @@ function GroupPage({ match: {params}}) {
     // The first option is less writes to the database
     const handleEditGroup = async (event) => {
         event.preventDefault();
+
+        if (!event.target.name.value || !event.target.description.value) {
+            setSuccessMessage('What is the name of your group? And could you share some info about it?')
+            setSnackbar('error');
+            setShowFlashMessage(Math.random()*100)
+            return 0 
+        }
+
         try {
             const { name, description, tags, category } = event.target;
             let newGroup = {
@@ -114,9 +136,11 @@ function GroupPage({ match: {params}}) {
                 category: category.value
             }
             let response = await axios.patch(`${API_URL}/api/edit-group`, newGroup, {withCredentials: true})
-            console.log(response.data)
             setGroup(response.data)
             setShowEditGroup(false)
+            setSuccessMessage(`The Owner of ${response.data.name} has spoken.`)
+            setSnackbar('success');
+            setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -134,6 +158,9 @@ function GroupPage({ match: {params}}) {
             user.groupNames.push(group.name)
             user.groups.push(group._id)
             onUpdateUser(user)
+            await setSuccessMessage(`Welome to ${group.name}!`)
+            await setSnackbar('success');
+            await setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -156,9 +183,11 @@ function GroupPage({ match: {params}}) {
             // Therefore this helper function is created
             user.groups = user.groups.map(group => group._id)
             user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
-
-            console.log(user)
             onUpdateUser(user)
+            console.log(group.name)
+            setSuccessMessage(`The members of ${group.name} will miss you, come back whenever you want!`)
+            setSnackbar('success');
+            setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -192,7 +221,7 @@ function GroupPage({ match: {params}}) {
                             <Button startIcon={<SettingsIcon /> } onClick={() => {setShowEditGroup(true)}}>Manage Group</Button>
                         }
                         {
-                            (group.users.includes(user._id)) &&
+                            (group.users.includes(user._id) && user._id !== group.admin) &&
                             <Button startIcon={<ExitToAppIcon />} onClick={handleLeaveGroup}>Leave</Button>
                         }
                     </ButtonGroup>
@@ -220,6 +249,7 @@ function GroupPage({ match: {params}}) {
                     <EditGroup onCloseEditGroup={handleCloseEditGroup} onEditGroup={handleEditGroup} group={group}/>
                 </div>
             )}
+            <FlashMessage trigger={showFlashMessage} messageType={snackbar}>{successMessage}</FlashMessage>
         </>
     )
 }
