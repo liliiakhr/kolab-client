@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import UserContext from '../contexts/UserContext';
 import { Redirect } from 'react-router';
 import axios from 'axios';
-import API_URL from "../config"
+import API_URL from "../config";
 import { Typography, Button, ButtonGroup } from '@material-ui/core';
 import NavBar from '../components/Navbar';
 import AddPost from '../components/AddPost';
@@ -231,7 +231,7 @@ function GroupPage({ match: {params}}) {
                             return (
                                 <>
                                     <h1>{`${post.title}`}</h1> 
-                                    <h5>{`Created by: ${post.creator.username}`}</h5>
+                                    {/* <h5>{`Created by: ${post.creator.username}`}</h5> */}
                                     <p>{`${post.content}`}</p>
                                     <img width="100px" src={post.image_url}/>
                                 </>

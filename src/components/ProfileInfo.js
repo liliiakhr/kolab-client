@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import UserContext from '../contexts/UserContext';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Typography, CardActions, Card, CardMedia, CardContent, Container } from '@material-ui/core';
@@ -7,9 +7,10 @@ import Chip from '@material-ui/core/Chip';
 import avatarImg from "../assets/images/avatar.png"
 
 
-function ProfileInfo({isLoggedInUser}) {
-    const {user, onUpdateUser} = useContext(UserContext);
 
+function ProfileInfo({isLoggedInUser, onEditProfilePopUp}) {
+    const {user, onUpdateUser} = useContext(UserContext);
+    
     const useStyles = makeStyles((theme) => ({
         root: {
           maxWidth: 700,
@@ -26,13 +27,10 @@ function ProfileInfo({isLoggedInUser}) {
   
     const classes = useStyles();
 
-    const changeName = (() => {
-        onUpdateUser({...user, username:"Kalande"});
-    })
 
     return (
         <Card className={classes.root} >
-        <Avatar className={classes.large} alt="User avatar" src={avatarImg} />
+        <Avatar className={classes.large} alt="User avatar" src={user.image_url} />
         <CardContent>
             <Typography variant="subtitle1">{user.username}</Typography>
             <Typography variant="body2" color="textSecondary" component="p">
@@ -45,7 +43,8 @@ function ProfileInfo({isLoggedInUser}) {
             }
         </CardContent>
         <CardActions style={{display: "flex", justifyContent: "space-between"}}>
-            {isLoggedInUser && <Button onClick = {changeName}>Edit your profile</Button>}
+            {isLoggedInUser && <Button onClick = {onEditProfilePopUp}>Edit your profile</Button>}
+            {!isLoggedInUser && <Button>Add friend</Button>}
         </CardActions>
     </Card>
 

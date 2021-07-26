@@ -127,7 +127,6 @@ function App() {
     setRandomNumber(Math.random()*100)
     setErrorMessage(error)
   }
-  console.log(fetchingUser)
   if (fetchingUser) {
       return <h1>Loading . . .</h1>
   }
