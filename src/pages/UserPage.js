@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import UserContext from '../contexts/UserContext';
 import Navbar from '../components/Navbar';
 import { Button, Container, Grid } from '@material-ui/core';
+import ProfileInfo from '../components/ProfileInfo';
 
 function UserPage(props) {
     const {user, onUpdateUser} = useContext(UserContext);
@@ -9,9 +10,7 @@ function UserPage(props) {
     const urlId = props.match.params.id;
     const isLoggedInUser = user.id == urlId;
 
-    const changeName = (() => {
-        onUpdateUser({...user, username:"Kalande"});
-    })
+
     
     return (
         <Container>
@@ -19,7 +18,7 @@ function UserPage(props) {
             
             <Navbar user={user} onUpdateUser={onUpdateUser}>
 
-            {isLoggedInUser && <Button onClick = {changeName}>Change name</Button>}
+            
 
                 <Grid
                         container
@@ -32,7 +31,8 @@ function UserPage(props) {
 
                     <Grid item xs={12} sm={6}>
                                 <div>
-                                   {user.username}
+                                   <ProfileInfo isLoggedInUser={isLoggedInUser}/>
+                                   
                                 </div>
                             </Grid> 
 

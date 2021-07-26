@@ -76,7 +76,6 @@ function GroupPage({ match: {params}}) {
         formData.append('imageUrl', event.target.imageUrl.files[0])
 
         let imgResponse = await axios.post(`${API_URL}/api/upload`, formData)
-        console.log(imgResponse);
 
         try {
 

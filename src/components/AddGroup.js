@@ -27,7 +27,7 @@ function AddGroup(props) {
             border: '2px solid black'
             }}>        
         <Container maxWidth="xs"> 
-           <Typography variant='h4' encType="multipart/form-data"  style={{marginTop: '10%'}}>Create your group <IconButton onClick={props.onAddGroupPopUp} style={{marginLeft: '15%'}} >
+           <Typography variant='h4' style={{marginTop: '10%'}}>Create your group <IconButton onClick={props.onAddGroupPopUp} style={{marginLeft: '15%'}} >
                 <CloseIcon />
             </IconButton> </Typography>      
               <form autocomplete="off" style={{display: 'flex', flexDirection: 'column'}} onSubmit={props.onAddGroup} novalidate>
