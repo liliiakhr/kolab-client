@@ -11,8 +11,9 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import UserContext from '../contexts/UserContext';
 
+
 function NavBar(props) {
-  const {user, onUpdateUser} = useContext(UserContext);
+  const {user, onLogout} = useContext(UserContext);
   const [groupNames, setGroupNames] = useState([])
   const [menuIndex, setMenuIndex] = useState(null)
   // Variables that help with display and navigation of the sidebar
@@ -179,18 +180,6 @@ function NavBar(props) {
       </div>
   );
 
-  // Log user out, destorys the session
-  const handleLogOut = async () => {
-      try {
-          let response = await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
-          onUpdateUser(null)
-          history.push('/')
-      }
-      catch(error) {
-          // ?? What is best to put in here?
-      }
-  }
-
   // Functions for opening and closing the App bar menus
   const handleProfileMenuOpen = (event, menuType) => {
     setAnchorEl(event.currentTarget);
@@ -228,7 +217,7 @@ function NavBar(props) {
           selectedMenu === 'user' ? (
               <div>
                   <MenuItem onClick={() => {history.push(`/profile/${user._id}`)}}>Profile</MenuItem>
-                  <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                  <MenuItem onClick={onLogout}>Logout</MenuItem>
               </div>
           )
           :

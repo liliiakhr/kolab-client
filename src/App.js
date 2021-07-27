@@ -128,6 +128,16 @@ function App() {
     setRandomNumber(Math.random()*100)
     setErrorMessage(error)
   }
+
+  const handleLogout = async () => {
+    try{
+      await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
+      setUser(null)
+      history.push('/')
+    } catch (error) {
+      handleErrorMessage(`Oops, looks like you're stuck here buddy!`)
+    }
+  }
   if (fetchingUser) {
       return <h1>Loading . . .</h1>
   }
@@ -135,7 +145,7 @@ function App() {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <UserContext.Provider value={{user, onUpdateUser: handleUpdateUser}}>
+        <UserContext.Provider value={{user, onUpdateUser: handleUpdateUser, onLogout: handleLogout}}>
           <Switch>
             <Route exact path={'/'} render={(routeProps) => {
               return <LandingPage {...routeProps} trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>
@@ -159,7 +169,7 @@ function App() {
               return <PeoplePage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>
             }}/>
             <Route path={'/friends'} render={(routeProps) => {
-              return <FriendsPage {...routeProps} onUpdateUser={handleUpdateUser} user={user}/>
+              return <FriendsPage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>
             }}/>
             <Route path={'/group/:group'} render={(routeProps) => {
               return <GroupPage {...routeProps} />
