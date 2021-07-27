@@ -13,7 +13,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-function AddEvent({onCloseAddEvent}) {
+function AddEvent({onCloseAddEvent, onAddEvent}) {
 
     return (  
         <Container maxWidth="xs"> 
@@ -23,7 +23,23 @@ function AddEvent({onCloseAddEvent}) {
                         <CloseIcon />
                     </IconButton> 
                 </div>
-              <form autocomplete="off" style={{display: 'flex', flexDirection: 'column'}}  novalidate>
+              <form onSubmit={onAddEvent} autocomplete="off" style={{display: 'flex', flexDirection: 'column'}}  novalidate>
+                <TextField 
+                    placeholder="Name" 
+                    variant="standard" 
+                    label="Name" 
+                    type="text" 
+                    name="name" 
+                />
+                <TextField 
+                    label="Description"
+                    placeholder="What makes your group special?"
+                    name="description"
+                    multiline
+                    rows={5}
+                    maxRows={10}
+                    variant="standard"
+                 />
                 <TextField
                     id="datetime-local"
                     label="Start date & time"
@@ -32,6 +48,7 @@ function AddEvent({onCloseAddEvent}) {
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    name="start"
                     />
                 <TextField
                     id="datetime-local"
@@ -39,9 +56,11 @@ function AddEvent({onCloseAddEvent}) {
                     type="datetime-local"
                     defaultValue="2021-01-01T12:00"
                     InputLabelProps={{
-                    shrink: true,
+                        shrink: true,
                     }}
+                    name="end"
                 />
+                <input type="file" name="imageUrl" accept="image/png, image/jpg" />             
                 <Button type="submit" variant="contained" color="primary">Create Event</Button>
                </form>            
             </Paper>

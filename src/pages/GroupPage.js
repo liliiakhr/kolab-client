@@ -60,7 +60,6 @@ function GroupPage({ match: {params}}) {
                     id: group._id
                 }
                 let response = await axios.post(`${API_URL}/api/posts`, groupInfo, {withCredentials: true})
-                console.log("POSTS", response.data)
                 setPosts(response.data)
             }
             catch(error) {
@@ -94,7 +93,6 @@ function GroupPage({ match: {params}}) {
 
         try {
             let imgResponse = '' 
-            console.log(event.target.imageUrl.value)
             if (event.target.imageUrl.value) {
                 var formData = new FormData();
                 formData.append('imageUrl', event.target.imageUrl.files[0]);
@@ -116,6 +114,47 @@ function GroupPage({ match: {params}}) {
             setSuccessMessage('Awesome! New post has been added.')
             setSnackbar('success');
             setShowFlashMessage(Math.random()*100)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+
+    const handleAddEvent = async (event) => {
+        event.preventDefault();
+        const { name, description, start, end, imageUrl } = event.target
+
+        if (!name.value || !description.value || !start.value || !end.value || !imageUrl.value) {
+            setSuccessMessage('Please fill in all the fields...');
+            setSnackbar('error');
+            setShowFlashMessage(Math.random()*100);
+            return 0 
+        }
+
+        try {
+            var formData = new FormData();
+            formData.append('imageUrl', event.target.imageUrl.files[0]);
+            let imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
+            
+            let newEvent = {
+                name: name.value,
+                description: description.value,
+                image_url: imgResponse.data.image_url,
+                start: start.value,
+                end: end.value,
+                creator: user._id,
+                groupOrigin: group._id,
+                users: [user._id]
+            }
+            
+            let response = await axios.post(`${API_URL}/api/event/add-event`, newEvent, {withCredentials: true})
+            console.log(response.data)
+            // user.posts.push(response.data._id)
+            // onUpdateUser(user)
+            setShowAddEvent(false)
+            // setSuccessMessage('Awesome! New post has been added.')
+            // setSnackbar('success');
+            // setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -188,11 +227,6 @@ function GroupPage({ match: {params}}) {
             let response =  await axios.post(`${API_URL}/api/leave-group`, leaveInfo, {withCredentials: true})
             setGroup(response.data)
             user.groupNames = user.groupNames.filter(oldGroupName => oldGroupName !== group.name) 
-            // Because the user.groups is populated now this doesn't work anymore
-            // user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
-            
-            // In order to make the onUpdateUser function work for the user.groups, it needs to take an array of ids
-            // Therefore this helper function is created
             user.groups = user.groups.map(group => group._id)
             user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
             onUpdateUser(user)
@@ -279,7 +313,7 @@ function GroupPage({ match: {params}}) {
             )}
             {showAddEvent && (
                 <div className="popupOpacity">
-                    <AddEvent onCloseAddEvent={handleCloseAddEvent}/>
+                    <AddEvent onCloseAddEvent={handleCloseAddEvent} onAddEvent={handleAddEvent}/>
                 </div>
             )}
             <FlashMessage trigger={showFlashMessage} messageType={snackbar}>{successMessage}</FlashMessage>
