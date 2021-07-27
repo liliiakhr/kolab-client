@@ -13,12 +13,15 @@ import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import EditGroup from '../components/EditGroup';
 import FlashMessage from '../components/FlashMessage';
 import PostCard from '../components/PostCard';
+import EventAvailableRoundedIcon from '@material-ui/icons/EventAvailableRounded';
+import AddEvent from '../components/AddEvent';
 
 function GroupPage({ match: {params}}) {
 
     const [group, setGroup] = useState(null);
     const [posts, setPosts] = useState([]);
     const [showAddPost, setShowAddPost] = useState(false);
+    const [showAddEvent, setShowAddEvent] = useState(false);
     const [showEditGroup, setShowEditGroup] = useState(false);
     const [navBarChanged, setNavBarChanged] = useState(false);
     const {user, onUpdateUser} = useContext(UserContext);
@@ -57,6 +60,7 @@ function GroupPage({ match: {params}}) {
                     id: group._id
                 }
                 let response = await axios.post(`${API_URL}/api/posts`, groupInfo, {withCredentials: true})
+                console.log("POSTS", response.data)
                 setPosts(response.data)
             }
             catch(error) {
@@ -68,7 +72,10 @@ function GroupPage({ match: {params}}) {
     
     const handleCloseAddPost = () => {
         setShowAddPost(false);
+    }
 
+    const handleCloseAddEvent = () => {
+        setShowAddEvent(false);
     }
 
     const handleCloseEditGroup = () => {
@@ -85,8 +92,6 @@ function GroupPage({ match: {params}}) {
             return 0 
         }
 
-
-        
         try {
             let imgResponse = '' 
             console.log(event.target.imageUrl.value)
@@ -226,7 +231,11 @@ function GroupPage({ match: {params}}) {
                     }
                     {
                         ((group.users.includes(user._id)) || user._id === group.admin) &&
-                        <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
+                        <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}>Create Post</Button>
+                    }
+                    {
+                        ((group.users.includes(user._id)) || user._id === group.admin) &&
+                        <Button startIcon={<EventAvailableRoundedIcon />} onClick={() => {setShowAddEvent(true)}}>Create Event</Button>
                     }
                     {   
                         (user._id === group.admin) &&
@@ -247,7 +256,7 @@ function GroupPage({ match: {params}}) {
                                 {
                                     posts.map((post, index) => {
                                         return (
-                                                <Grid item xs={12} sm={12} key={index} style={{ display: "flex", marginBottom: "20px"}} >
+                                                <Grid item xs={12} sm={12} key={post._id} style={{ display: "flex", marginBottom: "20px"}} >
                                                     <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
                                                         <PostCard postData={post} index={index} user={user} />
                                                     </div>  
@@ -266,6 +275,11 @@ function GroupPage({ match: {params}}) {
             {showEditGroup && (
                 <div className="popupOpacity">
                     <EditGroup onCloseEditGroup={handleCloseEditGroup} onEditGroup={handleEditGroup} group={group}/>
+                </div>
+            )}
+            {showAddEvent && (
+                <div className="popupOpacity">
+                    <AddEvent onCloseAddEvent={handleCloseAddEvent}/>
                 </div>
             )}
             <FlashMessage trigger={showFlashMessage} messageType={snackbar}>{successMessage}</FlashMessage>

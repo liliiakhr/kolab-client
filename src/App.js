@@ -14,6 +14,7 @@ import UserPage from './pages/UserPage';
 import UserContext from './contexts/UserContext';
 import PeoplePage from "./pages/PeoplePage";
 import FriendsPage from "./pages/FriendsPage";
+import EventPage from "./pages/EventPage";
 
 const theme = createTheme({
   // You get the objects from the documentation
@@ -164,6 +165,9 @@ function App() {
             }}/>
             <Route exact path={'/profile/:userId'} render={(routeProps) => {
               return <UserPage {...routeProps}/>
+            }}/>
+            <Route exact path={'/events'} render={(routeProps) => {
+              return <EventPage {...routeProps}/>
             }}/>
             <Route path={'/people'} render={(routeProps) => {
               return <PeoplePage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>
