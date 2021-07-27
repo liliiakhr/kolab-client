@@ -34,11 +34,8 @@ function EventPage() {
             
             let eventUserIds = users.map(user => user._id)
             let userGroupIds = user.groups.map(group => group._id)
-            console.log(userGroupIds)
             let color = '' 
-            // console.log(name)
-            // console.log(eventGroupOriginId, "GROUP ORIGIN ID FROM EVENT")
-            // console.log(userGroupIds, "ARRAY OF GROUP IDS FROM USER")
+
             if (eventUserIds.includes(user._id)) {
                 // Events the user participates in
                 color = "green";
