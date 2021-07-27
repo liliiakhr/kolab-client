@@ -26,8 +26,9 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function FriendsPage({user, onUpdateUser, onSuccess, onError}) {
+function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
     const classes = useStyles();
+    console.log(history)
 
     const [users, setUsers] = useState(null)
     const [requests, setRequests] = useState(null)
@@ -106,7 +107,7 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError}) {
                            return(
                             <Grid item xs={12} sm={6} key={i}>
                             <div className={i % 2 === 0 ? 'fly-left' : 'fly-right'}>
-                                    <UserCard key={i} categories={user.categories} id={user._id} username={username} description={user.description}/>
+                                    <UserCard history={history} key={i} categories={user.categories} id={user._id} username={username} description={user.description}/>
                                 </div>
                             </Grid>                            
                            )

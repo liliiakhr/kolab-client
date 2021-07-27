@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect,  useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -8,7 +8,12 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Logo from '../assets/images/profile.png'
 import Tooltip from '@material-ui/core/Tooltip';
-import {Link} from 'react-router-dom'
+import {Link, useHistory,} from 'react-router-dom';
+import ChatIcon from '@material-ui/icons/Chat';
+import UserContext from '../contexts/UserContext';
+import axios from 'axios';
+import API_URL from '../config';
+
 
 const useStyles = makeStyles({
   root: {
@@ -27,10 +32,33 @@ const useStyles = makeStyles({
   },
 });
 
+
 function UserCard({username, description, image_url, id, categories}) {
+  let history = useHistory(); 
+
+
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   const interests = categories.map(elem => elem[0].toUpperCase() + elem.slice(1,elem.length)).join(', ')
+  const {user, onUpdateUser} = useContext(UserContext);
+
+  console.log(history)
+
+  let handleChat = (async () => {
+    try{
+      let obj = {participants: [id, user._id]}
+      let response = await axios.post(`${API_URL}/api/conversation`, obj, {withCredentials: true})
+      console.log(response.data)
+      console.log("User chat btn works", id, user._id)
+      history.push(`/chat/${response.data._id}`)
+
+
+    }
+
+    catch(error) {
+      console.log(error)
+  }
+  })
 
   return (
     <Card className={classes.root}>
@@ -48,6 +76,8 @@ function UserCard({username, description, image_url, id, categories}) {
         </Typography>
       </CardContent>
       </Link>
+      <Button onClick = {handleChat} variant="contained" color="secondary" type="submit" > <ChatIcon /> </Button>
+
     </Card>
   );
 }

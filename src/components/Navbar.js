@@ -272,7 +272,6 @@ function NavBar(props) {
     </Menu>
   );  
 
-  console.log("IMAGE", user.image_url)
 
   return (
     <div className={classes.root}>

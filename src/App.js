@@ -14,6 +14,7 @@ import UserPage from './pages/UserPage';
 import UserContext from './contexts/UserContext';
 import PeoplePage from "./pages/PeoplePage";
 import FriendsPage from "./pages/FriendsPage";
+import ChatPage from './pages/ChatPage'
 
 const theme = createTheme({
   // You get the objects from the documentation
@@ -131,9 +132,9 @@ function App() {
 
   const handleLogout = async () => {
     try{
+      history.push('/')
       await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
       setUser(null)
-      history.push('/')
     } catch (error) {
       handleErrorMessage(`Oops, looks like you're stuck here buddy!`)
     }
@@ -174,7 +175,9 @@ function App() {
             <Route path={'/group/:group'} render={(routeProps) => {
               return <GroupPage {...routeProps} />
             }}/>
-              {/* Props will be passed with Context */}
+            <Route exact path={'/chat/:conversation'} render={(routeProps) => {
+              return <ChatPage user={user} {...routeProps} />
+            }}/>
           </Switch>
           {
            snackbar === 'success' ? <FlashMessage trigger={randomNumber} messageType={snackbar}>{successMessage}</FlashMessage> : <FlashMessage trigger={randomNumber} messageType={snackbar}>{errorMessage}</FlashMessage> 
