@@ -213,13 +213,13 @@ function GroupPage({ match: {params}}) {
         <>
             <NavBar onNavBarChange={handleNavBarChange} showDrawer>
                 <div style={{position: "relative"}}>
-                    <div style = {{marginLeft: "20px", position: "absolute", color: "white"}}>
+                    <div className="group-header-text">
                         <Typography variant="h2">{group.name}</Typography>
                         <Typography variant="subtitle1">{group.description}</Typography>
                     </div>
-                    <img src={group.image_url} style={{width: "100%", height: "150px", objectFit: "cover"}}/>
+                    <img src={group.image_url} className="group-header-image"/>
                 </div>
-                <ButtonGroup variant="contained" color="secondary">
+                <ButtonGroup variant="contained" color="secondary" style={{marginLeft: "20px", marginTop: "10px"}}>
                     {
                         (!group.users.includes(user._id)) && (user._id !== group.admin) &&
                         <Button startIcon={<AccessibilityNewIcon />} onClick={handleJoinGroup}>Join</Button>
@@ -241,13 +241,13 @@ function GroupPage({ match: {params}}) {
                         !showAddPost && 
                             <Grid
                                 container
-                                spacing={4}
-                                style={{paddingTop: "20px"}}
+                                // spacing={4}
+                                style={{paddingTop: "20px", paddingLeft: "20px"}}
                             >
                                 {
                                     posts.map((post, index) => {
                                         return (
-                                                <Grid item xs={12} sm={12} key={index} style={{ display: "flex"}} >
+                                                <Grid item xs={12} sm={12} key={index} style={{ display: "flex", marginBottom: "20px"}} >
                                                     <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
                                                         <PostCard postData={post} index={index} user={user} />
                                                     </div>  

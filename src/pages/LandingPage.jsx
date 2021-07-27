@@ -4,9 +4,8 @@ import Button from "@material-ui/core/Button";
 import React, { useState } from "react";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
-import Paper from '@material-ui/core/Paper';
-import logo from '../assets/images/logo_dark_transparent.png';
-
+import Paper from "@material-ui/core/Paper";
+import logo from "../assets/images/logo_dark_transparent.png";
 
 function LandingPage(props) {
   const [signup, setSignUp] = useState(false);
@@ -50,21 +49,17 @@ function LandingPage(props) {
           </Button>
         </div>
       </Container>
-        {
-          signup && (
-          <div className="popupOpacity">  
-             <Signup onSignUpPopUp={handleSignUpPopUp} onSignUp={props.onSignUp}/>               
-          </div>
-          )
-        } {
-          login && (
-            <div className="popupOpacity">  
-            <Login onLoginPopUp={handleLoginPopUp} onLogin={props.onLogin}/>               
-           </div>
-            )
-        }
-      </div>
-    
+      {signup && (
+        <div className="popupOpacity">
+          <Signup onSignUpPopUp={handleSignUpPopUp} onSignUp={props.onSignUp} />
+        </div>
+      )}{" "}
+      {login && (
+        <div className="popupOpacity">
+          <Login onLoginPopUp={handleLoginPopUp} onLogin={props.onLogin} />
+        </div>
+      )}
+    </div>
   );
 }
 
