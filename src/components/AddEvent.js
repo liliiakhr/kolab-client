@@ -12,8 +12,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import moment from 'moment';
 
 function AddEvent({onCloseAddEvent, onAddEvent}) {
+
+    let currentDate = new Date();
+    currentDate = moment(currentDate).format().slice(0, 10) + "T12:00"; // Creates date in format YYYY-MM-DD 
+    let currentDateOneHourLater = moment(currentDate).format().slice(0, 10) + "T13:00"; // Creates date in format YYYY-MM-DD 
 
     return (  
         <Container maxWidth="xs"> 
@@ -44,7 +49,7 @@ function AddEvent({onCloseAddEvent, onAddEvent}) {
                     id="datetime-local"
                     label="Start date & time"
                     type="datetime-local"
-                    defaultValue="2021-01-01T12:00"
+                    defaultValue={currentDate}
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -54,7 +59,7 @@ function AddEvent({onCloseAddEvent, onAddEvent}) {
                     id="datetime-local"
                     label="Start date & time"
                     type="datetime-local"
-                    defaultValue="2021-01-01T12:00"
+                    defaultValue={currentDateOneHourLater}
                     InputLabelProps={{
                         shrink: true,
                     }}

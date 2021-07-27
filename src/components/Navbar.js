@@ -144,7 +144,6 @@ function NavBar(props) {
   };
 
   const handleMenuChange = (name) => {
-    console.log(name)
     if (!groupNames.includes(name)) {
       setMenuIndex(0)
     }
