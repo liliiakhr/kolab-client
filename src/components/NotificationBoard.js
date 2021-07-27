@@ -54,10 +54,10 @@ function NotificationBoard({onSendResponse ,loggedusername,username,image_url, d
       {
      !requestComplete? (<div>
       <IconButton onClick={() => {handleRequestToggle(true)}}>
-          <PersonAddIcon />
+          <PersonAddIcon style={{color: 'green'}}/>
         </IconButton>
       <IconButton onClick={() => {handleRequestToggle(false)}}>
-          <PersonAddDisabledIcon />
+          <PersonAddDisabledIcon style={{color: 'red'}}/>
         </IconButton>
        </div>) : <Typography><DoneIcon /> Done</Typography>  
     }
