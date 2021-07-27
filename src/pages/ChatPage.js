@@ -1,7 +1,14 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import config from '../config';
+import API_URL from '../config';
 import io from "socket.io-client";
+import {Container, Grid } from '@material-ui/core';
+import Navbar from '../components/Navbar';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import SendIcon from '@material-ui/icons/Send';
+import Box from '@material-ui/core/Box';
 
 
 let socket = ''
@@ -22,14 +29,12 @@ class ChatPage extends Component {
 
     componentDidMount(){
         //setup your socket connection with the server
-        socket = io(`${config.API_URL}`);
+        socket = io(`${API_URL}`);
 
         let conversationId = this.props.match.params.chatId
+        console.log(conversationId)
 
-        
-
-
-        axios.get(`${config.API_URL}/api/messages/${conversationId}`)
+        axios.get(`${API_URL}/api/messages/${conversationId}`)
             .then((response) => {
                 console.log(response.data)
                 this.setState({
@@ -40,7 +45,7 @@ class ChatPage extends Component {
                 })
             })
             .catch((err) => {
-                console.log(err)
+                console.log("Line 41", err)
             })
         // ensure that the user is connected to a specific chat via webSocket    
         console.log("Emit socket")
@@ -61,6 +66,11 @@ class ChatPage extends Component {
         this.setState({
             currentMessage: e.target.value
         })
+    }
+
+    onSendMessage = (event) => {
+        event.preventDefault()
+        console.log(event)
     }
 
     sendMessage = async () => {
@@ -90,36 +100,52 @@ class ChatPage extends Component {
         const { user } = this.props
 
         if (loading) {
-            <p>Loading all messages . . .</p>
+            return <p>Loading all messages . . .</p>
         }
 
         return (
-            <div>
-                <h3>You're in the Chat Page </h3>
-                <div className="chatContainer">
-                    <div className="messages">
-                        {
-                            messageList.map((val) => {
-                                return (
-                                    <div key={val._id} className="messageContainer" id={val.sender.name == user.name ?"You" : "Other"}>
-                                        <div className="messageIndividual">
-                                            {val.sender.name}: {val.message}
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        }
-                        <div style={{ float:"left", clear: "both" }}
-                            ref={(el) => { this.messagesEnd = el; }}>
+
+            
+
+            <div className="ChatPageWrapper">
+                 <Navbar user={user}>
+            
+                <Container className='room chatContainer'>
+                    <Container  className='heading '>
+                        <Typography  variant='h5'> Welcome to your chat with {messageList[0].sender.username} </Typography>
+                    </Container>
+                
+                    <Container className="chatContainer">
+                        <Container className="messages">
+                            {
+                                messageList.map((val) => {
+                                    return (
+                                        <Box key={val._id} className={'messageContainer'} id={val.sender.username === user.name ?"You" : "Other"}>
+                                                {/* <TextField className="user">{val.sender.username}</TextField>
+                                                <TextField className="msg">{val.message}</TextField> */}
+                                            <div className="messageIndividual">
+                                                {val.sender.username}: {val.message}
+                                            </div>
+                                        </Box>
+                                    );
+                                })
+                            }
+                            <div style={{ float:"left", clear: "both" }}
+                                ref={(el) => { this.messagesEnd = el; }}>
+                            </div>
+                        </Container>
+                        <div className="messageInputs">
+                        <form onSubmit = {this.onSendMessage} noValidate>
+                            <input value={this.state.currentMessage} type="text" placeholder="Message..."
+                                onChange={this.handleMessageInput}
+                            />
+                            <Button type="submit" onClick={this.sendMessage}><SendIcon/></Button>
+                        </form>
                         </div>
-                    </div>
-                    <div className="messageInputs">
-                        <input value={this.state.currentMessage} type="text" placeholder="Message..."
-                            onChange={this.handleMessageInput}
-                        />
-                        <button onClick={this.sendMessage}>Send</button>
-                    </div>
-                </div>
+                    </Container>
+                
+                </Container>
+                </Navbar> 
             </div>
         )
     }

@@ -42,19 +42,15 @@ function UserCard({username, description, image_url, id, categories}) {
   const interests = categories.map(elem => elem[0].toUpperCase() + elem.slice(1,elem.length)).join(', ')
   const {user, onUpdateUser} = useContext(UserContext);
 
-  console.log(history)
 
   let handleChat = (async () => {
     try{
       let obj = {participants: [id, user._id]}
       let response = await axios.post(`${API_URL}/api/conversation`, obj, {withCredentials: true})
       console.log(response.data)
-      console.log("User chat btn works", id, user._id)
       history.push(`/chat/${response.data._id}`)
-
-
     }
-
+    
     catch(error) {
       console.log(error)
   }

@@ -20,7 +20,6 @@ function UserPage(props) {
     useEffect(async () => {
         try {
             let response = await axios.get(`${API_URL}/api/profile/${urlId}`, {withCredentials: true})
-            console.log(response.data)
             setProfile(response.data)
             
         }
@@ -72,7 +71,6 @@ function UserPage(props) {
     }
 
     const handleEditProfilePopUp = (() => {
-        console.log("Popup!");
         setEditProfile(!editProfile);
     })
 

@@ -175,7 +175,7 @@ function App() {
             <Route path={'/group/:group'} render={(routeProps) => {
               return <GroupPage {...routeProps} />
             }}/>
-            <Route exact path={'/chat/:conversation'} render={(routeProps) => {
+            <Route exact path={'/chat/:chatId'} render={(routeProps) => {
               return <ChatPage user={user} {...routeProps} />
             }}/>
           </Switch>
