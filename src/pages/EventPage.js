@@ -197,7 +197,7 @@ function EventPage() {
                             ChangeViewWeek: {
                                 text: "Week View",
                                 click() {
-
+                                    
                                     const calendar = calendarRef.current;
                                     if (calendar) {
                                         const calendarApi = calendar.getApi();

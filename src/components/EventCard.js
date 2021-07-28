@@ -37,17 +37,12 @@ export default function EventCard({eventData, user}) {
         }
 
         let newEvent = await axios.post(`${API_URL}/api/event/participate`, eventInfo, {withCredentials: true})
-        console.log(newEvent.data)
         setEvent(newEvent.data)
     }
     catch(error) {
         console.log(error)
     }
   }
-
-  console.log("USER IN USERS ARR:", event.users.map(user => user._id).includes(user._id))
-  console.log("EVENT:", event)
-  console.log("AMOUNT OF USERS:", event.users.length, event.users.length > 0)
 
   return (
     <Card className={classes.root}>

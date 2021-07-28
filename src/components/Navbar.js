@@ -18,6 +18,7 @@ function NavBar(props) {
   const {user, onLogout} = useContext(UserContext);
   const [groupNames, setGroupNames] = useState([])
   const [menuIndex, setMenuIndex] = useState(null)
+
   // Variables that help with display and navigation of the sidebar
   let location = useLocation();
   let selectedGroup = location.pathname.replace("/group/", '')

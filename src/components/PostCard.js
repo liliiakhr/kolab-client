@@ -134,7 +134,7 @@ function PostCard({postData, user}) {
             <Card className={classes.root}>
             <CardHeader
                 avatar={
-                    <Avatar alt={user.username} src={user.image_url} />
+                    <Avatar alt={postData.creator.username} src={postData.creator.image_url} />
                 }
                 action={
                     <Typography variant="body2">{moment(post.createdAt).format("MMM Do YY") }</Typography>    
