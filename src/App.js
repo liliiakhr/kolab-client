@@ -131,9 +131,9 @@ function App() {
 
   const handleLogout = async () => {
     try{
-      await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
-      setUser(null)
       history.push('/')
+      await axios.post(`${API_URL}/api/auth/logout`, {}, {withCredentials: true})
+      setUser(null) 
     } catch (error) {
       handleErrorMessage(`Oops, looks like you're stuck here buddy!`)
     }
@@ -163,7 +163,7 @@ function App() {
               return <ExploreGroupPage {...routeProps} onError={handleErrorMessage} onSuccess={handleSuccessMessage}/>
             }}/>
             <Route exact path={'/profile/:userId'} render={(routeProps) => {
-              return <UserPage {...routeProps}/>
+              return <UserPage {...routeProps} onError={handleErrorMessage} onSuccess={handleSuccessMessage}/>
             }}/>
             <Route path={'/people'} render={(routeProps) => {
               return <PeoplePage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>
