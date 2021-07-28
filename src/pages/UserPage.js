@@ -22,8 +22,7 @@ function UserPage({match, onError, onSuccess}) {
         let getUser = async() => {
            try {
             let response = await axios.get(`${API_URL}/api/profile/${urlId}`, {withCredentials: true})
-            console.log(response.data)
-            setProfile(response.data)  
+            setProfile(response.data)
         }
         catch(error) {
             console.log(error)
@@ -111,7 +110,6 @@ function UserPage({match, onError, onSuccess}) {
     }
 
     const handleEditProfilePopUp = (() => {
-        console.log("Popup!");
         setEditProfile(!editProfile);
     })
 

@@ -14,6 +14,8 @@ import UserPage from './pages/UserPage';
 import UserContext from './contexts/UserContext';
 import PeoplePage from "./pages/PeoplePage";
 import FriendsPage from "./pages/FriendsPage";
+import ChatPage from './pages/ChatPage'
+import EventPage from "./pages/EventPage";
 
 const theme = createTheme({
   // You get the objects from the documentation
@@ -48,7 +50,6 @@ function App() {
           try {
             let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
             setUser(response.data)
-            console.log(response.data)
             setFetchingUser(false);
           }
           catch(error) {
@@ -165,6 +166,9 @@ function App() {
             <Route exact path={'/profile/:userId'} render={(routeProps) => {
               return <UserPage {...routeProps} onError={handleErrorMessage} onSuccess={handleSuccessMessage}/>
             }}/>
+            <Route exact path={'/events'} render={(routeProps) => {
+              return <EventPage {...routeProps}/>
+            }}/>
             <Route path={'/people'} render={(routeProps) => {
               return <PeoplePage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>
             }}/>
@@ -174,7 +178,9 @@ function App() {
             <Route path={'/group/:group'} render={(routeProps) => {
               return <GroupPage {...routeProps} />
             }}/>
-              {/* Props will be passed with Context */}
+            <Route exact path={'/chat/:chatId'} render={(routeProps) => {
+              return <ChatPage user={user} {...routeProps} />
+            }}/>
           </Switch>
           {
            snackbar === 'success' ? <FlashMessage trigger={randomNumber} messageType={snackbar}>{successMessage}</FlashMessage> : <FlashMessage trigger={randomNumber} messageType={snackbar}>{errorMessage}</FlashMessage> 

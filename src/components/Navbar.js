@@ -10,6 +10,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import UserContext from '../contexts/UserContext';
+import EventAvailableRoundedIcon from '@material-ui/icons/EventAvailableRounded';
+
 
 
 function NavBar(props) {
@@ -144,7 +146,6 @@ function NavBar(props) {
   };
 
   const handleMenuChange = (name) => {
-    console.log(name)
     if (!groupNames.includes(name)) {
       setMenuIndex(0)
     }
@@ -244,19 +245,23 @@ function NavBar(props) {
     >
       <MenuItem onClick={() => {history.push('/explore')}}>
         <IconButton aria-label="show 4 new mails" color="inherit"   >
-          <Badge badgeContent={4} color="secondary">
             <ExploreIcon />
-          </Badge>
         </IconButton>
         <p>Explore</p>
       </MenuItem>
       <MenuItem onClick={(event) => handleProfileMenuOpen(event, 'friend') }>
         <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
+          <Badge badgeContent={user.friendRequests.length} color="secondary">
             <PeopleAltIcon />
           </Badge>
         </IconButton>
         <p>Friends</p>
+      </MenuItem>
+      <MenuItem onClick={() => {history.push('/events')}}>
+        <IconButton aria-label="show 4 new mails" color="inherit"   >
+            <EventAvailableRoundedIcon />
+        </IconButton>
+        <p>Events</p>
       </MenuItem>
       <MenuItem onClick={(event) => handleProfileMenuOpen(event, 'user') } >
         <IconButton
@@ -271,8 +276,6 @@ function NavBar(props) {
       </MenuItem>
     </Menu>
   );  
-
-  console.log("IMAGE", user.image_url)
 
   return (
     <div className={classes.root}>
@@ -300,24 +303,29 @@ function NavBar(props) {
             <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
                         <Tooltip TransitionComponent={Zoom} title="What topics facinate you?">
-                            <Button onClick={() => {history.push('/explore')} }color="inherit" startIcon={
-                                                <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                                                    <ExploreIcon />
-                                                </Badge>
-                                }> Explore
+                            <Button style={{marginRight: "10px"}} onClick={() => {history.push('/explore')} }color="inherit" startIcon={
+                                  <ExploreIcon />
+                              }> Explore
                             </Button>
                         </Tooltip>
                         <Tooltip TransitionComponent={Zoom} title="Connect with your partners in passion">
                             <Button  
+                                    style={{marginRight: "10px"}}
                                     color="inherit" 
                                     startIcon={
-                                        <Badge badgeContent={4} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                                        <Badge badgeContent={user.friendRequests.length} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                                             <PeopleAltIcon />
                                         </Badge>
                                     }
                                     onClick={(event) => handleProfileMenuOpen(event, 'friend') }
                                 > Friends
                                 </Button>
+                        </Tooltip>
+                        <Tooltip TransitionComponent={Zoom} title="Join awesome activities!">
+                            <Button style={{marginRight: "10px"}} onClick={() => {history.push('/events')} }color="inherit" startIcon={
+                                  <EventAvailableRoundedIcon />
+                              }> Events
+                            </Button>
                         </Tooltip>
                         <Tooltip TransitionComponent={Zoom} title="Check your profile">
                             <IconButton

@@ -13,12 +13,18 @@ import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import EditGroup from '../components/EditGroup';
 import FlashMessage from '../components/FlashMessage';
 import PostCard from '../components/PostCard';
+import EventAvailableRoundedIcon from '@material-ui/icons/EventAvailableRounded';
+import AddEvent from '../components/AddEvent';
+import EventCard from '../components/EventCard';
+import moment from 'moment';
 
 function GroupPage({ match: {params}}) {
 
     const [group, setGroup] = useState(null);
     const [posts, setPosts] = useState([]);
+    const [events, setEvents] = useState([]);
     const [showAddPost, setShowAddPost] = useState(false);
+    const [showAddEvent, setShowAddEvent] = useState(false);
     const [showEditGroup, setShowEditGroup] = useState(false);
     const [navBarChanged, setNavBarChanged] = useState(false);
     const {user, onUpdateUser} = useContext(UserContext);
@@ -38,8 +44,10 @@ function GroupPage({ match: {params}}) {
     useEffect(() => {
         (async () => {
             try {
+                // console.log("GROUP DATA FETCHED")
                 let response = await axios.get(`${API_URL}/api/${params.group}`, {withCredentials: true})
                 setGroup(response.data)
+                // console.log("GROUP DATA FETCHED SUCCESFULLY")
             }
             catch(error) {
                 console.log(error)
@@ -53,22 +61,32 @@ function GroupPage({ match: {params}}) {
     useEffect(() => {
         (async () => {
             try {
+                // console.log("POST DATA FETCHED")
                 let groupInfo = {
                     id: group._id
                 }
-                let response = await axios.post(`${API_URL}/api/posts`, groupInfo, {withCredentials: true})
-                setPosts(response.data)
+
+                let currentDate = new Date();
+                currentDate = moment(currentDate).format().slice(0, 10);   // Creates date in format YYYY-MM-DD 
+
+                let postResponse = await axios.post(`${API_URL}/api/posts`, groupInfo, {withCredentials: true})
+                let eventResponse = await axios.get(`${API_URL}/api/events/${group._id}/${currentDate}`, {withCredentials: true})
+                setPosts(postResponse.data)
+                setEvents(eventResponse.data)
             }
             catch(error) {
                 console.log("Something went wrong while getting the posts // maybe none exist", error)
                 setPosts([])
             }
         })()
-    }, [group, user])
+    }, [group])
     
     const handleCloseAddPost = () => {
         setShowAddPost(false);
+    }
 
+    const handleCloseAddEvent = () => {
+        setShowAddEvent(false);
     }
 
     const handleCloseEditGroup = () => {
@@ -85,11 +103,8 @@ function GroupPage({ match: {params}}) {
             return 0 
         }
 
-
-        
         try {
             let imgResponse = '' 
-            console.log(event.target.imageUrl.value)
             if (event.target.imageUrl.value) {
                 var formData = new FormData();
                 formData.append('imageUrl', event.target.imageUrl.files[0]);
@@ -111,6 +126,62 @@ function GroupPage({ match: {params}}) {
             setSuccessMessage('Awesome! New post has been added.')
             setSnackbar('success');
             setShowFlashMessage(Math.random()*100)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+
+    const handleAddEvent = async (event) => {
+        event.preventDefault();
+        const { name, description, start, end, imageUrl } = event.target
+
+        if (!name.value || !description.value || !start.value || !end.value || !imageUrl.value) {
+            setSuccessMessage('Please fill in all the fields...');
+            setSnackbar('error');
+            setShowFlashMessage(Math.random()*100);
+            return 0 
+        }
+
+        if (end.value < start.value) {
+            setSuccessMessage('So time goes backward for you! This is not inception...');
+            setSnackbar('error');
+            setShowFlashMessage(Math.random()*100);
+        }
+
+        let currentDate = new Date();
+        currentDate = moment(currentDate).format().slice(0, 10);   // Creates date in format YYYY-MM-DD 
+
+        if (start.value.slice(0, 10) < currentDate) {
+            setSuccessMessage('This event starts in the past... This is not Back to the Future');
+            setSnackbar('error');
+            setShowFlashMessage(Math.random()*100);
+        }
+
+        try {
+            var formData = new FormData();
+            formData.append('imageUrl', event.target.imageUrl.files[0]);
+            let imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
+            
+            let newEvent = {
+                name: name.value,
+                description: description.value,
+                image_url: imgResponse.data.image_url,
+                start: start.value,
+                end: end.value,
+                creator: user._id,
+                groupOrigin: group._id,
+                users: [user._id]
+            }
+            
+            let response = await axios.post(`${API_URL}/api/event/add-event`, newEvent, {withCredentials: true})
+            console.log(response.data)
+            // user.posts.push(response.data._id)
+            setEvents([...events, response.data])
+            setShowAddEvent(false)
+            // setSuccessMessage('Awesome! New post has been added.')
+            // setSnackbar('success');
+            // setShowFlashMessage(Math.random()*100)
         }
         catch(error) {
             console.log(error)
@@ -183,11 +254,6 @@ function GroupPage({ match: {params}}) {
             let response =  await axios.post(`${API_URL}/api/leave-group`, leaveInfo, {withCredentials: true})
             setGroup(response.data)
             user.groupNames = user.groupNames.filter(oldGroupName => oldGroupName !== group.name) 
-            // Because the user.groups is populated now this doesn't work anymore
-            // user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
-            
-            // In order to make the onUpdateUser function work for the user.groups, it needs to take an array of ids
-            // Therefore this helper function is created
             user.groups = user.groups.map(group => group._id)
             user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
             onUpdateUser(user)
@@ -209,6 +275,8 @@ function GroupPage({ match: {params}}) {
         return <h1>Loading . . .</h1>
     }
 
+    console.log(events)
+
     return (
         <>
             <NavBar onNavBarChange={handleNavBarChange} showDrawer>
@@ -226,7 +294,11 @@ function GroupPage({ match: {params}}) {
                     }
                     {
                         ((group.users.includes(user._id)) || user._id === group.admin) &&
-                        <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}> Create Post</Button>
+                        <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}>Create Post</Button>
+                    }
+                    {
+                        ((group.users.includes(user._id)) || user._id === group.admin) &&
+                        <Button startIcon={<EventAvailableRoundedIcon />} onClick={() => {setShowAddEvent(true)}}>Create Event</Button>
                     }
                     {   
                         (user._id === group.admin) &&
@@ -237,26 +309,48 @@ function GroupPage({ match: {params}}) {
                         <Button startIcon={<ExitToAppIcon />} onClick={handleLeaveGroup}>Leave</Button>
                     }
                 </ButtonGroup>
+                <div className="group-page-container">
                     {   
-                        !showAddPost && 
-                            <Grid
-                                container
-                                // spacing={4}
-                                style={{paddingTop: "20px", paddingLeft: "20px"}}
-                            >
+                        (!showAddPost || !showAddEvent) && 
+                        <Grid
+                        container
+                        // spacing={4}
+                        style={{paddingTop: "20px", paddingLeft: "20px", width: "50%"}}
+                        >
                                 {
                                     posts.map((post, index) => {
                                         return (
-                                                <Grid item xs={12} sm={12} key={index} style={{ display: "flex", marginBottom: "20px"}} >
-                                                    <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
+                                            <Grid item xs={12} sm={12} key={post._id} style={{ display: "flex", marginBottom: "20px"}} >
+                                                    <div className={'fly-left'}>
                                                         <PostCard postData={post} index={index} user={user} />
                                                     </div>  
                                                 </Grid>
                                             )
-                                    })
-                                }
-                            </Grid>
+                                        })
+                                    }
+                        </Grid>
                     }
+                    {   
+                        (!showAddPost || !showAddEvent) && 
+                        <Grid
+                        container
+                        // spacing={4}
+                        style={{paddingTop: "20px", paddingLeft: "20px", width: "50%"}}
+                        >
+                                {
+                                    events.map((event, index) => {
+                                        return (
+                                            <Grid item xs={12} sm={12} key={event._id} style={{ display: "flex", marginBottom: "20px"}} >
+                                                    <div className={'fly-right'}>
+                                                        <EventCard eventData={event} index={index} user={user} />
+                                                    </div>  
+                                                </Grid>
+                                            )
+                                        })
+                                    }
+                        </Grid>
+                    }
+                </div>
             </NavBar>
             {showAddPost && (
                 <div className="popupOpacity">
@@ -266,6 +360,11 @@ function GroupPage({ match: {params}}) {
             {showEditGroup && (
                 <div className="popupOpacity">
                     <EditGroup onCloseEditGroup={handleCloseEditGroup} onEditGroup={handleEditGroup} group={group}/>
+                </div>
+            )}
+            {showAddEvent && (
+                <div className="popupOpacity">
+                    <AddEvent onCloseAddEvent={handleCloseAddEvent} onAddEvent={handleAddEvent}/>
                 </div>
             )}
             <FlashMessage trigger={showFlashMessage} messageType={snackbar}>{successMessage}</FlashMessage>
