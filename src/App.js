@@ -15,6 +15,7 @@ import UserContext from './contexts/UserContext';
 import PeoplePage from "./pages/PeoplePage";
 import FriendsPage from "./pages/FriendsPage";
 import ChatPage from './pages/ChatPage'
+import EventPage from "./pages/EventPage";
 
 const theme = createTheme({
   // You get the objects from the documentation
@@ -49,7 +50,6 @@ function App() {
           try {
             let response = await axios.get(`${API_URL}/api/user`, {withCredentials: true})
             setUser(response.data)
-            console.log(response.data)
             setFetchingUser(false);
           }
           catch(error) {
@@ -165,6 +165,9 @@ function App() {
             }}/>
             <Route exact path={'/profile/:userId'} render={(routeProps) => {
               return <UserPage {...routeProps}/>
+            }}/>
+            <Route exact path={'/events'} render={(routeProps) => {
+              return <EventPage {...routeProps}/>
             }}/>
             <Route path={'/people'} render={(routeProps) => {
               return <PeoplePage {...routeProps} onUpdateUser={handleUpdateUser} onError={handleErrorMessage} onSuccess={handleSuccessMessage} user={user}/>

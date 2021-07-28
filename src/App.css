@@ -166,3 +166,13 @@
 
 
 /* ----------End of chat room styles ------------- */
+.group-page-container {
+  display: flex;
+}
+
+@media (max-width: 400px) {
+  .group-page-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
