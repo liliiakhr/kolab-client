@@ -2,11 +2,13 @@ import React, { useEffect, useState, useContext } from 'react';
 import UserContext from '../contexts/UserContext';
 import GroupCard from '../components/GroupCard';
 import { Container, Typography, Grid, Button } from '@material-ui/core';
-import API_URL from "../config"
+import API_URL from "../config";
 import axios from 'axios';
 import { Link, Redirect } from 'react-router-dom';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import LandingPage from './LandingPage'
+import LandingPage from './LandingPage';
+import Animation from '../components/Animation';
+import loading from '../json/loading.json';
 
 
 function SignupGroupPage({history}) {
@@ -46,7 +48,7 @@ function SignupGroupPage({history}) {
 
 
     if (!groups.length) {
-        return <h1>Loading . . .</h1>
+        return <Animation width={300} height={300} animation={loading} />
     }
 
 

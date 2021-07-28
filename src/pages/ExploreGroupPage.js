@@ -11,6 +11,8 @@ import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
 import AddGroup from '../components/AddGroup';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import Animation from '../components/Animation';
+import loading from '../json/loading.json';
 
 function ExploreGroupPage({onError, onSuccess, history}) {
 
@@ -28,18 +30,29 @@ function ExploreGroupPage({onError, onSuccess, history}) {
 
     let handleCreateGroup = async (event) => {
         event.preventDefault()
-        const {name, image_url, description, category, tags} = event.target
-        let groupData = {
-            name: name.value.trim(),
-            image_url: image_url.value,
-            description: description.value,
-            category: category.value,
-            tags: tags.value.split(','),
-            admin: user._id,
-            users: [user._id]
-        } 
+
+        const {name, description, category, tags} = event.target
+
      
         try{
+            let imgResponse = '' 
+            if (event.target.imageUrl.value) {
+                var formData = new FormData();
+                formData.append('imageUrl', event.target.imageUrl.files[0]);
+                imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
+            }
+
+            let groupData = {
+                name: name.value.trim(),
+                image_url: imgResponse.data ? imgResponse.data.image_url : '',
+                description: description.value,
+                category: category.value,
+                tags: tags.value.split(','),
+                admin: user._id,
+                users: [user._id]
+            } 
+
+
           let response = await axios.post(`${API_URL}/api/add-group`, groupData, {withCredentials: true})
           onSuccess(response.data.successMessage)
           setGroups([response.data.group,...groups])
@@ -59,7 +72,7 @@ function ExploreGroupPage({onError, onSuccess, history}) {
     }
 
     if(groups.length === 0){
-        return <Typography variant="h3">Loading . . .</Typography>
+        return  <Animation width={300} height={300} animation={loading} />
     }
 
     return (

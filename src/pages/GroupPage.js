@@ -17,6 +17,8 @@ import EventAvailableRoundedIcon from '@material-ui/icons/EventAvailableRounded'
 import AddEvent from '../components/AddEvent';
 import EventCard from '../components/EventCard';
 import moment from 'moment';
+import Animation from '../components/Animation'
+import loading from '../json/loading.json';
 
 function GroupPage({ match: {params}}) {
 
@@ -272,7 +274,8 @@ function GroupPage({ match: {params}}) {
     }
 
     if (!group) {
-        return <h1>Loading . . .</h1>
+            return  <Animation width={300} height={300} animation={loading} />
+            
     }
 
     console.log(events)

@@ -16,7 +16,9 @@ import PeoplePage from "./pages/PeoplePage";
 import FriendsPage from "./pages/FriendsPage";
 import ChatPage from './pages/ChatPage'
 import EventPage from "./pages/EventPage";
-import NotFound from './pages/NotFound'
+import NotFound from './pages/NotFound';
+import Animation from './components/Animation'
+import loading from './json/loading.json';
 
 const theme = createTheme({
   // You get the objects from the documentation
@@ -141,7 +143,7 @@ function App() {
     }
   }
   if (fetchingUser) {
-      return <h1>Loading . . .</h1>
+    return  <Animation width={300} height={300} animation={loading} />
   }
 
   return (

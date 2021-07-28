@@ -9,6 +9,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
 import Box from '@material-ui/core/Box';
+import moment from 'moment';
+import Animation from '../components/Animation'
+import loading from '../json/loading.json';
 
 
 let socket = ''
@@ -36,7 +39,7 @@ class ChatPage extends Component {
 
         axios.get(`${API_URL}/api/messages/${conversationId}`)
             .then((response) => {
-                console.log(response.data)
+                // console.log(response.data)
                 this.setState({
                     loading: false, 
                     messageList: response.data
@@ -84,6 +87,7 @@ class ChatPage extends Component {
             content: {
                 sender: this.props.user,
                 message: this.state.currentMessage,
+                
             },
             };
         await socket.emit("send_message", messageContent);
@@ -93,7 +97,7 @@ class ChatPage extends Component {
         }, () => {
             this.scrollToBottom();
         })
-        
+        // console.log(this.messageList)
     }
 
 
@@ -101,8 +105,14 @@ class ChatPage extends Component {
         const { loading , messageList} = this.state
         const { user } = this.props
 
+        // messageList.forEach(element => {
+        //     console.log(element);
+        //     console.log(moment(element.createdAt));
+        // });
+
         if (loading) {
-            return <p>Loading all messages . . .</p>
+            return  <Animation width={300} height={300} animation={loading} />
+
         }
 
         return (
@@ -114,18 +124,25 @@ class ChatPage extends Component {
             
                 <Container className='room'>
                     <Container  className='heading '>
-                         {messageList.length == 0 ? <Typography className='heading-text' variant='h5'> Send your first message  </Typography> : <Typography className='heading-text' variant='h5'> Your chat with {messageList[0].sender.username}  </Typography>}
+                         {messageList.length == 0 ? <Typography className='heading-text' variant='h5'> Send your first message  
+                         </Typography> : <Typography className='heading-text' variant='h5'> Chat 
+                         </Typography>}
                     </Container>
                 
                     <Container className="chatContainer">
                         <Box className="messages">
                             {
-                                messageList.map((val) => {
+                                messageList.map((val,i) => {
                                     return (
-                                        <Box key={val._id} className={`messageContainer ${val.sender.username == user.username ?"you" : "other"}`} 
+                                        <Box key={i} className={`messageContainer ${val.sender.username == user.username ?"you" : "other"}`} 
                                         >
                                                 <span className="sender"> {val.sender.username}</span>
-                                                <span className="msg">{val.message}</span> 
+                                                <div className="msg">
+                                                    <span>{val.message}</span>
+
+                                                <p className={"msg-time"}>{ moment(val.message.createdAt).format('HH:mm')}</p>
+                                                </div>
+                                                
 
                                         </Box>
                                     );

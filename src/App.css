@@ -111,51 +111,54 @@
   height: 81vh;
   overflow:scroll;
 }
+
+.messageContainer {
+  max-width: 70%;
+  margin: 8px;
+}
+
 .you {
-  justify-self: flex-end;
   align-self: flex-end;
-  width: auto;
-  display: flex;
-  flex-direction: column;
 }
 .you .msg{
   background-color: #00bfb6;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-  font-weight: 900;
 }
-.you .msg{
-  background-color: #00bfb6;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-  font-weight: 900;
+
+.other .sender {
+  text-align:start;
 }
+
+.you .sender {
+  text-align:end;
+}
+
 .other{
-  justify-content: flex-start;
-  align-content: flex-start;
-  width: auto;
+  align-self: flex-start;
 }
+
 .other .msg{
   background-color:#C08672;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  font-weight: 900;
 }
 .sender{
   display: block;
-  margin: 20px;
+  margin-bottom: 5px;
   font-weight: bold;
 }
-.msg{
+
+.msg{ 
   display: inline-block;
   position: relative;
-  right: 0;
-  margin-left: 20px;
-  /* overflow-wrap: break-word; */
+  border-radius: 10px;
+  padding: 15px;
 }
+
+.msg-time {
+  margin: 0!important; 
+  text-align: end;
+  font-size: small;
+  color: gray;
+}
+
 .messageInputs{
   box-shadow: 1px 1px 10px rgba(0,0,0,.1);
   width: 100%;
@@ -181,9 +184,11 @@
   background-color: white;
 }
 
+
 /* ----------End of chat room styles ------------- */
 .group-page-container {
   display: flex;
+  flex-direction: row;
 }
 
 @media (max-width: 400px) {
@@ -192,3 +197,16 @@
     flex-direction: column;
   }
 }
+/* Start of profile page */
+#user-avatar {
+  margin: 15px;
+}
+
+#user-card{
+  display: flex;
+}
+.user-info{
+
+}
+
+/* End of profile page */

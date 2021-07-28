@@ -24,9 +24,8 @@ function AddGroup(props) {
                         <CloseIcon />
                     </IconButton> 
                 </div>  
-              <form autocomplete="off" style={{display: 'flex', flexDirection: 'column'}} onSubmit={props.onAddGroup} novalidate>
+              <form autocomplete="off" encType="multipart/form-data" style={{display: 'flex', flexDirection: 'column'}} onSubmit={props.onAddGroup} novalidate>
                 <TextField placeholder="Name" variant="filled" label="Name" type="text" name="name"></TextField>
-                <TextField style={{marginTop: '10px'}} placeholder="Image Url" variant="filled" label="Image" type="text" name="image_url"></TextField>
                 <TextField 
                     label="Description"
                     placeholder="What makes your group special?"
@@ -62,6 +61,7 @@ function AddGroup(props) {
                     <MenuItem value="entertainment">Entertainment</MenuItem>
                     </Select>
                 </FormControl>
+                <input type="file" name="imageUrl" accept="image/png, image/jpg"/>                  
                 <Button type="submit" variant="contained" color="primary">Create Group</Button>
                </form>            
             </Paper>

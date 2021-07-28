@@ -15,6 +15,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import Animation from '../components/Animation';
+import loading from '../json/loading.json';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -67,7 +69,7 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
     }
 
     if(!users){
-        return <Typography variant="h3">Loading . . .</Typography>
+        return <Animation width={300} height={300} animation={loading} />
     }
 
     return (

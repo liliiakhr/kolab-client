@@ -3,8 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button, Typography, CardActions, Card, Grid, CardMedia, CardContent, Container } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
-import avatarImg from "../assets/images/avatar.png"
+import avatarImg from "../assets/images/avatar.png";
 import DoneIcon from '@material-ui/icons/Done';
+import Box from '@material-ui/core/Box';
 
 function ProfileInfo(props) {
 
@@ -20,8 +21,8 @@ function ProfileInfo(props) {
           paddingTop: '33%', // 16:9
         },
         large: {
-            width: theme.spacing(17),
-            height: theme.spacing(17),
+            width: theme.spacing(25),
+            height: theme.spacing(25),
           },
       }));
   
@@ -30,21 +31,23 @@ function ProfileInfo(props) {
 
     return (
         
-        <Card className={classes.root} >
-        <Avatar className={classes.large} alt="User avatar" src={profile.image_url} />
-        <CardContent>
-            <Typography variant="subtitle1">{profile.username}</Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-            {profile.description}
-            </Typography>
-        </CardContent>
-        <CardActions style={{display: "flex", justifyContent: "space-between"}}>
-            {isLoggedInUser && <Button onClick = {onEditProfilePopUp}>Edit your profile</Button>}
-            {!isLoggedInUser && !friends && !requested && <Button onClick={onFriend}>Add friend</Button>}
-            {!isLoggedInUser && !friends && requested && <Button><DoneIcon /> Requested</Button>}
-            {!isLoggedInUser && friends && !requested && <Button onClick={onUnfriend}> Unfriend </Button>}
-        </CardActions>
-    </Card>
+      <Card className={classes.root} id="user-card" >
+        <Avatar className={classes.large} id="user-avatar" alt="User avatar" src={profile.image_url} />
+        <div className="user-info">
+          <CardContent>
+              <Typography variant="subtitle1">{profile.username}</Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+              {profile.description}
+              </Typography>
+          </CardContent>
+          <CardActions style={{display: "flex", justifyContent: "space-between"}}>
+              {isLoggedInUser && <Button onClick = {onEditProfilePopUp}>Edit your profile</Button>}
+              {!isLoggedInUser && !friends && !requested && <Button onClick={onFriend}>Add friend</Button>}
+              {!isLoggedInUser && !friends && requested && <Button><DoneIcon /> Requested</Button>}
+              {!isLoggedInUser && friends && !requested && <Button onClick={onUnfriend}> Unfriend </Button>}
+          </CardActions>
+        </div>
+      </Card>
 
     )
 }

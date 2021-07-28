@@ -5,6 +5,9 @@ import API_URL from "../config"
 import axios from 'axios';
 import Pagination from '../components/Pagination';
 import UserCard from '../components/UserCard';
+import Animation from '../components/Animation'
+import loading from '../json/loading.json';
+
 
 
 function PeoplePage({user, onUpdateUser}) {
@@ -22,7 +25,7 @@ function PeoplePage({user, onUpdateUser}) {
     }, [])
 
     if(!users){
-        return <Typography variant="h3">Loading . . .</Typography>
+        return  <Animation width={300} height={300} animation={loading} />
     }
 
     return (
