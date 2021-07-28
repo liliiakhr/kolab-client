@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { Switch, Route, useHistory } from "react-router-dom";
 import LandingPage from './pages/LandingPage';
-import { createTheme, ThemeProvider } from '@material-ui/core';
+import { createTheme, Paper, ThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from './config';
 import SignupCategoryPage from "./pages/SignupCategoryPage";
@@ -16,24 +16,8 @@ import PeoplePage from "./pages/PeoplePage";
 import FriendsPage from "./pages/FriendsPage";
 import ChatPage from './pages/ChatPage'
 import EventPage from "./pages/EventPage";
-
-const theme = createTheme({
-  // You get the objects from the documentation
-  palette: {
-    // ~turquoise
-      primary: {
-          dark: '#006C7A',
-          main: '#55ABB1',
-          light: '#E0F7FA',
-      },
-      // brownish
-      secondary: {
-        dark: '#543327',
-        main: "#6D4031",
-        light: "F2E7E3"
-      },
-    }
-  })
+import defaultTheme from "./contexts/DefaultTheme";
+import darkTheme from "./contexts/DarkTheme";
 
 function App() {
   const [user, setUser] = useState(null)
@@ -42,6 +26,7 @@ function App() {
   const [successMessage, setSuccessMessage] = useState(null)
   const [snackbar, setSnackbar] = useState('success')
   const [randomNumber, setRandomNumber] = useState(0)
+  const [showDarkTheme, setShowDarkTheme] = useState(false)
 
   let history = useHistory(); 
 
@@ -139,14 +124,20 @@ function App() {
       handleErrorMessage(`Oops, looks like you're stuck here buddy!`)
     }
   }
+
+  const handleChangeThemeColor = () => {
+    setShowDarkTheme(prevShowDarkThem => !prevShowDarkThem)
+    console.log(showDarkTheme)
+  }
+
   if (fetchingUser) {
       return <h1>Loading . . .</h1>
   }
 
   return (
     <div>
-      <ThemeProvider theme={theme}>
-        <UserContext.Provider value={{user, onUpdateUser: handleUpdateUser, onLogout: handleLogout}}>
+      <ThemeProvider theme={showDarkTheme ? darkTheme : defaultTheme}>
+        <UserContext.Provider value={{user, onUpdateUser: handleUpdateUser, onLogout: handleLogout, onChangeThemeColor: handleChangeThemeColor}}>
           <Switch>
             <Route exact path={'/'} render={(routeProps) => {
               return <LandingPage {...routeProps} trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>

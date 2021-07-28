@@ -322,7 +322,7 @@ function GroupPage({ match: {params}}) {
                         <Grid
                         container
                         // spacing={4}
-                        style={{width: "50%", marginTop: "20px", marginRight: "30px"}}
+                        style={{width: "60%", marginTop: "20px", marginRight: "30px"}}
                         >
                                 {
                                     posts.map((post, index) => {
@@ -342,7 +342,7 @@ function GroupPage({ match: {params}}) {
                         <Grid
                         container
                         // spacing={4}
-                        style={{paddingTop: "20px", width: "50%", display: "flex", justifyContent: "flex-end"}}
+                        style={{paddingTop: "20px", width: "40%", display: "flex", justifyContent: "flex-end", height: "500px"}}
                         >
                                 {
                                     events.map((event, index) => {

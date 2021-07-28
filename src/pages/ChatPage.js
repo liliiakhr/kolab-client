@@ -112,7 +112,7 @@ class ChatPage extends Component {
             
                 <Container className='room'>
                     <Container  className='heading '>
-                        <Typography  variant='h5'> Welcome to your chat with {messageList[0].sender.username} </Typography>
+                        <Typography  variant='h5'> Welcome to your chat! </Typography>
                     </Container>
                 
                     <Container className="chatContainer">

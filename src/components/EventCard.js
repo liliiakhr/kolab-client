@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function EventCard({eventData, user}) {
+export default function EventCard({eventData, user, onEventStatusChanged}) {
   const classes = useStyles();
 
   const [event, setEvent] = useState(eventData)
@@ -38,6 +38,7 @@ export default function EventCard({eventData, user}) {
 
         let newEvent = await axios.post(`${API_URL}/api/event/participate`, eventInfo, {withCredentials: true})
         setEvent(newEvent.data)
+        onEventStatusChanged(newEvent.data)
     }
     catch(error) {
         console.log(error)
@@ -82,26 +83,15 @@ export default function EventCard({eventData, user}) {
         {
             event.users.length > 0 && 
             <AvatarGroup max={5}>
-                {/* {
+                {
                     event.users.map(user => {
                         return ( 
-                            <> */}
-                            {/* <Avatar alt={user.username} src={user.image_url} /> */}
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            <Avatar src={event.users[0].image_url} />
-                            {/* </>
+                            <> 
+                            <Avatar alt={user.username} src={user.image_url} /> 
+                             </>
                         )
                     })
-                } */}
+                }
             </AvatarGroup>
         }
 

@@ -13,6 +13,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import PersonIcon from '@material-ui/icons/Person';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import { useTheme } from '@material-ui/core/styles';
+
 
 function EventPage() {
 
@@ -22,7 +24,8 @@ function EventPage() {
     const [showEvent, setShowEvent] = useState(false)
     const [selectedEvent, setSelectedEvent] = useState(null)
     const {user} = useContext(userContext)
-    
+    const theme = useTheme();
+
     // Re do the format function after the event is set
 
     useEffect(() => {
@@ -49,15 +52,15 @@ function EventPage() {
 
             if (eventUserIds.includes(user._id)) {
                 // Events the user participates in
-                color = "#55ABB1";
+                color = `${theme.palette.primary.main}`;
             }
             else if (userGroupIds.includes(eventGroupOriginId)) {
                 // Events from user's groups that user doesn't participate in
-                color = "#6D4031";
+                color = `${theme.palette.secondary.main}`;
             }
             else {
                 // All other events
-                color = "purple";
+                color = `${theme.palette.info.main}`;
             }
 
             return {
@@ -71,19 +74,8 @@ function EventPage() {
         return formattedEventData
     }
 
-    const handleEventStatusChanged = (eventId) => {
-        // This function gets in the id of the event that was changed
-        // It should modify the events state
-        // It should find the event with that event Id and remove or add the user from the users list in it
-        // Then it should format the code again 
-        // 
-    }
-
     const calendarRef = useRef();
  
-    console.log(calendarRef)
-    // let dateCalendar = calendarRef.fullCalendar(‘getDate’)
-
     const handleEventClick = (event) => {
         // This is how you access the the title via eventClickd
         // event.event._def.publicId
@@ -123,6 +115,13 @@ function EventPage() {
         setShowEvent(false)
     }
 
+    const handleEventStatusChanged = (changedEvent) => {
+        let newEvents = [...events.filter(event => event._id !== changedEvent._id), changedEvent];
+        setCalendarEvents(formatEvents(newEvents))
+        setFilteredCalendarEvents(formatEvents(newEvents))
+        setEvents(newEvents)
+    }
+
     return (
         <NavBar >
             <Container style={{marginTop: "20px"}}>
@@ -135,7 +134,7 @@ function EventPage() {
                                 <CloseIcon />
                             </IconButton> 
                         </div>
-                        <EventCard eventData={selectedEvent} user={user} />
+                        <EventCard eventData={selectedEvent} user={user} onEventStatusChanged={handleEventStatusChanged} />
                     </div>
                 )
             }
@@ -151,15 +150,15 @@ function EventPage() {
                         </ButtonGroup>
                         <div style={{display: "flex", justifyContent: "space-between", marginTop: "20px", width: "40%"}}>
                             <div style={{display: "flex", alignItems: "center"}}>
-                                <div style={{marginRight: "5px", backgroundColor: "#55ABB1", width: "20px", height: "20px", borderRadius: "100%"}}></div>
+                                <div style={{marginRight: "5px", backgroundColor: `${theme.palette.primary.main}`, width: "20px", height: "20px", borderRadius: "100%"}}></div>
                                 <Typography>Scheduled events</Typography>
                             </div>
                             <div style={{display: "flex", alignItems: "center"}}>
-                                <div style={{marginRight: "5px", backgroundColor: "#6D4031", width: "20px", height: "20px", borderRadius: "100%"}}></div>
+                                <div style={{marginRight: "5px", backgroundColor: `${theme.palette.secondary.main}`, width: "20px", height: "20px", borderRadius: "100%"}}></div>
                                 <Typography>My Group events</Typography>
                             </div>
                             <div style={{display: "flex", alignItems: "center"}}>
-                                <div style={{marginRight: "5px", backgroundColor: "purple", width: "20px", height: "20px", borderRadius: "100%"}}></div>
+                                <div style={{marginRight: "5px", backgroundColor: `${theme.palette.info.main}`, width: "20px", height: "20px", borderRadius: "100%"}}></div>
                                 <Typography>Other events</Typography>
                             </div>
                         </div>
