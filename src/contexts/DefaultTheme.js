@@ -1,7 +1,7 @@
 import React from 'react';
-import { createTheme } from '@material-ui/core';
+import { createTheme, responsiveFontSizes } from '@material-ui/core';
 
-const defaultTheme = createTheme({
+let defaultTheme = createTheme({
     // You get the objects from the documentation
     palette: {
       // ~turquoise
@@ -19,5 +19,6 @@ const defaultTheme = createTheme({
     }
 })
 
+defaultTheme = responsiveFontSizes(defaultTheme)
 
 export default defaultTheme;

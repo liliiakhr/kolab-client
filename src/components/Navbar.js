@@ -154,8 +154,6 @@ function NavBar(props) {
     props.onNavBarChange()
   }
 
-  console.log(theme)
-
   const drawer = (
       <div >
           <Tabs

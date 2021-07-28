@@ -14,6 +14,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import { useTheme } from '@material-ui/core/styles';
+import { Redirect } from 'react-router-dom';
 
 
 function EventPage() {
@@ -41,6 +42,15 @@ function EventPage() {
             }
         })()
     }, [])
+
+    const calendarRef = useRef();
+
+    if (!user) {
+        return <Redirect to={{
+            pathname: "/",
+            state: { renderLogin: true }
+        }} />
+    }
 
     const formatEvents = (eventData) => {
         let formattedEventData = eventData.map(event => {
@@ -73,8 +83,6 @@ function EventPage() {
         })
         return formattedEventData
     }
-
-    const calendarRef = useRef();
  
     const handleEventClick = (event) => {
         // This is how you access the the title via eventClickd
@@ -106,7 +114,6 @@ function EventPage() {
                 let userGroupIds = user.groups.map(group => group._id)
                 return userGroupIds.includes(groupOriginId) 
             })
-
             setFilteredCalendarEvents(eventsFiltered)
         }
     }
@@ -148,16 +155,16 @@ function EventPage() {
                             <Button startIcon={<PeopleAltIcon/>}onClick={() => handleMyEvents('group')}>Events from my Groups</Button>
                             <Button startIcon={<EventAvailableIcon/>} onClick={() => handleMyEvents('all')}>All Events</Button>
                         </ButtonGroup>
-                        <div style={{display: "flex", justifyContent: "space-between", marginTop: "20px", width: "40%"}}>
-                            <div style={{display: "flex", alignItems: "center"}}>
+                        <div className="event-legend-container">
+                            <div style={{display: "flex", alignItems: "center", marginRight: "10px"}}>
                                 <div style={{marginRight: "5px", backgroundColor: `${theme.palette.primary.main}`, width: "20px", height: "20px", borderRadius: "100%"}}></div>
                                 <Typography>Scheduled events</Typography>
                             </div>
-                            <div style={{display: "flex", alignItems: "center"}}>
+                            <div style={{display: "flex", alignItems: "center", marginRight: "10px"}}>
                                 <div style={{marginRight: "5px", backgroundColor: `${theme.palette.secondary.main}`, width: "20px", height: "20px", borderRadius: "100%"}}></div>
                                 <Typography>My Group events</Typography>
                             </div>
-                            <div style={{display: "flex", alignItems: "center"}}>
+                            <div style={{display: "flex", alignItems: "center", marginRight: "10px"}}>
                                 <div style={{marginRight: "5px", backgroundColor: `${theme.palette.info.main}`, width: "20px", height: "20px", borderRadius: "100%"}}></div>
                                 <Typography>Other events</Typography>
                             </div>

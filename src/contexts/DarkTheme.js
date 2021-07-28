@@ -1,10 +1,12 @@
 import React from 'react';
-import { createTheme } from '@material-ui/core';
+import { createTheme, responsiveFontSizes } from '@material-ui/core';
 
-const darkTheme = createTheme({
+let darkTheme = createTheme({
   palette: {
     type: 'dark',
   },
 });
+
+darkTheme = responsiveFontSizes(darkTheme)
 
 export default darkTheme;

@@ -25,7 +25,7 @@ import Animation from './Animation'
 
 
 function PostCard({postData, user}) {
-    const cardWidth = 500;
+    // const cardWidth = 500;
 
     // rename later
     const [post, setPost] = useState(postData);
@@ -35,11 +35,11 @@ function PostCard({postData, user}) {
 
     const useStyles = makeStyles((theme) => ({
         root: {
-          maxWidth: cardWidth,
+            maxWidth: 345,
+            width: 345
         },
         media: {
-          height: 0,
-          paddingTop: '56.25%', // 16:9
+            height: 140,
         },
         expand: {
           transform: 'rotate(0deg)',
@@ -55,7 +55,7 @@ function PostCard({postData, user}) {
           backgroundColor: red[500],
         },
         comment: {
-            width: cardWidth - 80,
+            // width: cardWidth - 80,
         }
       }));
 
@@ -130,7 +130,6 @@ function PostCard({postData, user}) {
     }
     
     return (
-        <div>
             <Card className={classes.root}>
             <CardHeader
                 avatar={
@@ -146,8 +145,9 @@ function PostCard({postData, user}) {
                 <Typography variant="body1" color="textSecondary" component="p">
                 {post.content}
                 </Typography>
-                <img src={post.image_url} style={{width: `${cardWidth - 40}px`} }/>
-                {/* <img src={post.image_url} style={{width: "auto"} }/> */}
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <img src={post.image_url} style={{maxWidth: "300px"}}/>
+                </div>
             </CardContent>
             <CardActions disableSpacing >
                         {   
@@ -219,7 +219,6 @@ function PostCard({postData, user}) {
             </CardContent>
             </div>
             </Card>            
-        </div>
     )
 }
 
