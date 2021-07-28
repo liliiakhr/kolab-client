@@ -34,17 +34,17 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
     const [requests, setRequests] = useState(null)
     const [notificationPopUp, setNotificationsPopup] = useState(false)
     const [updatedUser, setUpdatedUser] = useState(null)
-    const [filteredUsers, setFiltered] = useState(users)
+    const [responded, setResponded] = useState([])
 
     useEffect(() => {
         let getUsers = async () => {
             let response = await axios.post(`${API_URL}/api/getFriends`,{},{withCredentials: true})
-            console.log(response.data)
             setUsers(response.data.friends)
-            setRequests(response.data.requests)
+            setRequests(response.data.friendRequests)
+            setUpdatedUser(response.data)
         }
         getUsers()
-    }, [])
+    }, [user])
 
     const handleNotificationToggle = () => {
        setNotificationsPopup(!notificationPopUp)
@@ -55,7 +55,8 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
         try{
          let res = await axios.post(`${API_URL}/api/friend/response`, request, {withCredentials: true})
          setUpdatedUser(res.data.userData)
-         onSuccess(res.data.successMessage)   
+         onSuccess(res.data.successMessage) 
+         setResponded([...responded, userId])  
         } catch(error){
            onError(error.response.data.errorMessage)
         }
@@ -142,7 +143,8 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
                             username={person.username} 
                             image_url={person.image_url} 
                             description={person.description} 
-                            id={person._id}/>
+                            id={person._id}
+                            responded={responded}/>
                         })
                     } 
                      </List>

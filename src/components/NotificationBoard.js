@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NotificationBoard({onSendResponse ,loggedusername,username,image_url, description, id}) {
+function NotificationBoard({onSendResponse ,loggedusername,username,image_url, description, id, responded}) {
   const classes = useStyles();
 
   const [requestComplete, setRequestCompleted] = useState(false)
@@ -27,6 +27,12 @@ function NotificationBoard({onSendResponse ,loggedusername,username,image_url, d
       setRequestCompleted(!requestComplete)
       onSendResponse(response, id)
   }  
+  
+  useEffect(() => {
+    if(responded.includes(id)){
+    setRequestCompleted(true)
+    }
+  }, [id, responded])
   
 
   return (

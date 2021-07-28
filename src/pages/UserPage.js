@@ -8,26 +8,65 @@ import axios from 'axios';
 import API_URL from "../config";
 import PostCard from '../components/PostCard';
 
-function UserPage(props) {
+function UserPage({match, onError, onSuccess}) {
     const {user, onUpdateUser} = useContext(UserContext);
     const [editProfile, setEditProfile] = useState(false);
     const [profile, setProfile] = useState(null)
+    const [requested, setRequested] = useState(false)
+    const [friends, setFriends] = useState(false)
 
-    const urlId = props.match.params.userId;
+    const urlId = match.params.userId;
     const isLoggedInUser = (user._id === urlId);
 
-
-    useEffect(async () => {
-        try {
+    useEffect(() => {
+        let getUser = async() => {
+           try {
             let response = await axios.get(`${API_URL}/api/profile/${urlId}`, {withCredentials: true})
             setProfile(response.data)
-            
         }
         catch(error) {
             console.log(error)
+        } 
         }
-       
+        getUser() 
+
+
     }, [urlId, user]);
+   
+    useEffect(() => {
+       if(profile && profile.friends.includes(user._id)){
+            setFriends(true)
+        } else if (profile && profile.friendRequests.includes(user._id)){
+            setRequested(true)
+        }  
+    }, [user._id, profile])
+
+
+    const handleSendRequest = async () => {
+        let userData = {userId: profile._id}
+        try {
+            let response = await axios.post(`${API_URL}/api/friend/request`, userData,{withCredentials: true})
+            onSuccess(response.data.successMessage) 
+            setRequested(true)  
+        }
+        catch(error) {
+            onError(error.response.data.errorMessage)
+        }
+    }
+
+    const handleUnfriendRequest = async () => {
+        let userData = {userId: profile._id}
+        try {
+            let response = await axios.post(`${API_URL}/api/friend/unfriend`, userData, {withCredentials: true})
+            console.log(response.data)
+            onSuccess(response.data.successMessage) 
+            onUpdateUser(response.data.user)
+            setFriends(false)  
+        }
+        catch(error) {
+            onError(error.response.data.errorMessage)
+        }
+    }
 
     const handleEditProfile = async (event) => {
         event.preventDefault();
@@ -93,7 +132,13 @@ function UserPage(props) {
 
                     <Grid item xs={12} sm={7}>
                         <div>
-                            {profile && <ProfileInfo profile={profile} onEditProfilePopUp = {handleEditProfilePopUp} isLoggedInUser={isLoggedInUser}/>}
+                            {profile && <ProfileInfo profile={profile} 
+                            onEditProfilePopUp = {handleEditProfilePopUp} 
+                            isLoggedInUser={isLoggedInUser} 
+                            requested={requested} 
+                            friends={friends} 
+                            onUnfriend={handleUnfriendRequest} 
+                            onFriend={handleSendRequest}/>}
                         </div>
                     </Grid> 
 

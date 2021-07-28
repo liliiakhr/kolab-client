@@ -4,13 +4,11 @@ import { Button, Typography, CardActions, Card, Grid, CardMedia, CardContent, Co
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import avatarImg from "../assets/images/avatar.png"
-
-
-
+import DoneIcon from '@material-ui/icons/Done';
 
 function ProfileInfo(props) {
 
-    const {isLoggedInUser, onEditProfilePopUp, profile} = props;
+    const {isLoggedInUser, onEditProfilePopUp, profile, requested, friends, onFriend, onUnfriend} = props;
     
 
     const useStyles = makeStyles((theme) => ({
@@ -28,7 +26,6 @@ function ProfileInfo(props) {
       }));
   
     const classes = useStyles();
-    console.log(profile)
 
 
     return (
@@ -43,7 +40,9 @@ function ProfileInfo(props) {
         </CardContent>
         <CardActions style={{display: "flex", justifyContent: "space-between"}}>
             {isLoggedInUser && <Button onClick = {onEditProfilePopUp}>Edit your profile</Button>}
-            {!isLoggedInUser && <Button>Add friend</Button>}
+            {!isLoggedInUser && !friends && !requested && <Button onClick={onFriend}>Add friend</Button>}
+            {!isLoggedInUser && !friends && requested && <Button><DoneIcon /> Requested</Button>}
+            {!isLoggedInUser && friends && !requested && <Button onClick={onUnfriend}> Unfriend </Button>}
         </CardActions>
     </Card>
 
