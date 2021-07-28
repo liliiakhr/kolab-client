@@ -8,8 +8,11 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import API_URL from '../config';
 import axios from 'axios';
 import userContext from '../contexts/UserContext';
-import { Button, ButtonGroup, IconButton, Typography } from '@material-ui/core';
+import { Button, ButtonGroup, Container, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import PersonIcon from '@material-ui/icons/Person';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 
 function EventPage() {
 
@@ -20,9 +23,6 @@ function EventPage() {
     const [selectedEvent, setSelectedEvent] = useState(null)
     const {user} = useContext(userContext)
     
-
-    // Display 1 eventCard
-    // Add navbar
     // Re do the format function after the event is set
 
     useEffect(() => {
@@ -49,11 +49,11 @@ function EventPage() {
 
             if (eventUserIds.includes(user._id)) {
                 // Events the user participates in
-                color = "green";
+                color = "#55ABB1";
             }
             else if (userGroupIds.includes(eventGroupOriginId)) {
                 // Events from user's groups that user doesn't participate in
-                color = "blue";
+                color = "#6D4031";
             }
             else {
                 // All other events
@@ -69,6 +69,14 @@ function EventPage() {
             }
         })
         return formattedEventData
+    }
+
+    const handleEventStatusChanged = (eventId) => {
+        // This function gets in the id of the event that was changed
+        // It should modify the events state
+        // It should find the event with that event Id and remove or add the user from the users list in it
+        // Then it should format the code again 
+        // 
     }
 
     const calendarRef = useRef();
@@ -107,7 +115,6 @@ function EventPage() {
                 return userGroupIds.includes(groupOriginId) 
             })
 
-
             setFilteredCalendarEvents(eventsFiltered)
         }
     }
@@ -118,6 +125,7 @@ function EventPage() {
 
     return (
         <NavBar >
+            <Container style={{marginTop: "20px"}}>
             {
                 showEvent &&
                 (
@@ -129,27 +137,31 @@ function EventPage() {
                         </div>
                         <EventCard eventData={selectedEvent} user={user} />
                     </div>
-
                 )
             }
             {
                 !showEvent &&
                 (
                     <>
-                    <div style={{display: "flex", alignItems: "center"}}>
-                        <ButtonGroup variant="contained" color="secondary" style={{marginLeft: "20px", marginTop: "10px"}}>
-                            <Button onClick={() => handleMyEvents('own')}>My Events</Button>
-                            <Button onClick={() => handleMyEvents('group')}>Events from my Groups</Button>
-                            <Button onClick={() => handleMyEvents('all')}>All Events</Button>
+                    <div style={{display: "flex", flexDirection:"column", alignItems: "center", justifyContent: "center"}}>
+                        <ButtonGroup variant="contained" color="secondary" style={{marginTop: "10px"}}>
+                            <Button startIcon={<PersonIcon/>}onClick={() => handleMyEvents('own')}>My Events</Button>
+                            <Button startIcon={<PeopleAltIcon/>}onClick={() => handleMyEvents('group')}>Events from my Groups</Button>
+                            <Button startIcon={<EventAvailableIcon/>} onClick={() => handleMyEvents('all')}>All Events</Button>
                         </ButtonGroup>
-                        <div style={{display: "flex"}}>
-                            <Typography>Legend:</Typography>
-                            <div style={{backgroundColor: "green", width: "20px", height: "20px", borderRadius: "100%"}}></div>
-                            <Typography>Scheduled events:</Typography>
-                            <div style={{backgroundColor: "blue", width: "20px", height: "20px", borderRadius: "100%"}}></div>
-                            <Typography>My Group events:</Typography>
-                            <div style={{backgroundColor: "purple", width: "20px", height: "20px", borderRadius: "100%"}}></div>
-                            <Typography>Other events:</Typography>
+                        <div style={{display: "flex", justifyContent: "space-between", marginTop: "20px", width: "40%"}}>
+                            <div style={{display: "flex", alignItems: "center"}}>
+                                <div style={{marginRight: "5px", backgroundColor: "#55ABB1", width: "20px", height: "20px", borderRadius: "100%"}}></div>
+                                <Typography>Scheduled events</Typography>
+                            </div>
+                            <div style={{display: "flex", alignItems: "center"}}>
+                                <div style={{marginRight: "5px", backgroundColor: "#6D4031", width: "20px", height: "20px", borderRadius: "100%"}}></div>
+                                <Typography>My Group events</Typography>
+                            </div>
+                            <div style={{display: "flex", alignItems: "center"}}>
+                                <div style={{marginRight: "5px", backgroundColor: "purple", width: "20px", height: "20px", borderRadius: "100%"}}></div>
+                                <Typography>Other events</Typography>
+                            </div>
                         </div>
                     </div>
 
@@ -171,24 +183,6 @@ function EventPage() {
                         //   selectMirror={true}
                         eventClick={handleEventClick}
                         customButtons={{
-                            MyEventBtn: {
-                                text: "My Events",
-                                click() {
-                                    handleMyEvents('own')
-                                }
-                            },
-                            GroupEventBtn: {
-                                text: "Group Events",
-                                click() {
-                                    handleMyEvents('group')
-                                }
-                            },
-                            AllEventBtn: {
-                                text: "All Events",
-                                click() {
-                                    handleMyEvents('all')
-                                }
-                            },
                             ChangeViewMonth: {
                                 text: "Month View",
                                 click() {
@@ -216,8 +210,8 @@ function EventPage() {
                     </>
                 )
             }
+            </Container>
         </NavBar>
-
     )
 }
 
