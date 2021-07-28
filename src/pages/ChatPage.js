@@ -75,15 +75,17 @@ class ChatPage extends Component {
 
     sendMessage = async () => {
         // Create the object structure
+        if (this.state.currentMessage.length === 0){
+            return;
+        }
+        
         let messageContent = {
             chatId: this.props.match.params.chatId,
             content: {
-              sender: this.props.user,
-              message: this.state.currentMessage,
+                sender: this.props.user,
+                message: this.state.currentMessage,
             },
-          };
-
-          // emit it so that everyone connected to the same chat receives the message
+            };
         await socket.emit("send_message", messageContent);
         this.setState({
             messageList: [...this.state.messageList, messageContent.content],
@@ -91,12 +93,12 @@ class ChatPage extends Component {
         }, () => {
             this.scrollToBottom();
         })
+        
     }
 
 
     render() {
         const { loading , messageList} = this.state
-        console.log(messageList)
         const { user } = this.props
 
         if (loading) {
@@ -112,7 +114,7 @@ class ChatPage extends Component {
             
                 <Container className='room'>
                     <Container  className='heading '>
-                        <Typography  variant='h5'> Welcome to your chat with {messageList[0].sender.username} </Typography>
+                         {messageList.length == 0 ? <Typography className='heading-text' variant='h5'> Send your first message  </Typography> : <Typography className='heading-text' variant='h5'> Your chat with {messageList[0].sender.username}  </Typography>}
                     </Container>
                 
                     <Container className="chatContainer">
@@ -122,9 +124,6 @@ class ChatPage extends Component {
                                     return (
                                         <Box key={val._id} className={`messageContainer ${val.sender.username == user.username ?"you" : "other"}`} 
                                         >
-                                                {/* <TextField className="user">{val.sender.username}</TextField>
-                                                <TextField className="msg">{val.message}</TextField> */}
-
                                                 <span className="sender"> {val.sender.username}</span>
                                                 <span className="msg">{val.message}</span> 
 
@@ -137,12 +136,12 @@ class ChatPage extends Component {
                             </div>
                         </Box>
                         <div className="messageInputs">
-                        <form onSubmit = {this.onSendMessage} noValidate>
-                            <input value={this.state.currentMessage} type="text" placeholder="Message..."
-                                onChange={this.handleMessageInput}
-                            />
-                            <Button type="submit" onClick={this.sendMessage}><SendIcon/></Button>
-                        </form>
+                            <form onSubmit = {this.onSendMessage} noValidate>
+                                <input value={this.state.currentMessage} type="text" placeholder="Message..."
+                                    onChange={this.handleMessageInput}
+                                />
+                                <Button type="submit" onClick={this.sendMessage}><SendIcon/></Button>
+                            </form>
                         </div>
                     </Container>
                 

@@ -78,17 +78,21 @@
 .room{
   box-shadow: 1px 1px 10px rgba(0,0,0,.1);
   border-radius: 5px;
-  margin:30px;
   padding: 0;
   background-color: #F9F3F1;
+  max-width: 50%;
 }
-.MuiContainer-root{
-  padding:0;
+#root > div > div.ChatPageWrapper > div > main > div{
+  max-width: 1000px;
+}
 
+#root > div > div.ChatPageWrapper > div > main > div{
+  padding:0;
 }
 .heading{
     box-shadow: 1px 1px 10px rgba(0,0,0,.1);
     width: 100%;
+    height: 50px;
     border-radius: 5px;
     font-family: 'DM Sans';
     color: rgb(70, 70, 70);
@@ -96,28 +100,24 @@
     font-weight: 500;
     z-index: 1000;
     background-color: #F2E7E3;
+    text-align: center;
 }
-
+.heading-text{
+  padding: 10px;
+}
 .messages{
   display: flex;
   flex-direction: column;
+  height: 81vh;
+  overflow:scroll;
 }
-
-/* .messageContainer #you{
-  display: flex;
-  width: calc(50% - 30px);
-  justify-content: flex-end;
-  align-content: flex-end;
-
-} */
-
-
 .you {
   justify-self: flex-end;
   align-self: flex-end;
   width: auto;
+  display: flex;
+  flex-direction: column;
 }
-
 .you .msg{
   background-color: #00bfb6;
   border-radius: 10px;
@@ -125,45 +125,61 @@
   text-align: center;
   font-weight: 900;
 }
-
-
+.you .msg{
+  background-color: #00bfb6;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  font-weight: 900;
+}
 .other{
   justify-content: flex-start;
   align-content: flex-start;
   width: auto;
 }
-
 .other .msg{
-  background-color: #9bbd3e;
+  background-color:#C08672;
   border-radius: 10px;
   padding: 20px;
   text-align: center;
   font-weight: 900;
 }
-
 .sender{
   display: block;
   margin: 20px;
-}
-
-/* #you:before {
-  content: "";
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 10px solid #00bfb6;
-  border-right: 10px solid transparent;
-  border-top: 10px solid #00bfb6;
-  border-bottom: 10px solid transparent;
-  right: -20px;
-  top: 6px;
-} */
-
-.sender{
   font-weight: bold;
 }
-
-
+.msg{
+  display: inline-block;
+  position: relative;
+  right: 0;
+  margin-left: 20px;
+  /* overflow-wrap: break-word; */
+}
+.messageInputs{
+  box-shadow: 1px 1px 10px rgba(0,0,0,.1);
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+  font-family: 'DM Sans';
+  color: rgb(70, 70, 70);
+  font-size: 2rem;
+  font-weight: 500;
+  z-index: 1000;
+  background-color: #F2E7E3;
+  text-align: center;
+}
+.messageInputs input{
+  height: 40px;
+  width: 50%;
+  border: none;
+  background-color: #F9F3F1;
+  transition: all 1s ease-in-out;
+}
+.messageInputs input:focus{
+  outline:none;
+  background-color: white;
+}
 
 /* ----------End of chat room styles ------------- */
 .group-page-container {

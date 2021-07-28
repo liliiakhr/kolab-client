@@ -16,6 +16,7 @@ import PeoplePage from "./pages/PeoplePage";
 import FriendsPage from "./pages/FriendsPage";
 import ChatPage from './pages/ChatPage'
 import EventPage from "./pages/EventPage";
+import NotFound from './pages/NotFound'
 
 const theme = createTheme({
   // You get the objects from the documentation
@@ -181,6 +182,7 @@ function App() {
             <Route exact path={'/chat/:chatId'} render={(routeProps) => {
               return <ChatPage user={user} {...routeProps} />
             }}/>
+            <Route component={NotFound} />
           </Switch>
           {
            snackbar === 'success' ? <FlashMessage trigger={randomNumber} messageType={snackbar}>{successMessage}</FlashMessage> : <FlashMessage trigger={randomNumber} messageType={snackbar}>{errorMessage}</FlashMessage> 
