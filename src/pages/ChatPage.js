@@ -110,22 +110,24 @@ class ChatPage extends Component {
             <div className="ChatPageWrapper">
                  <Navbar user={user}>
             
-                <Container className='room chatContainer'>
+                <Container className='room'>
                     <Container  className='heading '>
                         <Typography  variant='h5'> Welcome to your chat with {messageList[0].sender.username} </Typography>
                     </Container>
                 
                     <Container className="chatContainer">
-                        <Container className="messages">
+                        <Box className="messages">
                             {
                                 messageList.map((val) => {
                                     return (
-                                        <Box key={val._id} className={'messageContainer'} id={val.sender.username === user.name ?"You" : "Other"}>
+                                        <Box key={val._id} className={`messageContainer ${val.sender.username == user.username ?"you" : "other"}`} 
+                                        >
                                                 {/* <TextField className="user">{val.sender.username}</TextField>
                                                 <TextField className="msg">{val.message}</TextField> */}
-                                            <div className="messageIndividual">
-                                                {val.sender.username}: {val.message}
-                                            </div>
+
+                                                <span className="sender"> {val.sender.username}</span>
+                                                <span className="msg">{val.message}</span> 
+
                                         </Box>
                                     );
                                 })
@@ -133,7 +135,7 @@ class ChatPage extends Component {
                             <div style={{ float:"left", clear: "both" }}
                                 ref={(el) => { this.messagesEnd = el; }}>
                             </div>
-                        </Container>
+                        </Box>
                         <div className="messageInputs">
                         <form onSubmit = {this.onSendMessage} noValidate>
                             <input value={this.state.currentMessage} type="text" placeholder="Message..."
