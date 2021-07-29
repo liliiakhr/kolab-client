@@ -13,6 +13,7 @@ import AddGroup from '../components/AddGroup';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import Animation from '../components/Animation';
 import loading from '../json/loading.json';
+import './explorePage.css'
 
 function ExploreGroupPage({onError, onSuccess, history}) {
 
@@ -94,41 +95,33 @@ function ExploreGroupPage({onError, onSuccess, history}) {
             <Navbar user={user} onUpdateUser={onUpdateUser} >      
       
                <IconButton onClick={handleAddGroupPopUp} 
-                style={{position: "fixed", right: "0px", top: "0px", marginTop: "50px", marginRight: "30px"}}
+                className="add-group-pos" 
                >
-                <div style={{
-                    borderRadius: '50%', 
-                    width: '100px', 
-                    height: '100px', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    backgroundColor: '#55ABB1',
-                }}>
+                <div className="add-btn">
                     <PeopleAltIcon style={{color: 'white'}}/> <AddIcon style={{color: 'white'}}/> 
                 </div>
                 </IconButton>
                 <Container style={{ marginTop: "30px"}} >
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}} className="fly-top">
-                        <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "50px"}}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start"}} className="fly-top">
+                        <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "30px"}}>
                             Explore our groups
                         </Typography>
-                    </div>
                     <TextField 
-                        style={{width: "200px", transform: "translateY(-70px)", position: "absolute"}}
+                     className='searchbar'
+                        style={{width: "200px",marginBottom: "30px"}}
                         variant="outlined"
                         onChange={handleGroupSearch} 
                         label="Search" 
                         size="medium"
-                    />  
+                    />
+                    </div>  
                     {
                      !addGroup && <Pagination data={filteredGroups} RenderComponent={GroupCard} dataLimit={10}/>
                     }
                 </Container> 
             </Navbar> {
             addGroup && (
-                    <div className="popupOpacity">  
+                    <div className="popupOpacity create-group">  
                         <AddGroup onAddGroupPopUp={handleAddGroupPopUp} onAddGroup={handleCreateGroup}/>
                     </div>
                     )

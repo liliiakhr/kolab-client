@@ -17,12 +17,13 @@ import CloseIcon from '@material-ui/icons/Close';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import Animation from '../components/Animation';
 import loading from '../json/loading.json';
+import './FriendsPage.css'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      width: '100%',
+      width: '96%',
       maxWidth: '800px',
-      height: '525px',
+      height: '80%',
       backgroundColor: theme.palette.background.paper,
       overflowY: 'scroll'
     }
@@ -73,11 +74,12 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
     }
 
     return (
-        <div>  
+        <div>
+            {!notificationPopUp && (
             <Navbar user={user} onUpdateUser={onUpdateUser} > 
             <Tooltip title="Friend Requests">
             <IconButton onClick={handleNotificationToggle}>
-                <div style={{borderRadius: '50%', width: '100px', height: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#55ABB1'}}>
+                <div className="notification-btn">
                 <Badge color="secondary" badgeContent={requests ? requests.length : 0}>
                 {
                   requests ? <NotificationsActiveIcon style={{color: 'white', width: '40px', height: '40px'}}/> : <NotificationsPausedIcon style={{color: 'white', width: '40px', height: '40px'}}/>
@@ -87,7 +89,7 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
                 </IconButton>
                 </Tooltip>             
                 <Container style={{ marginTop: "-20px"}} >
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start"}} className="fly-top">
+                    <div className="friends fly-top" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start"}}>
                         <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "50px"}}>
                             Friends
                             <IconButton onClick={handleRefresh}>
@@ -119,22 +121,22 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
                     </Grid>
                     {/* <Pagination data={groups} RenderComponent={GroupCard} dataLimit={10}/> */}
                 </Container> 
-            </Navbar> 
-            {
+            </Navbar>)}
+           {
             notificationPopUp && (
                     <div className="popupOpacity"> 
                     
                     <Container maxWidth="md">
-                    <div style={{width: '900px', display: 'flex',justifyContent: 'flex-end'}}>  
+                    <div className='closeIcon'>  
                     <IconButton onClick={handleNotificationToggle} style={{marginLeft: '50px'}} >
                        <CloseIcon />
                     </IconButton>
                     </div>
-                    <div style={{backgroundColor: 'white', width: '900px', height: '700px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', borderRadius: '10%'}}> 
-                    <Typography variant='h2' color='primary' style={{marginTop: '20px'}}>
+                    <div className='friendRequests'> 
+                    <Typography variant='h2' color='primary' className='req-title' style={{marginTop: '20px'}}>
                         Friend Requests 
                     </Typography>
-                    <Divider  component='li' style={{width: '500px'}}/>
+                    <Divider  component='li' className="divider"/>
                     <List className={classes.root}>
                     {
                         requests.map((person, i) => {
