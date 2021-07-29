@@ -15,9 +15,12 @@ import axios from 'axios';
 import API_URL from '../config';
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    width: 400, 
+    width: "500px",
+    [theme.breakpoints.down('sm')]: {
+        width: "345px",
+      },
   },
   bullet: {
     display: 'inline-block',
@@ -30,7 +33,24 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
-});
+}));
+
+// const useStyles = makeStyles({
+//   root: {
+//     width: 400, 
+//   },
+//   bullet: {
+//     display: 'inline-block',
+//     margin: '0 2px',
+//     transform: 'scale(0.8)',
+//   },
+//   title: {
+//     fontSize: 14,
+//   },
+//   pos: {
+//     marginBottom: 12,
+//   },
+// });
 
 
 function UserCard({username, description, image_url, id, categories}) {

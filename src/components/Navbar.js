@@ -12,10 +12,11 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import UserContext from '../contexts/UserContext';
 import EventAvailableRoundedIcon from '@material-ui/icons/EventAvailableRounded';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
+import VideoCallIcon from '@material-ui/icons/VideoCall';
 
 
 function NavBar(props) {
-  const {user, onLogout, onChangeThemeColor} = useContext(UserContext);
+  const {user, onLogout, onChangeThemeColor, showDarkTheme} = useContext(UserContext);
   const [groupNames, setGroupNames] = useState([])
   const [menuIndex, setMenuIndex] = useState(null)
 
@@ -267,6 +268,12 @@ function NavBar(props) {
         </IconButton>
         <p>Events</p>
       </MenuItem>
+      <MenuItem onClick={() => {history.push('/events')}}>
+        <IconButton aria-label="show 4 new mails" color="inherit"   >
+            <VideoCallIcon />
+        </IconButton>
+        <p>Video Calls</p>
+      </MenuItem>
       <MenuItem onClick={onChangeThemeColor}>
         <IconButton aria-label="show 4 new mails" color="inherit"   >
             <Brightness4Icon />
@@ -313,7 +320,8 @@ function NavBar(props) {
             <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
                         <Tooltip TransitionComponent={Zoom} title="What topics facinate you?">
-                            <Button style={{marginRight: "10px"}} onClick={() => {history.push('/explore')} }color="inherit" startIcon={
+                            <Button style={{marginRight: "10px"}} onClick={() => {history.push('/explore')} }
+                            color={showDarkTheme ? 'white' : 'inherit'} startIcon={
                                   <ExploreIcon />
                               }> Explore
                             </Button>
@@ -321,7 +329,7 @@ function NavBar(props) {
                         <Tooltip TransitionComponent={Zoom} title="Connect with your partners in passion">
                             <Button  
                                     style={{marginRight: "10px"}}
-                                    color="inherit" 
+                                    color={showDarkTheme ? 'white' : 'inherit'}
                                     startIcon={
                                         <Badge badgeContent={user.friendRequests.length} color="secondary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                                             <PeopleAltIcon />
@@ -331,14 +339,24 @@ function NavBar(props) {
                                 > Friends
                                 </Button>
                         </Tooltip>
-                        <Tooltip TransitionComponent={Zoom} title="Join awesome activities!">
-                            <Button style={{marginRight: "10px"}} onClick={() => {history.push('/events')} }color="inherit" startIcon={
+                        <Tooltip TransitionComponent={Zoom} title="Join awesome activities">
+                            <Button style={{marginRight: "10px"}} onClick={() => {history.push('/events')} }
+                                color={showDarkTheme ? 'white' : 'inherit'} 
+                                startIcon={
                                   <EventAvailableRoundedIcon />
                               }> Events
                             </Button>
                         </Tooltip>
+                        <Tooltip TransitionComponent={Zoom} title="Video chat with your friends">
+                            <Button style={{marginRight: "10px"}} onClick={() => {history.push('/face-lab')} }
+                              color={showDarkTheme ? 'white' : 'inherit'} 
+                              startIcon={
+                                    <VideoCallIcon />
+                                }> Video Calls
+                            </Button>
+                        </Tooltip>
                         <Tooltip TransitionComponent={Zoom} title="Change the color or your app">
-                            <Button onClick={onChangeThemeColor} color="inherit" startIcon={
+                            <Button onClick={onChangeThemeColor} color={showDarkTheme ? 'white' : 'inherit'} startIcon={
                                   <Brightness4Icon />
                               }> 
                             </Button>

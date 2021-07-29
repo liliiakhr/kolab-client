@@ -19,6 +19,8 @@ import Animation from '../components/Animation';
 import loading from '../json/loading.json';
 import UserContext from '../contexts/UserContext';
 import './FriendsPage.css'
+import FriendAnimation from '../json/friend.json'
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
     const classes = useStyles();
-    console.log(history)
 
     const [users, setUsers] = useState(null)
     const [requests, setRequests] = useState(null)
@@ -40,6 +41,8 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
     const [updatedUser, setUpdatedUser] = useState(null)
     const [responded, setResponded] = useState([])
     const {showDarkTheme, onUpdateUserState} = useContext(UserContext);
+    const [showFriendAnimation, setShowFriendAnimation] = useState(false);
+
 
 
     useEffect(() => {
@@ -64,6 +67,7 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
          setUpdatedUser(res.data.userData)
          onSuccess(res.data.successMessage) 
          setResponded([...responded, userId])  
+         temporaryShowAnimation(setShowFriendAnimation, 3700)
         } catch(error){
            onError(error.response.data.errorMessage)
         }
@@ -72,6 +76,15 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
     const handleRefresh = async () => {
         await onUpdateUser(updatedUser)
     }
+
+    const temporaryShowAnimation = (animationFunction, duration) => {
+        animationFunction(true)
+        console.log(showFriendAnimation)
+        setTimeout(() => {
+            animationFunction(false)
+        }, duration);
+    }
+    console.log(showFriendAnimation)
 
     if(!users){
         return <Animation width={300} height={300} animation={loading} />
@@ -94,7 +107,7 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
                 </Tooltip>             
                 <Container style={{ marginTop: "-20px"}} >
                     <div className="friends fly-top" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start"}}>
-                        <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "50px"}}>
+                        <Typography variant="h3" gutterBottom align="center" color={showDarkTheme ? 'inherit' : 'primary'} style={{marginBottom: "50px"}}>
                             Friends
                             <IconButton onClick={handleRefresh}>
                                 <div style={{color: 'white', width: '40px', height: '40px', backgroundColor: '#55ABB1',display: 'flex', alignItems: 'center',justifyContent: 'center', borderRadius: '50%' }}>
@@ -155,6 +168,14 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
                             responded={responded}/>
                         })
                     } 
+                    {
+                        showFriendAnimation &&
+                        (
+                            <div style={{display: "flex", justifyContent:"center"}}> 
+                                <Animation width={500} height={500} animation={FriendAnimation} />
+                            </div>
+                        )
+                    }
                      </List>
                      </div>  
                      </Container>  
