@@ -1,0 +1,74 @@
+.cont-landing{
+    display: flex;
+}
+.landingLogoDescWrapper{
+    position: relative;
+}
+#logo-landing{
+    top: 100px;
+}
+#desc{
+    font-size: 40px;
+    color: #232949;
+}
+.logo-btns{
+    display: flex;
+    flex-direction: column;
+}
+#login-btn{
+    width: 120px;
+    height: 50px;
+    background-color: white;
+    color: #232949;
+    border: 0.1rem solid #232949;
+    padding: 0.7rem 0.5rem;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.8s;
+}
+#login-btn:hover{
+    background-color:#b7d5d8;
+}
+#signup-btn{
+    width: 120px;
+    height: 50px;
+    background-color: #4d5270;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#signup-btn:hover{
+    background-color:#353b5c  ;
+}
+
+/* .animation-wrapper{
+    display: flex;
+    flex-direction: column;
+} */
+.madeBy{
+    position: relative;
+    text-align: center;
+
+}
+.madeBy a{
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .cont-landing {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+    }
+    .logo-btns{
+        position: relative;
+        left: 100px;
+    }
+    .madeBy{
+        position: relative;
+        left: 100px;
+    }
+  }
+  
