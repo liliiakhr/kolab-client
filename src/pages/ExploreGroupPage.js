@@ -73,8 +73,6 @@ function ExploreGroupPage({onError, onSuccess, history}) {
             setAddGroup(!addGroup)
     }
 
-    console.log(groups)
-
     const handleGroupSearch = (event) => {
         let filter = groups.filter(group => {
             let lcTags = group.tags.map(tag => tag.toLowerCase())[0]

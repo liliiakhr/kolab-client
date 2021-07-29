@@ -48,8 +48,6 @@ function NavBar(props) {
   const theme = useTheme();
   let history = useHistory();
 
-  console.log(user)
-
   const useStyles = makeStyles((theme) => ({
     root: {
       display: 'flex',
