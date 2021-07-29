@@ -35,6 +35,16 @@ const theme = createTheme({
         main: "#6D4031",
         light: "F2E7E3"
       },
+      typography: {
+        fontFamily: [
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+        ],
+      },
     }
   })
 

@@ -33,20 +33,20 @@ function ProfileInfo(props) {
         
       <Card className={classes.root} id="user-card" >
         <Avatar className={classes.large} id="user-avatar" alt="User avatar" src={profile.image_url} />
-        <div className="user-info">
-          <CardContent>
-              <Typography variant="subtitle1">{profile.username}</Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-              {profile.description}
-              </Typography>
-          </CardContent>
-          <CardActions style={{display: "flex", justifyContent: "space-between"}}>
-              {isLoggedInUser && <Button onClick = {onEditProfilePopUp}>Edit your profile</Button>}
-              {!isLoggedInUser && !friends && !requested && <Button onClick={onFriend}>Add friend</Button>}
-              {!isLoggedInUser && !friends && requested && <Button><DoneIcon /> Requested</Button>}
-              {!isLoggedInUser && friends && !requested && <Button onClick={onUnfriend}> Unfriend </Button>}
-          </CardActions>
-        </div>
+
+        <CardContent>
+            <Typography id="user-username" variant="subtitle1">{profile.username}</Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+            {profile.description}
+            </Typography>
+        </CardContent>
+        <CardActions style={{display: "flex", justifyContent: "space-between"}}>
+            {isLoggedInUser && <Button onClick = {onEditProfilePopUp}>Edit your profile</Button>}
+            {!isLoggedInUser && !friends && !requested && <Button onClick={onFriend}>Add friend</Button>}
+            {!isLoggedInUser && !friends && requested && <Button><DoneIcon /> Requested</Button>}
+            {!isLoggedInUser && friends && !requested && <Button onClick={onUnfriend}> Unfriend </Button>}
+        </CardActions>
+
       </Card>
 
     )
