@@ -1,5 +1,5 @@
 import Navbar from '../components/Navbar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Container, Typography, Grid, Tooltip } from '@material-ui/core';
 import API_URL from "../config"
 import axios from 'axios';
@@ -17,6 +17,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import Animation from '../components/Animation';
 import loading from '../json/loading.json';
+import UserContext from '../contexts/UserContext';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,6 +39,8 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
     const [notificationPopUp, setNotificationsPopup] = useState(false)
     const [updatedUser, setUpdatedUser] = useState(null)
     const [responded, setResponded] = useState([])
+    const {showDarkTheme, onUpdateUserState} = useContext(UserContext);
+
 
     useEffect(() => {
         let getUsers = async () => {
@@ -56,6 +60,7 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
         let request = {response, userId}
         try{
          let res = await axios.post(`${API_URL}/api/friend/response`, request, {withCredentials: true})
+         onUpdateUserState(res.data.userData)
          setUpdatedUser(res.data.userData)
          onSuccess(res.data.successMessage) 
          setResponded([...responded, userId])  
@@ -88,7 +93,7 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
                 </Tooltip>             
                 <Container style={{ marginTop: "-20px"}} >
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start"}} className="fly-top">
-                        <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "50px"}}>
+                        <Typography variant="h3" gutterBottom align="center" color={showDarkTheme ? "inherit" : "primary"} style={{marginBottom: "50px"}}>
                             Friends
                             <IconButton onClick={handleRefresh}>
                                 <div style={{color: 'white', width: '40px', height: '40px', backgroundColor: '#55ABB1',display: 'flex', alignItems: 'center',justifyContent: 'center', borderRadius: '50%' }}>

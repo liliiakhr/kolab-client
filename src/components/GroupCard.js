@@ -31,10 +31,10 @@ function GroupCard({group}) {
         </Typography>
     </CardContent>
     <CardActions style={{display: "flex", justifyContent: "space-between"}}>
-        <Button  color="primary" startIcon={<PeopleAltOutlinedIcon />}>
+        <Button  color="inherit" startIcon={<PeopleAltOutlinedIcon />}>
             {group.users.length} Members
         </Button>
-        <Button  color="primary" startIcon={<QuestionAnswerOutlinedIcon />}>
+        <Button  color="inherit" startIcon={<QuestionAnswerOutlinedIcon />}>
             {group.postCount} Posts
         </Button>
     </CardActions>

@@ -5,6 +5,13 @@ let darkTheme = createTheme({
   palette: {
     type: 'dark',
   },
+  typography: { 
+    fontFamily: 'Josefin Sans',
+    fontWeightLight: 700,
+    body1: {
+      fontFamily: 'Roboto'
+    }
+  },
 });
 
 darkTheme = responsiveFontSizes(darkTheme)

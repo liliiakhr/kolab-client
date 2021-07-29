@@ -10,13 +10,13 @@
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 /* ----------------------- */
-body{
-  font-family: 'Josefin Sans', sans-serif;
+body {
+  font-family: "Josefin Sans", sans-serif;
 }
 /* Start landing page */
 .landingPageWrapper {
   height: 100vh;
-  background-image: url("./assets/images/background.jpg");
+  /* background-image: url("./assets/images/background.jpg"); */
   position: relative;
 }
 
@@ -71,40 +71,40 @@ body{
 /* ----------Chat room styles ------------- */
 .ChatPageWrapper {
   height: 100vh;
-  background-image: url("./assets/images/background.jpg");
+  /* background-image: url("./assets/images/background.jpg"); */
   position: relative;
 }
 .room {
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   padding: 0;
-  background-color: #F9F3F1;
+  background-color: #f9f3f1;
   max-width: 50%;
 }
-#root > div > div.ChatPageWrapper > div > main > div{
+#root > div > div.ChatPageWrapper > div > main > div {
   max-width: 1000px;
 }
 
-#root > div > div.ChatPageWrapper > div > main > div{
-  padding:0;
+#root > div > div.ChatPageWrapper > div > main > div {
+  padding: 0;
 }
-.heading{
-    box-shadow: 1px 1px 10px rgba(0,0,0,.1);
-    width: 100%;
-    height: 50px;
-    border-radius: 5px;
-    font-family: 'DM Sans';
-    color: rgb(70, 70, 70);
-    font-size: 2rem;
-    font-weight: 500;
-    z-index: 1000;
-    background-color: #F2E7E3;
-    text-align: center;
+.heading {
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+  font-family: "DM Sans";
+  color: rgb(70, 70, 70);
+  font-size: 2rem;
+  font-weight: 500;
+  z-index: 1000;
+  background-color: #f2e7e3;
+  text-align: center;
 }
-.heading-text{
+.heading-text {
   padding: 10px;
 }
-.messages{
+.messages {
   margin: 30px;
   padding: 0;
   background-color: #f9f3f1;
@@ -128,7 +128,7 @@ body{
   display: flex;
   flex-direction: column;
   height: 81vh;
-  overflow:scroll;
+  overflow: scroll;
 }
 
 .messageContainer {
@@ -152,15 +152,15 @@ body{
 }
 
 .other .sender {
-  text-align:start;
+  text-align: start;
 }
 
 .you .sender {
-  text-align:end;
+  text-align: end;
 }
 
-.other .msg{
-  background-color:#C08672;
+.other .msg {
+  background-color: #c08672;
 }
 
 .other {
@@ -183,7 +183,7 @@ body{
   font-weight: bold;
 }
 
-.msg{ 
+.msg {
   display: inline-block;
   position: relative;
   border-radius: 10px;
@@ -191,37 +191,36 @@ body{
 }
 
 .msg-time {
-  margin: 0!important; 
+  margin: 0 !important;
   text-align: end;
   font-size: small;
   color: gray;
 }
 
-.messageInputs{
-  box-shadow: 1px 1px 10px rgba(0,0,0,.1);
+.messageInputs {
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 50px;
   border-radius: 5px;
-  font-family: 'DM Sans';
+  font-family: "DM Sans";
   color: rgb(70, 70, 70);
   font-size: 2rem;
   font-weight: 500;
   z-index: 1000;
-  background-color: #F2E7E3;
+  background-color: #f2e7e3;
   text-align: center;
 }
-.messageInputs input{
+.messageInputs input {
   height: 40px;
   width: 50%;
   border: none;
-  background-color: #F9F3F1;
+  background-color: #f9f3f1;
   transition: all 1s ease-in-out;
 }
-.messageInputs input:focus{
-  outline:none;
+.messageInputs input:focus {
+  outline: none;
   background-color: white;
 }
-
 
 .sender {
   font-weight: bold;
@@ -244,10 +243,10 @@ body{
   margin: 15px;
 }
 
-#user-card{
+#user-card {
   display: flex;
 }
-#user-username{
+#user-username {
   font-size: 32px;
 }
 /* End of profile page */
@@ -267,3 +266,6 @@ body{
     margin-bottom: 10px;
   }
 }
+
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;700&family=Noto+Sans&family=Roboto+Mono:wght@300;400;500&family=Roboto+Slab&display=swap");

@@ -138,8 +138,11 @@ function PostCard({postData, user}) {
                 action={
                     <Typography variant="body2">{moment(post.createdAt).format("MMM Do YY") }</Typography>    
                 }
-                title={post.title}
-                subheader={post.creator.username}
+                title={
+                    <Typography variant="h6">{post.title}</Typography>
+                }
+                subheader={<Typography variant="body2">{post.creator.username}</Typography>
+            }
             />
             <CardContent>
                 <Typography variant="body1" color="textSecondary" component="p">
@@ -184,10 +187,6 @@ function PostCard({postData, user}) {
                         >
                             <CommentIcon/>
                         </IconButton>
-                        <IconButton aria-label="share">
-                            <ShareIcon />
-                        </IconButton>
-
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
