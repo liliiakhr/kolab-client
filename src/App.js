@@ -21,6 +21,8 @@ import Animation from './components/Animation'
 import loading from './json/loading.json';
 import defaultTheme from "./contexts/DefaultTheme";
 import darkTheme from "./contexts/DarkTheme";
+import VideoChatPage from "./pages/VideoChatPage";
+
 
 function App() {
   const [user, setUser] = useState(null)
@@ -174,6 +176,9 @@ function App() {
             }}/>
             <Route exact path={'/chat/:chatId'} render={(routeProps) => {
               return <ChatPage user={user} {...routeProps} />
+            }}/>
+            <Route path={'/face-lab'} render={(routeProps) => {
+              return <VideoChatPage {...routeProps} />
             }}/>
             <Route component={NotFound} />
           </Switch>
