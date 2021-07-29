@@ -148,7 +148,6 @@ function GroupPage({ match: {params}}) {
     const handleAddEvent = async (event) => {
         event.preventDefault();
         const { name, description, start, end, imageUrl } = event.target
-        console.log("I RUN 1")
         
         if (!name.value || !description.value || !start.value || !end.value || !imageUrl.value) {
             setSuccessMessage('Please fill in all the fields...');
@@ -156,14 +155,12 @@ function GroupPage({ match: {params}}) {
             setShowFlashMessage(Math.random()*100);
             return 0 
         }
-        console.log("I RUN 2")
         
         if (end.value < start.value) {
             setSuccessMessage('So time goes backward for you! This is not inception...');
             setSnackbar('error');
             setShowFlashMessage(Math.random()*100);
         }
-        console.log("I RUN 3")
         
         let currentDate = new Date();
         currentDate = moment(currentDate).format().slice(0, 10);   // Creates date in format YYYY-MM-DD 
@@ -178,7 +175,6 @@ function GroupPage({ match: {params}}) {
             var formData = new FormData();
             formData.append('imageUrl', event.target.imageUrl.files[0]);
             let imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
-            console.log("I RUN 4")
             
             let newEvent = {
                 name: name.value,
@@ -192,8 +188,7 @@ function GroupPage({ match: {params}}) {
             }
             
             let response = await axios.post(`${API_URL}/api/event/add-event`, newEvent, {withCredentials: true})
-            console.log("I RUN 5")
-            setEvents([...events, response.data])
+            setEvents([response.data, ...events])
             setShowAddEvent(false)
             // setSuccessMessage('Awesome! New post has been added.')
             // setSnackbar('success');
@@ -324,7 +319,7 @@ function GroupPage({ match: {params}}) {
                 </ButtonGroup>
                 <div className="group-page-container">
                     {   
-                        (!showAddPost || !showAddEvent) && 
+                        !showAddPost && !showAddEvent && 
                         <Grid
                         container
                         // spacing={4}
@@ -344,7 +339,7 @@ function GroupPage({ match: {params}}) {
                         </Grid>
                     }
                     {   
-                        (!showAddPost || !showAddEvent) && 
+                        !showAddPost && !showAddEvent && 
                         <Grid
                         container
                         // spacing={4}

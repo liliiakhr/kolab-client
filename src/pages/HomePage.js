@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import UserContext from '../contexts/UserContext';
 import Navbar from "../components/Navbar";
 import PostCard from '../components/PostCard';
-import { Container, Typography, Grid, Button } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import axios from 'axios';
 import API_URL from "../config";
 import { Redirect } from 'react-router';
@@ -64,7 +64,7 @@ function HomePage() {
                     {
                         posts.map((postData, index) => {
                             return (
-                                    <Grid item xs={12} sm={12} key={index} >
+                                    <Grid item xs={12} md={12} lg={6} key={index} >
                                         <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
                                             <PostCard user={user} postData={postData} index={index} />
                                         </div>  

@@ -6,9 +6,10 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 export default function CommentCard({user, onHandleLikesAndDislikes, comment: {createdAt, content, likes, dislikes, owner, _id}}) {
+    console.log(owner)
     return (
         <div style={{display: "flex", marginTop: "20px"}}>
-            <Avatar alt={user.username} src={user.image_url} style={{marginRight: "10px"}} />
+            <Avatar alt={user.username} src={owner.image_url} style={{marginRight: "10px"}} />
             <div style={{ width: "100%" }}>
                 <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
                     <Typography 

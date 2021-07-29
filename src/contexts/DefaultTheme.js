@@ -19,9 +19,16 @@ let defaultTheme = createTheme({
       },
     typography: {
         fontFamily: 'Josefin Sans',
-        fontWeightLight: 700,
+        // fontWeight: 700,
+        // fontWeightLight: 700, 
+        // fontWeightRegular: 700, 
+        // fontWeightMedium: 700,
+        // fontWeightBold: 700,
+        body2: {
+          fontWeight: 700
+        },
         body1: {
-          fontFamily: 'Roboto'
+          // fontFamily: 'Roboto'
         }
     },
 })

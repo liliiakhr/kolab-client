@@ -34,24 +34,14 @@ function PostCard({postData, user}) {
 
     const useStyles = makeStyles((theme) => ({
         root: {
-            maxWidth: 500,
+            width: "500px",
+            [theme.breakpoints.down('sm')]: {
+                width: "345px",
+              },
         },
         media: {
             height: 0,
             paddingTop: '56.25%', // 16:9
-        },
-        expand: {
-          transform: 'rotate(0deg)',
-          marginLeft: 'auto',
-          transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-          }),
-        },
-        expandOpen: {
-          transform: 'rotate(180deg)',
-        },
-        avatar: {
-          backgroundColor: red[500],
         },
         comment: {
             // width: cardWidth - 80,
@@ -129,7 +119,9 @@ function PostCard({postData, user}) {
     }
     
     return (
-        <Card className="postcard-container">
+        <Card classes={{
+            root: classes.root
+        }}>
             <CardHeader
                 avatar={
                     <Avatar alt={postData.creator.username} src={postData.creator.image_url} />
