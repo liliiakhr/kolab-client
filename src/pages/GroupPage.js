@@ -71,7 +71,6 @@ function GroupPage({ match: {params}}) {
                 let postResponse = await axios.post(`${API_URL}/api/posts`, groupInfo, {withCredentials: true})
                 let eventResponse = await axios.get(`${API_URL}/api/events/${group._id}/${currentDate}`, {withCredentials: true})
                 let postData = postResponse.data.sort((a, b) => {
-                    console.log(a.createdAt)
                     if (a.createdAt < b.createdAt) {
                         return 1
                     }
@@ -80,7 +79,7 @@ function GroupPage({ match: {params}}) {
                     }
                     else {
                         return 0
-                    }
+                    } 
                 }) 
                 setPosts(postData)
                 setEvents(eventResponse.data)
@@ -106,7 +105,7 @@ function GroupPage({ match: {params}}) {
 
     const handleAddPost = async (event) => {
         event.preventDefault();
-
+        
         if (!event.target.title.value || !event.target.content.value) {
             setSuccessMessage('Please fill in a title and share your message');
             setSnackbar('error');
@@ -149,33 +148,37 @@ function GroupPage({ match: {params}}) {
     const handleAddEvent = async (event) => {
         event.preventDefault();
         const { name, description, start, end, imageUrl } = event.target
-
+        console.log("I RUN 1")
+        
         if (!name.value || !description.value || !start.value || !end.value || !imageUrl.value) {
             setSuccessMessage('Please fill in all the fields...');
             setSnackbar('error');
             setShowFlashMessage(Math.random()*100);
             return 0 
         }
-
+        console.log("I RUN 2")
+        
         if (end.value < start.value) {
             setSuccessMessage('So time goes backward for you! This is not inception...');
             setSnackbar('error');
             setShowFlashMessage(Math.random()*100);
         }
-
+        console.log("I RUN 3")
+        
         let currentDate = new Date();
         currentDate = moment(currentDate).format().slice(0, 10);   // Creates date in format YYYY-MM-DD 
-
+        
         if (start.value.slice(0, 10) < currentDate) {
             setSuccessMessage('This event starts in the past... This is not Back to the Future');
             setSnackbar('error');
             setShowFlashMessage(Math.random()*100);
         }
-
+        
         try {
             var formData = new FormData();
             formData.append('imageUrl', event.target.imageUrl.files[0]);
             let imgResponse = await axios.post(`${API_URL}/api/upload`, formData);
+            console.log("I RUN 4")
             
             let newEvent = {
                 name: name.value,
@@ -189,6 +192,7 @@ function GroupPage({ match: {params}}) {
             }
             
             let response = await axios.post(`${API_URL}/api/event/add-event`, newEvent, {withCredentials: true})
+            console.log("I RUN 5")
             setEvents([...events, response.data])
             setShowAddEvent(false)
             // setSuccessMessage('Awesome! New post has been added.')
@@ -282,8 +286,7 @@ function GroupPage({ match: {params}}) {
     }
 
     if (!group) {
-            return  <Animation width={300} height={300} animation={loading} />
-            
+            return  <Animation width={300} height={300} animation={loading} />     
     }
 
     return (
@@ -296,7 +299,7 @@ function GroupPage({ match: {params}}) {
                     </div>
                     <img src={group.image_url} className="group-header-image"/>
                 </div>
-                <Container>
+                <div style={{marginLeft: "20px"}}>
                 <ButtonGroup variant="contained" color="secondary" style={{marginTop: "10px"}}>
                     {
                         (!group.users.includes(user._id)) && (user._id !== group.admin) &&
@@ -304,11 +307,11 @@ function GroupPage({ match: {params}}) {
                     }
                     {
                         ((group.users.includes(user._id)) || user._id === group.admin) &&
-                        <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}>Create Post</Button>
+                        <Button startIcon={<AddIcon />} onClick={() => {setShowAddPost(true)}}>Post</Button>
                     }
                     {
                         ((group.users.includes(user._id)) || user._id === group.admin) &&
-                        <Button startIcon={<EventAvailableRoundedIcon />} onClick={() => {setShowAddEvent(true)}}>Create Event</Button>
+                        <Button startIcon={<EventAvailableRoundedIcon />} onClick={() => {setShowAddEvent(true)}}>Event</Button>
                     }
                     {   
                         (user._id === group.admin) &&
@@ -325,7 +328,7 @@ function GroupPage({ match: {params}}) {
                         <Grid
                         container
                         // spacing={4}
-                        style={{width: "60%", marginTop: "20px", marginRight: "30px"}}
+                        style={{marginTop: "20px", marginRight: "30px"}}
                         >
                                 {
                                     posts.map((post, index) => {
@@ -334,7 +337,7 @@ function GroupPage({ match: {params}}) {
                                                     <div className={'fly-left'}>
                                                         <PostCard postData={post} index={index} user={user} />
                                                     </div>  
-                                                </Grid>
+                                            </Grid>
                                             )
                                         })
                                     }
@@ -345,7 +348,7 @@ function GroupPage({ match: {params}}) {
                         <Grid
                         container
                         // spacing={4}
-                        style={{paddingTop: "20px", width: "40%", display: "flex", justifyContent: "flex-end", height: "500px"}}
+                        style={{paddingTop: "20px", display: "flex", justifyContent: "flex-end", height: "500px"}}
                         >
                                 {
                                     events.map((event, index) => {
@@ -354,14 +357,14 @@ function GroupPage({ match: {params}}) {
                                                     <div className={'fly-right'}>
                                                         <EventCard eventData={event} index={index} user={user} />
                                                     </div>  
-                                                </Grid>
+                                            </Grid>
                                             )
                                         })
                                     }
                         </Grid>
                     }
                     </div>
-                </Container>
+                </div>
             </NavBar>
             {showAddPost && (
                 <div className="popupOpacity">

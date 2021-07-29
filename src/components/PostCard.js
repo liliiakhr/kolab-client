@@ -25,7 +25,6 @@ import Animation from './Animation'
 
 
 function PostCard({postData, user}) {
-    // const cardWidth = 500;
 
     // rename later
     const [post, setPost] = useState(postData);
@@ -35,11 +34,11 @@ function PostCard({postData, user}) {
 
     const useStyles = makeStyles((theme) => ({
         root: {
-            maxWidth: 345,
-            width: 345
+            maxWidth: 500,
         },
         media: {
-            height: 140,
+            height: 0,
+            paddingTop: '56.25%', // 16:9
         },
         expand: {
           transform: 'rotate(0deg)',
@@ -130,7 +129,7 @@ function PostCard({postData, user}) {
     }
     
     return (
-            <Card className={classes.root}>
+        <Card className="postcard-container">
             <CardHeader
                 avatar={
                     <Avatar alt={postData.creator.username} src={postData.creator.image_url} />
@@ -138,16 +137,24 @@ function PostCard({postData, user}) {
                 action={
                     <Typography variant="body2">{moment(post.createdAt).format("MMM Do YY") }</Typography>    
                 }
-                title={post.title}
-                subheader={post.creator.username}
+                title={
+                    <Typography variant="h6">{post.title}</Typography>
+                }
+                subheader={<Typography variant="body2">{post.creator.username}</Typography>
+            }
             />
+            {
+                post.image_url &&
+                <CardMedia
+                    className={classes.media}
+                    image={post.image_url}
+                    title="Post image"
+                />
+            }
             <CardContent>
                 <Typography variant="body1" color="textSecondary" component="p">
                 {post.content}
-                </Typography>
-                <div style={{display: "flex", justifyContent: "center"}}>
-                    <img src={post.image_url} style={{maxWidth: "300px"}}/>
-                </div>
+            </Typography>
             </CardContent>
             <CardActions disableSpacing >
                         {   
@@ -184,10 +191,6 @@ function PostCard({postData, user}) {
                         >
                             <CommentIcon/>
                         </IconButton>
-                        <IconButton aria-label="share">
-                            <ShareIcon />
-                        </IconButton>
-
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
@@ -218,20 +221,8 @@ function PostCard({postData, user}) {
                 </form>
             </CardContent>
             </div>
-            </Card>            
+        </Card>            
     )
 }
 
 export default PostCard
-
-
-// npm install react-share
-// import {
-//     EmailShareButton,
-//     FacebookShareButton,
-//     InstapaperShareButton,
-//     LinkedinShareButton,
-//     PinterestShareButton,
-//     TwitterShareButton,
-//     WhatsappShareButton,
-//   } from "react-share";

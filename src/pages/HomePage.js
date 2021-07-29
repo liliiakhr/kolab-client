@@ -19,7 +19,19 @@ function HomePage() {
         const getPosts = async () => {
             try {
                 let response = await axios.get(`${API_URL}/api/home`);
-                setPosts(response.data)
+                let postData = response.data.sort((a, b) => {
+                    console.log(a.createdAt)
+                    if (a.createdAt < b.createdAt) {
+                        return 1
+                    }
+                    else if (a.createdAt > b.createdAt) {
+                        return -1
+                    }
+                    else {
+                        return 0
+                    }
+                }) 
+                setPosts(postData)
             }
             catch(error) {
                 console.log(error)

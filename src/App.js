@@ -96,6 +96,10 @@ function App() {
     }
   }
 
+  const handleUpdatUserState = (userData) => {
+    setUser(userData)
+  }
+
   const handleUpdateUser = async (userData) => {
     try {
       let response = await axios.post(`${API_URL}/api/user`, userData,  {withCredentials: true});
@@ -132,17 +136,18 @@ function App() {
 
   const handleChangeThemeColor = () => {
     setShowDarkTheme(prevShowDarkThem => !prevShowDarkThem)
-    console.log(showDarkTheme)
   }
 
   if (fetchingUser) {
     return  <Animation width={300} height={300} animation={loading} />
   }
+  console.log(showDarkTheme)
+
 
   return (
     <div>
       <ThemeProvider theme={showDarkTheme ? darkTheme : defaultTheme}>
-        <UserContext.Provider value={{user, onUpdateUser: handleUpdateUser, onLogout: handleLogout, onChangeThemeColor: handleChangeThemeColor}}>
+        <UserContext.Provider value={{user, onUpdateUser: handleUpdateUser, onUpdateUserState: handleUpdatUserState, onLogout: handleLogout, onChangeThemeColor: handleChangeThemeColor, showDarkTheme: showDarkTheme}}>
           <Switch>
             <Route exact path={'/'} render={(routeProps) => {
               return <LandingPage {...routeProps} trigger={randomNumber} messageType={snackbar} success={successMessage} error={errorMessage} onLogin={handleLogin} onSignUp={handleSignUp}/>

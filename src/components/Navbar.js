@@ -45,6 +45,8 @@ function NavBar(props) {
   
   // Created to differentiate between the friends and user menu
   const [selectedMenu, setSelectedMenu] = useState(null);
+  const theme = useTheme();
+  let history = useHistory();
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -117,6 +119,10 @@ function NavBar(props) {
         display: 'none',
       },
     },
+    tabs: {
+      // Not working (yet)
+      fontSize: "bold"
+    }
   }));
 
   useEffect(() => {
@@ -134,8 +140,6 @@ function NavBar(props) {
   }, [user])
 
   const classes = useStyles();
-  const theme = useTheme();
-  let history = useHistory();
 
   // Functions for opening/closing drawer
   const handleDrawerToggle = () => {
@@ -164,15 +168,14 @@ function NavBar(props) {
           aria-label="Vertical tabs example"
           className={classes.tabs}
       >   
-          <Link to={`/home`} style={{ textDecoration: "none", color: "black", textAlign: "center"}} >
+          <Link to={`/home`} style={{ textDecoration: "none", color: "inherit", textAlign: "center"}} >
             <Tab label="Feed" onClick={props.onNavBarChange}/>
           </Link>
           {
             groupNames && 
             groupNames.map(groupName => {
               return (               
-                <Link to={`/group/${groupName}`} style={{ textDecoration: "none", color: "black", textAlign: "center"}} >
-                  {/* <Tab label={groupName} onClick={props.onNavBarChange} name={groupName}/> */}
+                <Link to={`/group/${groupName}`} style={{ textDecoration: "none", color: "inherit", textAlign: "center"}} >
                   <Tab label={groupName} onClick={() => handleMenuChange(groupName)} name={groupName}/>
                 </Link>
               )

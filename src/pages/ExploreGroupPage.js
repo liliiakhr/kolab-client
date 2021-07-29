@@ -19,7 +19,7 @@ function ExploreGroupPage({onError, onSuccess, history}) {
     const [groups, setGroups] = useState([]);
     const [filteredGroups, setFilteredGroups] = useState([]);
     const [addGroup, setAddGroup] = useState(false);
-    const {user, onUpdateUser} = useContext(UserContext);
+    const {user, onUpdateUser, showDarkTheme} = useContext(UserContext);
 
     useEffect(() => {
         let getGroups = async () => {
@@ -74,7 +74,6 @@ function ExploreGroupPage({onError, onSuccess, history}) {
             setAddGroup(!addGroup)
     }
 
-
     const handleGroupSearch = (event) => {
         let filter = groups.filter(group => {
             let lcTags = group.tags.map(tag => tag.toLowerCase())[0]
@@ -111,7 +110,7 @@ function ExploreGroupPage({onError, onSuccess, history}) {
                 </IconButton>
                 <Container style={{ marginTop: "30px"}} >
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}} className="fly-top">
-                        <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "50px"}}>
+                        <Typography variant="h3" gutterBottom align="center" color={showDarkTheme ? "inherit" : "primary"} style={{marginBottom: "50px"}}>
                             Explore our groups
                         </Typography>
                     </div>

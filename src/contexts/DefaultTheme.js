@@ -16,7 +16,14 @@ let defaultTheme = createTheme({
           main: "#6D4031",
           light: "F2E7E3"
         },
-    }
+      },
+    typography: {
+        fontFamily: 'Josefin Sans',
+        fontWeightLight: 700,
+        body1: {
+          fontFamily: 'Roboto'
+        }
+    },
 })
 
 defaultTheme = responsiveFontSizes(defaultTheme)

@@ -1,5 +1,5 @@
 import Navbar from '../components/Navbar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Container, Typography, Grid, Button, TextField } from '@material-ui/core';
 import API_URL from "../config"
 import axios from 'axios';
@@ -7,19 +7,26 @@ import Pagination from '../components/Pagination';
 import UserCard from '../components/UserCard';
 import Animation from '../components/Animation'
 import loading from '../json/loading.json';
-
+import UserContext from '../contexts/UserContext';
 
 
 function PeoplePage({user, onUpdateUser}) {
 
     const [users, setUsers] = useState([])
     const [filteredUsers, setFilteredUsers] = useState(users)
+    const {showDarkTheme} = useContext(UserContext);
 
     useEffect(() => {
         let getUsers = async () => {
             let response = await axios.post(`${API_URL}/api/people`, {withCredentials: true})
-            setUsers(response.data)
-            setFilteredUsers(response.data)
+            let newUsers = response.data.filter(exploreUser => {
+                return (
+                    exploreUser._id !== user._id &&
+                    !user.friends.includes(exploreUser._id)
+                )
+            })
+            setUsers(newUsers)
+            setFilteredUsers(newUsers)
         }
         getUsers()
     }, [])
@@ -38,7 +45,7 @@ function PeoplePage({user, onUpdateUser}) {
             <Navbar user={user} onUpdateUser={onUpdateUser} >               
                 <Container style={{ marginTop: "60px"}} >
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start"}} className="fly-top">
-                        <Typography variant="h3" gutterBottom align="center" color="primary" style={{marginBottom: "30px"}}>
+                        <Typography variant="h3" gutterBottom align="center" color={showDarkTheme ? "inherit" : "primary"} style={{marginBottom: "30px"}}>
                             Find new people
                         </Typography>
                         <TextField
