@@ -110,7 +110,7 @@ function FriendsPage({user, onUpdateUser, onSuccess, onError, history}) {
                            return(
                             <Grid item xs={12} sm={6} key={i}>
                             <div className={i % 2 === 0 ? 'fly-left' : 'fly-right'}>
-                                    <UserCard history={history} key={i} categories={user.categories} id={user._id} username={username} description={user.description}/>
+                                    <UserCard history={history} key={i} categories={user.categories} image_url={user.image_url} id={user._id} username={username} description={user.description}/>
                                 </div>
                             </Grid>                            
                            )

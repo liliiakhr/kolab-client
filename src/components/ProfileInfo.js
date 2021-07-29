@@ -36,12 +36,12 @@ function ProfileInfo(props) {
 
         <CardContent>
             <Typography id="user-username" variant="subtitle1">{profile.username}</Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
+            <Typography id="user-desc" variant="body2" color="textSecondary" component="p">
             {profile.description}
             </Typography>
         </CardContent>
         <CardActions style={{display: "flex", justifyContent: "space-between"}}>
-            {isLoggedInUser && <Button onClick = {onEditProfilePopUp}>Edit your profile</Button>}
+            {isLoggedInUser && <Button id="profile-btn" onClick = {onEditProfilePopUp}>Edit your profile</Button>}
             {!isLoggedInUser && !friends && !requested && <Button onClick={onFriend}>Add friend</Button>}
             {!isLoggedInUser && !friends && requested && <Button><DoneIcon /> Requested</Button>}
             {!isLoggedInUser && friends && !requested && <Button onClick={onUnfriend}> Unfriend </Button>}

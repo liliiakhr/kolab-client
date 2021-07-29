@@ -62,7 +62,7 @@ function PeoplePage({user, onUpdateUser}) {
                            return(
                             <Grid item xs={12} sm={6} key={i}>
                             <div className={i % 2 === 0 ? 'fly-left' : 'fly-right'}>
-                                    <UserCard key={i} categories={user.categories} id={user._id} username={username} description={user.description}/>
+                                    <UserCard key={i} categories={user.categories} id={user._id} image_url={user.image_url} username={username} description={user.description}/>
                                 </div>
                             </Grid>                            
                            )

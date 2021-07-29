@@ -73,7 +73,6 @@ class ChatPage extends Component {
 
     onSendMessage = (event) => {
         event.preventDefault()
-        console.log(event)
     }
 
     sendMessage = async () => {
@@ -133,6 +132,7 @@ class ChatPage extends Component {
                         <Box className="messages">
                             {
                                 messageList.map((val,i) => {
+                                    console.log(val)
                                     return (
                                         <Box key={i} className={`messageContainer ${val.sender.username == user.username ?"you" : "other"}`} 
                                         >
@@ -140,7 +140,7 @@ class ChatPage extends Component {
                                                 <div className="msg">
                                                     <span>{val.message}</span>
 
-                                                <p className={"msg-time"}>{ moment(val.message.createdAt).format('HH:mm')}</p>
+                                                <p className={"msg-time"}>{ moment(val.createdAt).format('HH:mm')}</p>
                                                 </div>
                                                 
 

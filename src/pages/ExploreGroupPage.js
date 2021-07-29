@@ -37,7 +37,8 @@ function ExploreGroupPage({onError, onSuccess, history}) {
 
      
         try{
-            let imgResponse = '' 
+            let defaultImage = 'https://images.unsplash.com/photo-1478147427282-58a87a120781?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1650&q=80';
+            let imgResponse = ""
             if (event.target.imageUrl.value) {
                 var formData = new FormData();
                 formData.append('imageUrl', event.target.imageUrl.files[0]);
@@ -46,7 +47,7 @@ function ExploreGroupPage({onError, onSuccess, history}) {
 
             let groupData = {
                 name: name.value.trim(),
-                image_url: imgResponse.data ? imgResponse.data.image_url : '',
+                image_url: imgResponse.data ? imgResponse.data.image_url : defaultImage,
                 description: description.value,
                 category: category.value,
                 tags: tags.value.split(','),
@@ -73,7 +74,6 @@ function ExploreGroupPage({onError, onSuccess, history}) {
             setAddGroup(!addGroup)
     }
 
-    console.log(groups)
 
     const handleGroupSearch = (event) => {
         let filter = groups.filter(group => {

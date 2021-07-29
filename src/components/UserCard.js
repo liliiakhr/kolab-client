@@ -60,7 +60,7 @@ function UserCard({username, description, image_url, id, categories}) {
     <Card className={classes.root}>
     <Link to={`/profile/${id}`} style={{textDecoration: 'none'}}>
       <CardContent>
-        <Avatar alt="Remy Sharp" src={Logo} style={{width: '100px', height: '100px'}}/>
+        <Avatar alt="Remy Sharp" src={image_url} style={{width: '100px', height: '100px'}}/>
         <Typography variant="h5" component="h2" color='textPrimary'>
           {username}
         </Typography>       
