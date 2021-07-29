@@ -19,6 +19,7 @@ body{
   background-image: url("./assets/images/background.jpg");
   position: relative;
 }
+
 .landingBtnsWrapper {
   align-self: center;
 }
@@ -45,10 +46,6 @@ body{
   border: 2px solid black;
 }
 
-.cloudinary-btn {
-  /* to edit */
-}
-
 @media (max-width: 400px) {
   .popupOpacity {
     display: hidden;
@@ -71,15 +68,14 @@ body{
   border-radius: 0 0 50px 0;
 }
 
-
 /* ----------Chat room styles ------------- */
-.ChatPageWrapper{
+.ChatPageWrapper {
   height: 100vh;
   background-image: url("./assets/images/background.jpg");
   position: relative;
 }
-.room{
-  box-shadow: 1px 1px 10px rgba(0,0,0,.1);
+.room {
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   padding: 0;
   background-color: #F9F3F1;
@@ -109,6 +105,26 @@ body{
   padding: 10px;
 }
 .messages{
+  margin: 30px;
+  padding: 0;
+  background-color: #f9f3f1;
+}
+.MuiContainer-root {
+  padding: 0;
+}
+.heading {
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border-radius: 5px;
+  font-family: "DM Sans";
+  color: rgb(70, 70, 70);
+  font-size: 2rem;
+  font-weight: 500;
+  z-index: 1000;
+  background-color: #f2e7e3;
+}
+
+.messages {
   display: flex;
   flex-direction: column;
   height: 81vh;
@@ -119,11 +135,19 @@ body{
   max-width: 70%;
   margin: 8px;
 }
+/* .messageContainer #you{
+  display: flex;
+  width: calc(50% - 30px);
+  justify-content: flex-end;
+  align-content: flex-end;
+
+} */
 
 .you {
   align-self: flex-end;
 }
-.you .msg{
+
+.you .msg {
   background-color: #00bfb6;
 }
 
@@ -135,14 +159,25 @@ body{
   text-align:end;
 }
 
-.other{
-  align-self: flex-start;
-}
-
 .other .msg{
   background-color:#C08672;
 }
-.sender{
+
+.other {
+  justify-content: flex-start;
+  align-content: flex-start;
+  width: auto;
+}
+
+/* .other .msg {
+  background-color: #9bbd3e;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  font-weight: 900;
+} */
+
+.sender {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
@@ -188,13 +223,17 @@ body{
 }
 
 
+.sender {
+  font-weight: bold;
+}
+
 /* ----------End of chat room styles ------------- */
 .group-page-container {
   display: flex;
   flex-direction: row;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 1200px) {
   .group-page-container {
     display: flex;
     flex-direction: column;
@@ -212,3 +251,19 @@ body{
   font-size: 32px;
 }
 /* End of profile page */
+
+.event-legend-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+@media (max-width: 800px) {
+  .event-legend-container {
+    flex-direction: column;
+    align-content: flex-start;
+    width: 100%;
+    height: 80px;
+    margin-bottom: 10px;
+  }
+}

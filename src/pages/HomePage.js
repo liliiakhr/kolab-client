@@ -47,12 +47,12 @@ function HomePage() {
                 <Grid
                     container
                     spacing={4}
-                    // direction="column"
+                    style={{marginTop: "20px"}}
                 >
                     {
                         posts.map((postData, index) => {
                             return (
-                                    <Grid item xs={12} sm={6} key={index} style={{ display: "flex", justifyContent: "center"}} >
+                                    <Grid item xs={12} sm={12} key={index} >
                                         <div className={index % 2 === 0 ? 'fly-left' : 'fly-right'}>
                                             <PostCard user={user} postData={postData} index={index} />
                                         </div>  

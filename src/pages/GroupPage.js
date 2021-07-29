@@ -46,10 +46,8 @@ function GroupPage({ match: {params}}) {
     useEffect(() => {
         (async () => {
             try {
-                // console.log("GROUP DATA FETCHED")
                 let response = await axios.get(`${API_URL}/api/${params.group}`, {withCredentials: true})
                 setGroup(response.data)
-                // console.log("GROUP DATA FETCHED SUCCESFULLY")
             }
             catch(error) {
                 console.log(error)
@@ -63,7 +61,6 @@ function GroupPage({ match: {params}}) {
     useEffect(() => {
         (async () => {
             try {
-                // console.log("POST DATA FETCHED")
                 let groupInfo = {
                     id: group._id
                 }
@@ -73,7 +70,19 @@ function GroupPage({ match: {params}}) {
 
                 let postResponse = await axios.post(`${API_URL}/api/posts`, groupInfo, {withCredentials: true})
                 let eventResponse = await axios.get(`${API_URL}/api/events/${group._id}/${currentDate}`, {withCredentials: true})
-                setPosts(postResponse.data)
+                let postData = postResponse.data.sort((a, b) => {
+                    console.log(a.createdAt)
+                    if (a.createdAt < b.createdAt) {
+                        return 1
+                    }
+                    else if (a.createdAt > b.createdAt) {
+                        return -1
+                    }
+                    else {
+                        return 0
+                    }
+                }) 
+                setPosts(postData)
                 setEvents(eventResponse.data)
             }
             catch(error) {
@@ -123,6 +132,9 @@ function GroupPage({ match: {params}}) {
             
             let response = await axios.post(`${API_URL}/api/${params.group}/add-post`, newPost, {withCredentials: true})
             user.posts.push(response.data._id)
+            let createdPost = response.data;
+            createdPost.creator = user;
+            setPosts([createdPost, ...posts])
             onUpdateUser(user)
             setShowAddPost(false)
             setSuccessMessage('Awesome! New post has been added.')
@@ -177,8 +189,6 @@ function GroupPage({ match: {params}}) {
             }
             
             let response = await axios.post(`${API_URL}/api/event/add-event`, newEvent, {withCredentials: true})
-            console.log(response.data)
-            // user.posts.push(response.data._id)
             setEvents([...events, response.data])
             setShowAddEvent(false)
             // setSuccessMessage('Awesome! New post has been added.')
@@ -236,7 +246,6 @@ function GroupPage({ match: {params}}) {
             setGroup(response.data)
             user.groupNames.push(group.name)
             user.groups.push(group._id)
-            console.log("JOIN GROUP", user.groups)
             onUpdateUser(user)
             await setSuccessMessage(`Welome to ${group.name}!`)
             await setSnackbar('success');
@@ -259,7 +268,6 @@ function GroupPage({ match: {params}}) {
             user.groups = user.groups.map(group => group._id)
             user.groups = user.groups.filter(oldGroupId => oldGroupId !== group._id) 
             onUpdateUser(user)
-            console.log(group.name)
             setSuccessMessage(`The members of ${group.name} will miss you, come back whenever you want!`)
             setSnackbar('success');
             setShowFlashMessage(Math.random()*100)
@@ -278,8 +286,6 @@ function GroupPage({ match: {params}}) {
             
     }
 
-    console.log(events)
-
     return (
         <>
             <NavBar onNavBarChange={handleNavBarChange} showDrawer>
@@ -290,7 +296,8 @@ function GroupPage({ match: {params}}) {
                     </div>
                     <img src={group.image_url} className="group-header-image"/>
                 </div>
-                <ButtonGroup variant="contained" color="secondary" style={{marginLeft: "20px", marginTop: "10px"}}>
+                <Container>
+                <ButtonGroup variant="contained" color="secondary" style={{marginTop: "10px"}}>
                     {
                         (!group.users.includes(user._id)) && (user._id !== group.admin) &&
                         <Button startIcon={<AccessibilityNewIcon />} onClick={handleJoinGroup}>Join</Button>
@@ -318,7 +325,7 @@ function GroupPage({ match: {params}}) {
                         <Grid
                         container
                         // spacing={4}
-                        style={{paddingTop: "20px", paddingLeft: "20px", width: "50%"}}
+                        style={{width: "60%", marginTop: "20px", marginRight: "30px"}}
                         >
                                 {
                                     posts.map((post, index) => {
@@ -338,12 +345,12 @@ function GroupPage({ match: {params}}) {
                         <Grid
                         container
                         // spacing={4}
-                        style={{paddingTop: "20px", paddingLeft: "20px", width: "50%"}}
+                        style={{paddingTop: "20px", width: "40%", display: "flex", justifyContent: "flex-end", height: "500px"}}
                         >
                                 {
                                     events.map((event, index) => {
                                         return (
-                                            <Grid item xs={12} sm={12} key={event._id} style={{ display: "flex", marginBottom: "20px"}} >
+                                            <Grid item xs={12} sm={12} key={event._id} style={{ height: "auto", marginBottom: "20px"}} >
                                                     <div className={'fly-right'}>
                                                         <EventCard eventData={event} index={index} user={user} />
                                                     </div>  
@@ -353,7 +360,8 @@ function GroupPage({ match: {params}}) {
                                     }
                         </Grid>
                     }
-                </div>
+                    </div>
+                </Container>
             </NavBar>
             {showAddPost && (
                 <div className="popupOpacity">

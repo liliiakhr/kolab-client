@@ -11,13 +11,14 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import UserContext from '../contexts/UserContext';
 import EventAvailableRoundedIcon from '@material-ui/icons/EventAvailableRounded';
-
+import Brightness4Icon from '@material-ui/icons/Brightness4';
 
 
 function NavBar(props) {
-  const {user, onLogout} = useContext(UserContext);
+  const {user, onLogout, onChangeThemeColor} = useContext(UserContext);
   const [groupNames, setGroupNames] = useState([])
   const [menuIndex, setMenuIndex] = useState(null)
+
   // Variables that help with display and navigation of the sidebar
   let location = useLocation();
   let selectedGroup = location.pathname.replace("/group/", '')
@@ -263,6 +264,12 @@ function NavBar(props) {
         </IconButton>
         <p>Events</p>
       </MenuItem>
+      <MenuItem onClick={onChangeThemeColor}>
+        <IconButton aria-label="show 4 new mails" color="inherit"   >
+            <Brightness4Icon />
+        </IconButton>
+        <p>Change Theme</p>
+      </MenuItem>
       <MenuItem onClick={(event) => handleProfileMenuOpen(event, 'user') } >
         <IconButton
           aria-label="account of current user"
@@ -325,6 +332,12 @@ function NavBar(props) {
                             <Button style={{marginRight: "10px"}} onClick={() => {history.push('/events')} }color="inherit" startIcon={
                                   <EventAvailableRoundedIcon />
                               }> Events
+                            </Button>
+                        </Tooltip>
+                        <Tooltip TransitionComponent={Zoom} title="Change the color or your app">
+                            <Button onClick={onChangeThemeColor} color="inherit" startIcon={
+                                  <Brightness4Icon />
+                              }> 
                             </Button>
                         </Tooltip>
                         <Tooltip TransitionComponent={Zoom} title="Check your profile">
