@@ -96,7 +96,6 @@ class ChatPage extends Component {
         }, () => {
             this.scrollToBottom();
         })
-        // console.log(this.messageList)
     }
 
 

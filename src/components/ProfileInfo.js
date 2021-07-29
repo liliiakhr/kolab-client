@@ -10,7 +10,7 @@ import Box from '@material-ui/core/Box';
 function ProfileInfo(props) {
 
     const {isLoggedInUser, onEditProfilePopUp, profile, requested, friends, onFriend, onUnfriend} = props;
-    
+    const interests = profile.categories.map(elem => elem[0].toUpperCase() + elem.slice(1,elem.length)).join(', ')
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -39,12 +39,16 @@ function ProfileInfo(props) {
             <Typography id="user-desc" variant="body2" color="textSecondary" component="p">
             {profile.description}
             </Typography>
+            <Typography id="user-interests" variant="body2" color="textSecondary" component="p"> Interests: 
+            {interests}
+            </Typography>
+
         </CardContent>
         <CardActions style={{display: "flex", justifyContent: "space-between"}}>
             {isLoggedInUser && <Button id="profile-btn" onClick = {onEditProfilePopUp}>Edit your profile</Button>}
-            {!isLoggedInUser && !friends && !requested && <Button onClick={onFriend}>Add friend</Button>}
-            {!isLoggedInUser && !friends && requested && <Button><DoneIcon /> Requested</Button>}
-            {!isLoggedInUser && friends && !requested && <Button onClick={onUnfriend}> Unfriend </Button>}
+            {!isLoggedInUser && !friends && !requested && <Button id="profile-btn" onClick={onFriend}>Add friend</Button>}
+            {!isLoggedInUser && !friends && requested && <Button id="profile-btn"><DoneIcon /> Requested</Button>}
+            {!isLoggedInUser && friends && !requested && <Button id="profile-btn" onClick={onUnfriend}> Unfriend </Button>}
         </CardActions>
 
       </Card>
