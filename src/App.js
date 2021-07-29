@@ -16,6 +16,7 @@ import PeoplePage from "./pages/PeoplePage";
 import FriendsPage from "./pages/FriendsPage";
 import ChatPage from './pages/ChatPage'
 import EventPage from "./pages/EventPage";
+import VideoChatPage from "./pages/VideoChatPage";
 
 const theme = createTheme({
   // You get the objects from the documentation
@@ -180,6 +181,9 @@ function App() {
             }}/>
             <Route exact path={'/chat/:chatId'} render={(routeProps) => {
               return <ChatPage user={user} {...routeProps} />
+            }}/>
+            <Route path={'/face-lab'} render={(routeProps) => {
+              return <VideoChatPage {...routeProps} />
             }}/>
           </Switch>
           {
