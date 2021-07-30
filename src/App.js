@@ -22,6 +22,7 @@ import loading from './json/loading.json';
 import defaultTheme from "./contexts/DefaultTheme";
 import darkTheme from "./contexts/DarkTheme";
 import VideoChatPage from "./pages/VideoChatPage";
+import AysPage from "./pages/AysPage";
 
 
 function App() {
@@ -185,6 +186,10 @@ function App() {
             <Route path={'/face-lab'} render={(routeProps) => {
               return <VideoChatPage {...routeProps} />
             }}/>
+            <Route path={'/ays'} render={(routeProps) => {
+              return <AysPage {...routeProps} />
+            }}/>
+
             <Route component={NotFound} />
           </Switch>
           {
