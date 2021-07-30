@@ -174,7 +174,7 @@ function EventPage() {
                     <FullCalendar
                         plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
                         // initialView="dayGridMonth"
-                        initialView="timeGridWeek"
+                        initialView="dayGridMonth"
                         events={filteredCalendarEvents}
                         showNonCurrentDates={false}
                         ref={calendarRef}
