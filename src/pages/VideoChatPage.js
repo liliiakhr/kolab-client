@@ -25,30 +25,23 @@ function VideoChatPage() {
     // and the attendee respectfully and the connectionRef is to allow for disconnecting
 	const myVideo = useRef()
 	const userVideo = useRef()
-	const connectionRef= useRef()
+	const connectionRef = useRef()
 
     useEffect(() => {
-        let notify = async () => {
-            try{
-            //Lets the browser prompt the user to allow audio and video access
-            let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true})
-            setStream(stream)
-            //sets hosts ref video to the stream being broadcast
-            myVideo.current.srcObject = stream
-            }
-            catch (error){
+		socket.current = io.connect("/face-lab");
+		navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+		  setStream(stream);
+		  if (myVideo.current) {
+			myVideo.current.srcObject = stream;
+		  }
+		})
 
-            }
-        }
-        notify()
-
-
-       socket.on('me', (id) => {
+       socket.current.on('me', (id) => {
            setMe(id)
        })
        
 
-       socket.on('callUser', (data) => {
+       socket.current.on('callUser', (data) => {
            setReceivingCall(true)
            setCaller(data.from)
            setName(data.name)
@@ -66,7 +59,7 @@ function VideoChatPage() {
         
         //This allows for users to be able to call another user to the call
         peer.on("signal", (data) => {
-			socket.emit("callUser", {
+			socket.current.emit("callUser", {
 				userToCall: id,
 				signalData: data,
 				from: me,
@@ -75,24 +68,23 @@ function VideoChatPage() {
 		})
 
         //Sets the reference of the attendee's video to the streem after the peer connection
-        peer.on('stream' , (stream) => {
-            userVideo.current.srcObject = stream
-        })
+		peer.on("stream", stream => {
+			if (userVideo.current) {
+			  userVideo.current.srcObject = stream;
+			}
+		  });
         
         //once the call is accepted the signal connection is then handled here
-        socket.on('callAccepted', (signal) => {
+        socket.current.on('callAccepted', (signal) => {
             setCallAccepted(true)
             peer.signal(signal)
         })
-        
-        //sets the connection reference to the peer the host has connected to
-        connectionRef.current = peer
     } 
 
     // WARNING: LOTS OF REPEATED CODE for more on peers 
 
     //sets the user who answers as a new Peer to the call
-    const answerCall = () => {
+    const acceptCall = () => {
         setCallAccepted(true)
         const peer = new Peer({
            initiator: false,
@@ -101,22 +93,19 @@ function VideoChatPage() {
         })
 
         peer.on('signal', (data) => {
-            socket.emit('answerCall', {signal: data, to: caller})
+            socket.current.emit('acceptCall', {signal: data, to: caller})
         })
 
         peer.on("stream", (stream) => {
 			userVideo.current.srcObject = stream
 		})
-
 		peer.signal(callerSignal)
-		connectionRef.current = peer
     }
     
     //This will end the call and destroy the connection reference 
     const leaveCall = () => {
         setCallEnded(true)
         connectionRef.current.destroy()
-
     }
 
 
@@ -173,7 +162,7 @@ function VideoChatPage() {
 				{receivingCall && !callAccepted ? (
 						<div className="caller">
 						<h1 >{name} is calling...</h1>
-						<Button variant="contained" color="primary" onClick={answerCall}>
+						<Button variant="contained" color="primary" onClick={acceptCall}>
 							Answer
 						</Button>
 					</div>
