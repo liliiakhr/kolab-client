@@ -1,23 +1,17 @@
 .container {
+  margin-top: 3%;
   display: grid;
   grid-template-columns: 7fr 3fr;
 }
 
 .myId {
-  margin-right: 5rem;
-  border-radius: 5px;
-  background: #c9d6ff; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #e2e2e2,
-    #c9d6ff
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #e2e2e2,
-    #c9d6ff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+  margin-left: 20%;
+  margin-top: 10%;
+  width: 250px;
+  height: 70%;
+  border: 2px solid black;
+  box-shadow: 10px 10px #c9d6ff, 12px 12px black;
+  background: whitesmoke; /* fallback for old browsers */
   padding: 2rem;
   display: grid;
   justify-content: center;
@@ -34,8 +28,12 @@
   grid-template-columns: 1fr 1fr;
   justify-content: center;
   align-content: center;
-  margin-top: 10rem;
   margin-left: 10rem;
+  background-color: whitesmoke;
+  height: 500px;
+  width: fit-content;
+  box-shadow: 10px 10px #c9d6ff, 12px 12px black;
+  border: 2px solid black;
 }
 
 .caller {
@@ -43,6 +41,22 @@
   color: #fff;
 }
 
+.video-chat {
+  margin-top: 0px;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-image: url("../assets/images/background.jpg");
+	background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video {
+  margin: 20px;
+}
 /* body {
 	background-image: url("../assets/images/background.jpg");
 	background-repeat: no-repeat;

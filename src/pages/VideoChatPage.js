@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {Button, IconButton, TextField} from '@material-ui/core'
+import {Button, IconButton, TextField, Typography} from '@material-ui/core'
 import PhoneIcon from '@material-ui/icons/Phone'
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Peer from "simple-peer"
@@ -7,10 +7,12 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import io from "socket.io-client"
 import API_URL from '../config'
 import './VideoChat.css'
+import Animation from '../components/Animation'
+import videochat from '../json/videochat.json'
 
 const socket = io.connect(`${API_URL}`)
 
-function VideoChatPage() {
+function VideoChatPage({username}) {
     const [ me, setMe ] = useState("")
 	const [ stream, setStream ] = useState()
 	const [ receivingCall, setReceivingCall ] = useState(false)
@@ -110,23 +112,32 @@ function VideoChatPage() {
 
 
     return (
-        <>
-		<h1 style={{ textAlign: "center", color: '#fff' }}>Kolab Face-lab</h1>
+        <div className="video-chat">
+		<Typography variant='h1' color="primary" style={{marginTop: '2%'}}>😂Kolab Face-lab🤪</Typography>
 		<div className="container">
 			<div className="video-container">
-				<div className="video">
-					{stream &&  <video playsInline muted ref={myVideo} autoPlay style={{ width: "500px" }} />}
+				<div className="video" style={{borderRadius: '20px', border: '5px dashed orange' }}>
+					{stream &&  <video playsInline muted ref={myVideo} autoPlay style={{ width: "500px", borderRadius: '20px'}} />}
 				</div>
-				<div className="video">
+				<div className="video" style={{borderRadius: '20px', border: '5px dashed orange' }}>
+					{
+						!callAccepted && (
+						<> 
+						<Animation height={300} width={500} animation={videochat} style={{borderRadius: '20px'}}/>
+						<Typography variant="h4" color="secondary" style={{marginLeft: '10px'}}>Looking good {username}</Typography >
+						<Typography variant="h4" color="secondary" style={{marginLeft: '10px'}}>Somebody should be in soon . . .</Typography>
+						</>
+						)
+					}
 					{callAccepted && !callEnded ?
-					<video playsInline ref={userVideo} autoPlay style={{ width: "500px"}} />:
+					<video playsInline ref={userVideo} autoPlay style={{ width: "500px", borderRadius: '20px'}} />:
 					null}
 				</div>
 			</div>
 			<div className="myId">
 				<TextField
 					id="filled-basic"
-					label="Name"
+					label="Your Name*"
 					variant="filled"
 					value={name}
 					onChange={(e) => setName(e.target.value)}
@@ -161,7 +172,7 @@ function VideoChatPage() {
 			<div>
 				{receivingCall && !callAccepted ? (
 						<div className="caller">
-						<h1 >{name} is calling...</h1>
+						<Typography variant='h3' color="primary">{name} is calling...</Typography>
 						<Button variant="contained" color="primary" onClick={acceptCall}>
 							Answer
 						</Button>
@@ -169,7 +180,7 @@ function VideoChatPage() {
 				) : null}
 			</div>
 		</div>
-		</>
+		</div>
     )
 }
 

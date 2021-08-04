@@ -184,7 +184,7 @@ function App() {
               return <ChatPage user={user} {...routeProps} />
             }}/>
             <Route path={'/face-lab'} render={(routeProps) => {
-              return <VideoChatPage {...routeProps} />
+              return <VideoChatPage {...routeProps} username={user.username}/>
             }}/>
             <Route path={'/ays'} render={(routeProps) => {
               return <AysPage {...routeProps} />
