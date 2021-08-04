@@ -1,10 +1,10 @@
-# Backlog Quest
+# [KOLAB](https://kolab-app.herokuapp.com/)
 
 <br>
 
 ## Description
 
-Kolab is an app that allows users to connect based on their interests.
+Kolab is an app that allows users to connect based on their interests. In Kolab people can create and join groups, create posts, comment, like&dislike them, chat and video chat.
 
 ## User Stories
 
@@ -25,20 +25,19 @@ Kolab is an app that allows users to connect based on their interests.
 - User can search for groups based on name / categories / tags
 **Posts** 
 - User can create a new post
-- User can use a advanced-text-editor library to make the post fancy  
 - The posts in the group can be liked / disliked
 - The posts can be shared by other users on other social media
 - Users can comment on a post
 - Comments can be liked or disliked
 **Chat:** 
-- Users can chat 1:1
+- Users can chat 1💯
+*VideoChat:** 
+- Users can hav video chat 1:1
 **Feed**
 - User can see a feed with the latest posts of all the groups of categories
 - User can click on a particular post and be redirected to the post-page
 **PROFILE** 
-- User can set username, categories, maybe a slogan or something, profile picture 
-- User can signup with his google account
-
+- User can set/change username, categories, description, profile picture 
 
 ## Backlog
 
@@ -85,6 +84,16 @@ Kolab is an app that allows users to connect based on their interests.
 - FullPost
 - CommentCards 
 - AddComment
+- AddEvent
+- Animation
+- Calendar
+- CategoryCard
+- CommentCard
+- EditGroup
+- EventCard
+- FlashMessage
+- NotificationBoard
+- Pagination
 
 
 
@@ -99,9 +108,18 @@ Kolab is an app that allows users to connect based on their interests.
 - ChatPage
 - PeoplePage
 - FriendsPage
+- NotFoundPage
+- ChatPage
+- EventPage
+- VideoChatPage
+- UserPage
 
 ## Services
- 
+ - Socket IO
+ - Cloudinary
+ - LottieFiles
+ - AxiosullCalendar
+ - MaterialUI
 
 <br>
 
@@ -211,24 +229,19 @@ Messages model
 ## Links
 ### Trello/Whimsical
 
-[Trello]()
+[Trello](https://trello.com/b/jBdQAzo3/kolab)
 [Whimsical](https://whimsical.com/wireframes-JtCyGbL2GbYyoR3Gq8sTrt)
 [Colors palette](https://coolors.co/006c7a-55abb1-e0f7fa-f2e7e3-543327-6d4031)
 
 
 ### Git
 
-The url to your repository and to your deployed project
-
 [Client repository Link](https://github.com/liliiakhr/kolab-client)
 
 [Server repository Link](https://github.com/liliiakhr/kolab-server)
 
-[Deployed App Link]()
+[Deployed App Link](https://kolab-app.herokuapp.com/)
 
 ### Slides
 
-The url to your presentation slides
-
-[Slides Link]()
-{"mode":"full","isActive":false}
+[Slides Link](https://docs.google.com/presentation/d/1aSqDH15tsHmqR4pIOInjtkMIAMbKbWqBl3wn3cLps4w/edit#slide=id.p)
